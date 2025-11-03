@@ -10,5 +10,13 @@
   "common_locales": {
     "en": "Англійська / English",
     "uk": "Українська"
+  },
+  "form_login": {
+    "login": "Email / Номер телефону",
+    "password": "Пароль",
+    "submit": "Увійти"
+  },
+  "view_login": {
+    "title": "Вхід"
   }
 }

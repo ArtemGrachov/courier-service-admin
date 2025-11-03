@@ -4,5 +4,7 @@ export const ROUTES = {
   COURIERS: 'couriers',
   ORDERS: 'orders',
   CLIENTS: 'clients',
-  LOGOUT: 'logout',
-}
+  LOGIN: 'login',
+  FORGOT_PASSWORD: 'forgot-password',
+  RESET_PASSWORD: 'reset-password',
+};

@@ -8,6 +8,10 @@ export default [
     route(ROUTES.COURIERS, './routes/EmptyPlaceholder.tsx', { id: ROUTES.COURIERS }),
     route(ROUTES.ORDERS, './routes/EmptyPlaceholder.tsx', { id: ROUTES.ORDERS }),
     route(ROUTES.CLIENTS, './routes/EmptyPlaceholder.tsx', { id: ROUTES.CLIENTS }),
-    route(ROUTES.LOGOUT, './routes/EmptyPlaceholder.tsx', { id: ROUTES.LOGOUT }),
+  ]),
+  layout('./layouts/auth/LayoutAuth.tsx', [
+    route(ROUTES.LOGIN, './routes/ViewLogin.tsx', { id: ROUTES.LOGIN }),
+    route(ROUTES.FORGOT_PASSWORD, './routes/EmptyPlaceholder.tsx', { id: ROUTES.FORGOT_PASSWORD }),
+    route(ROUTES.RESET_PASSWORD, './routes/EmptyPlaceholder.tsx', { id: ROUTES.RESET_PASSWORD }),
   ]),
 ] satisfies RouteConfig;

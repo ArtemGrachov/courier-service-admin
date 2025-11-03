@@ -10,5 +10,17 @@
   "common_locales": {
     "en": "English",
     "uk": "Ukrainian / Українська"
+  },
+  "form_login": {
+    "login": "Email / Phone number",
+    "password": "Password",
+    "submit": "Log in"
+  },
+  "view_login": {
+    "title": "Log in"
+  },
+  "auth_links": {
+    "login_link": "Log in",
+    "forgot_password_link": "Forgot password"
   }
 }
