@@ -2,6 +2,8 @@ import type { ComponentType } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 
+import Navigation from './Navigation';
+
 const drawerWidth = 240;
 
 const Sidebar: ComponentType = () => {
@@ -18,7 +20,7 @@ const Sidebar: ComponentType = () => {
       variant="permanent"
     >
       <Toolbar />
-      Sidebar
+      <Navigation />
     </Drawer>
   )
 }
