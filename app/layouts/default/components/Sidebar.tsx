@@ -17,6 +17,7 @@ const Sidebar: ComponentType = () => {
       }}
       variant="permanent"
     >
+      <Toolbar />
       Sidebar
     </Drawer>
   )
