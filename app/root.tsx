@@ -7,8 +7,18 @@ import {
   ScrollRestoration,
 } from 'react-router';
 
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
 import type { Route } from './+types/root';
+
 import './app.scss';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,7 +30,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
