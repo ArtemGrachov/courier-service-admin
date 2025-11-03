@@ -12,6 +12,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import type { Route } from './+types/root';
 
+import '~/i18n/config';
 import './app.scss';
 
 const darkTheme = createTheme({
