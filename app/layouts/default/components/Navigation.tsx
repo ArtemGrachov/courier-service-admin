@@ -1,5 +1,6 @@
 import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 
 import type { SxProps } from '@mui/material';
 import List from '@mui/material/List';
@@ -13,32 +14,32 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 
+import { ROUTES } from '~/router/routes';
+
 const NAV_ITEMS = [
   {
     key: 'map',
     icon: <MapIcon />,
     translation: 'nav.map',
+    path: ROUTES.MAP,
   },
   {
     key: 'couriers',
     icon: <WorkIcon />,
     translation: 'nav.couriers',
+    path: ROUTES.COURIERS,
   },
   {
     key: 'orders',
     icon: <ChecklistIcon />,
     translation: 'nav.orders',
+    path: ROUTES.ORDERS,
   },
   {
     key: 'clients',
     icon: <AccountCircleIcon />,
     translation: 'nav.clients',
-  },
-  {
-    key: 'logout',
-    icon: <LogoutIcon />,
-    translation: 'nav.logout',
-    style: { marginTop: 'auto' } as SxProps,
+    path: ROUTES.CLIENTS,
   },
 ];
 
@@ -55,10 +56,10 @@ const Navigation: ComponentType = () => {
   }, [i18n.language]);
 
   return (
-    <List sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <List>
       {outputItems.map(item => (
-        <ListItem key={item.key} sx={item.style}>
-          <ListItemButton>
+        <ListItem key={item.key}>
+          <ListItemButton component={Link} to={item.path}>
             <ListItemIcon>
               {item.icon}
             </ListItemIcon>
