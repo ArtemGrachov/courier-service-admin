@@ -1,20 +1,13 @@
 import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 
-import type { SxProps } from '@mui/material';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import MapIcon from '@mui/icons-material/Map';
 import WorkIcon from '@mui/icons-material/Work';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import LogoutIcon from '@mui/icons-material/Logout';
 
 import { ROUTES } from '~/router/routes';
+import NavList from '~/components/navigation/NavList';
 
 const NAV_ITEMS = [
   {
@@ -56,18 +49,7 @@ const Navigation: ComponentType = () => {
   }, [i18n.language]);
 
   return (
-    <List>
-      {outputItems.map(item => (
-        <ListItem key={item.key}>
-          <ListItemButton component={Link} to={item.path}>
-            <ListItemIcon>
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText primary={item.label} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+    <NavList items={outputItems} />
   )
 }
 
