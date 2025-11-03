@@ -6,5 +6,9 @@
     "orders": "Orders",
     "clients": "Clients",
     "logout": "Logout"
+  },
+  "common_locales": {
+    "en": "English",
+    "uk": "Ukrainian / Українська"
   }
 }

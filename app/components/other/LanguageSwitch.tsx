@@ -1,13 +1,16 @@
-import { useRef, useState, type ComponentType, type ReactNode } from 'react';
+import { useRef, useState, type ComponentType } from 'react';
 
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
+import { useLanguageSwitch } from '~/hooks/i18n/use-language-switch';
+
 const LanguageSwitch: ComponentType = () => {
   const anchorRef = useRef<any | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const { currentLocaleLabel, options, changeLocale: switchHandler } = useLanguageSwitch();
 
   const clickHandler = () => {
     setIsOpen(!isOpen);
@@ -17,7 +20,8 @@ const LanguageSwitch: ComponentType = () => {
     setIsOpen(false);
   }
 
-  const selectHandler = () => {
+  const selectHandler = (locale: string) => {
+    switchHandler(locale);
     closeHandler();
   }
 
@@ -28,7 +32,7 @@ const LanguageSwitch: ComponentType = () => {
         onClick={clickHandler}
       >
         <Typography variant="subtitle2" width={24} component={'span'} lineHeight={1}>
-          EN
+          {currentLocaleLabel}
         </Typography>
       </IconButton>
       <Menu
@@ -36,12 +40,11 @@ const LanguageSwitch: ComponentType = () => {
         anchorEl={anchorRef.current}
         onClose={closeHandler}
       >
-        <MenuItem onClick={selectHandler}>
-          EN
-        </MenuItem>
-        <MenuItem onClick={selectHandler}>
-          UK
-        </MenuItem>
+        {options.map(option => (
+          <MenuItem key={option.locale} onClick={() => selectHandler(option.locale)}>
+            {option.label}
+          </MenuItem>
+        ))}
       </Menu>
     </>
   )
