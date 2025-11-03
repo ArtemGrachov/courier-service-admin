@@ -16,9 +16,10 @@ import '~/i18n/config';
 import './app.scss';
 
 const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
+  colorSchemes: {
+    dark: true,
+    light: true,
+  }
 });
 
 export function Layout({ children }: { children: React.ReactNode }) {
