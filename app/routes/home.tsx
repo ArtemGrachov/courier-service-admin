@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import type { Route } from './+types/home';
 import { useTranslation } from 'react-i18next';
 
@@ -13,15 +12,13 @@ export default function Home() {
   const { t } = useTranslation();
 
   return (
-    <Box component="main">
-      <div>
-        <h1>
-          Hello, world Lorem ipsum dolor sit, amet consectetur adipisicing elit. Incidunt, quasi officia ex iste fugit excepturi laboriosam hic iure ea cum. Eos sed eum nemo, modi quasi unde eligendi praesentium ex!
-        </h1>
-        <h2>
-          {t('test')}
-        </h2>
-      </div>
-    </Box>
+    <div>
+      <h1>
+        Hello, world Lorem ipsum dolor sit, amet consectetur adipisicing elit. Incidunt, quasi officia ex iste fugit excepturi laboriosam hic iure ea cum. Eos sed eum nemo, modi quasi unde eligendi praesentium ex!
+      </h1>
+      <h2>
+        {t('test')}
+      </h2>
+    </div>
   );
 }

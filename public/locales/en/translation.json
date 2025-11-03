@@ -1,3 +1,14 @@
 {
-  "test": "Test translation EN"
+  "test": "Test translation EN",
+  "nav": {
+    "map": "Map",
+    "couriers": "Couriers",
+    "orders": "Orders",
+    "clients": "Clients",
+    "logout": "Logout"
+  },
+  "common_locales": {
+    "en": "English",
+    "uk": "Ukrainian / Українська"
+  }
 }

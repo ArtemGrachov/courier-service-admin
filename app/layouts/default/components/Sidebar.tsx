@@ -1,6 +1,10 @@
-import type { ComponentType } from 'react';
+import { type ComponentType } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
+import Divider from '@mui/material/Divider';
+
+import Navigation from './Navigation';
+import Logout from './Logout';
 
 const drawerWidth = 240;
 
@@ -17,7 +21,10 @@ const Sidebar: ComponentType = () => {
       }}
       variant="permanent"
     >
-      Sidebar
+      <Toolbar />
+      <Navigation />
+      <Divider sx={{ marginTop: 'auto' }} />
+      <Logout />
     </Drawer>
   )
 }
