@@ -34,7 +34,8 @@
     "success_hint": "Password reset link was sent to {{email}}"
   },
   "view_reset_password": {
-    "title": "Reset password"
+    "title": "Reset password",
+    "success_hint": "Your password was resetted successfully. Now you can <Link>log in</Link>."
   },
   "common_errors": {
     "generic": "An error occured",
