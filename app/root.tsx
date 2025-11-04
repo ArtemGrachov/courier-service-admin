@@ -14,6 +14,9 @@ import type { Route } from './+types/root';
 
 import { StorageProvider } from '~/providers/storage';
 import { AuthProvider } from '~/providers/auth';
+import { ModalsProvider } from '~/providers/modals';
+
+import ModalRoot from '~/components/modals/ModalRoot';
 
 import '~/i18n/config';
 import './app.scss';
@@ -38,8 +41,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <StorageProvider>
           <AuthProvider>
             <ThemeProvider theme={darkTheme}>
-              <CssBaseline />
-              {children}
+              <ModalsProvider>
+                <CssBaseline />
+                {children}
+                <ModalRoot />
+              </ModalsProvider>
             </ThemeProvider>
           </AuthProvider>
         </StorageProvider>

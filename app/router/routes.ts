@@ -11,6 +11,6 @@ export const ROUTE_PATHS = {
 
 
 export const ROUTES = Object.entries(ROUTE_PATHS).reduce((acc, [key, value]) => {
-  acc[key] = `/${value}`;
+  acc[key as keyof typeof ROUTE_PATHS] = `/${value}`;
   return acc;
-}, {} as Record<string, string>)
+}, {} as Record<keyof typeof ROUTE_PATHS, string>)

@@ -34,5 +34,12 @@
   },
   "view_reset_password": {
     "title": "Скинути пароль"
+  },
+  "common_errors": {
+    "generic": "Сталася помилка",
+    "alert_title": "Помилка"
+  },
+  "common_modals": {
+    "close": "Закрити"
   }
 }
