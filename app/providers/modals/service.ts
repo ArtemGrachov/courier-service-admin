@@ -3,12 +3,13 @@ import { useRef } from 'react';
 import type { IModalItem, IModalOptions } from './types';
 
 export const useModalService = () => {
+  const modalId = useRef(0);
   const modals = useRef<IModalItem[]>([]);
   const callbacks = useRef<Function[]>([]);
 
   const openModal = <T,>({ id, component, props }: IModalOptions<T>) => {
     const item = {
-      id,
+      id: id ?? `modal_${modalId.current++}`,
       component,
       props,
       close: () => close(item),

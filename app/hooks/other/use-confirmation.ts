@@ -16,7 +16,6 @@ export const useConfirmation = () => {
   return async (options?: IOptions) => {
     return new Promise<boolean>((resolve) => {
       openModal({
-        id: 'confirmation',
         component: ModalConfirmation,
         props: {
           title: options?.title,

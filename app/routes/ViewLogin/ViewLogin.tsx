@@ -28,7 +28,6 @@ const ViewLogin: ComponentType = observer(() => {
       await submit(formValue);
     } catch (err) {
       openModal({
-        id: new Date().getTime(),
         component: ModalAlert,
         props: {
           title: t('common_errors.alert_title'),

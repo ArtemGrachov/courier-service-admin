@@ -11,7 +11,7 @@ export interface IModalItem {
 }
 
 export interface IModalOptions<T> {
-  id: string | number;
+  id?: string | number;
   component: ComponentType<T>;
   props?: Partial<T>;
   onClosed?: Function;
