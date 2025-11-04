@@ -7,7 +7,7 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-const FormLogin: ComponentType = () => {
+const FormForgotPassword: ComponentType = () => {
   const { t } = useTranslation();
   return (
     <Box
@@ -20,26 +20,20 @@ const FormLogin: ComponentType = () => {
       }}
     >
       <FormControl>
-        <FormLabel htmlFor="login">
-          {t('form_login.login')}
+        <FormLabel htmlFor="email">
+          {t('form_common.email')}
         </FormLabel>
-        <TextField id="login" />
-      </FormControl>
-      <FormControl>
-        <FormLabel htmlFor="password">
-          {t('form_common.password')}
-        </FormLabel>
-        <TextField type="password" id="password" />
+        <TextField id="email" />
       </FormControl>
       <Button
         variant="contained"
         size="large"
         type="submit"
       >
-        {t('form_login.submit')}
+        {t('form_common.submit')}
       </Button>
     </Box>
   )
 }
 
-export default FormLogin;
+export default FormForgotPassword;

@@ -5,21 +5,21 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
 import AuthLinks from '~/components/auth/AuthLinks';
-import FormLogin from '~/components/forms/FormLogin';
+import FormForgotPassword from '~/components/forms/FormForgotPassword';
 
-const ViewLogin: ComponentType = () => {
+const ViewForgotPassword: ComponentType = () => {
   const { t } = useTranslation();
   return (
     <Card sx={{ width: '100%', maxWidth: 340 }}>
       <CardContent>
         <Typography component="h1" variant="h4" marginBottom={2}>
-          {t('view_login.title')}
+          {t('view_forgot_password.title')}
         </Typography>
-        <FormLogin />
-        <AuthLinks isLogin={true} />
+        <FormForgotPassword />
+        <AuthLinks isResetPassword={true} />
       </CardContent>
     </Card>
   )
 }
 
-export default ViewLogin;
+export default ViewForgotPassword;

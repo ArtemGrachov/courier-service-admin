@@ -13,7 +13,6 @@
   },
   "form_login": {
     "login": "Email / Phone number",
-    "password": "Password",
     "submit": "Log in"
   },
   "view_login": {
@@ -22,5 +21,13 @@
   "auth_links": {
     "login_link": "Log in",
     "forgot_password_link": "Forgot password"
+  },
+  "form_common": {
+    "email": "Email",
+    "password": "Password",
+    "submit": "Submit"
+  },
+  "view_forgot_password": {
+    "title": "Forgot password"
   }
 }

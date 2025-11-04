@@ -1,17 +1,17 @@
 import { type RouteConfig, index, layout, route } from '@react-router/dev/routes';
-import { ROUTES } from './router/routes';
+import { ROUTE_PATHS, ROUTES } from './router/routes';
 
 export default [
   layout('./layouts/default/LayoutDefault.tsx', [
     index('routes/home.tsx'),
-    route(ROUTES.MAP, './routes/EmptyPlaceholder.tsx', { id: ROUTES.MAP }),
-    route(ROUTES.COURIERS, './routes/EmptyPlaceholder.tsx', { id: ROUTES.COURIERS }),
-    route(ROUTES.ORDERS, './routes/EmptyPlaceholder.tsx', { id: ROUTES.ORDERS }),
-    route(ROUTES.CLIENTS, './routes/EmptyPlaceholder.tsx', { id: ROUTES.CLIENTS }),
+    route(ROUTE_PATHS.MAP, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.MAP }),
+    route(ROUTE_PATHS.COURIERS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.COURIERS }),
+    route(ROUTE_PATHS.ORDERS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.ORDERS }),
+    route(ROUTE_PATHS.CLIENTS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.CLIENTS }),
   ]),
   layout('./layouts/auth/LayoutAuth.tsx', [
-    route(ROUTES.LOGIN, './routes/ViewLogin.tsx', { id: ROUTES.LOGIN }),
-    route(ROUTES.FORGOT_PASSWORD, './routes/EmptyPlaceholder.tsx', { id: ROUTES.FORGOT_PASSWORD }),
-    route(ROUTES.RESET_PASSWORD, './routes/EmptyPlaceholder.tsx', { id: ROUTES.RESET_PASSWORD }),
+    route(ROUTE_PATHS.LOGIN, './routes/ViewLogin.tsx', { id: ROUTE_PATHS.LOGIN }),
+    route(ROUTE_PATHS.FORGOT_PASSWORD, './routes/ViewForgotPassword.tsx', { id: ROUTE_PATHS.FORGOT_PASSWORD }),
+    route(ROUTE_PATHS.RESET_PASSWORD, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.RESET_PASSWORD }),
   ]),
 ] satisfies RouteConfig;

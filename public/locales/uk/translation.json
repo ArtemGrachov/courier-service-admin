@@ -13,10 +13,21 @@
   },
   "form_login": {
     "login": "Email / Номер телефону",
-    "password": "Пароль",
     "submit": "Увійти"
   },
   "view_login": {
     "title": "Вхід"
+  },
+  "auth_links": {
+    "login_link": "Увійти",
+    "forgot_password_link": "Забули пароль"
+  },
+  "form_common": {
+    "email": "Email",
+    "password": "Пароль",
+    "submit": "Відправити"
+  },
+  "view_forgot_password": {
+    "title": "Забули пароль"
   }
 }
