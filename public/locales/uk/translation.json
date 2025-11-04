@@ -67,5 +67,13 @@
     "special_symbol": "Це поле має містити спеціальний символ",
     "min_length": "Це поле має містити не менше {{minLength}} символів",
     "confirm_password": "Паролі повинні співпадати"
+  },
+  "password_validation_hint": {
+    "contain_upper_case": "Містить великі літери",
+    "contain_lower_case": "Містить маленькі літери",
+    "contain_number": "Містить цифри",
+    "only_latin": "Тільки латинські символи",
+    "special_symbol": "Містить спеціальні символи",
+    "min_length": "Мінімум {{minLength}} символів"
   }
 }

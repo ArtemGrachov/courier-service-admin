@@ -67,5 +67,13 @@
     "special_symbol": "This field must contain special symbols",
     "min_length": "This field must have at least {{minLength}} characters",
     "confirm_password": "Passwords must match"
+  },
+  "password_validation_hint": {
+    "contain_upper_case": "Contains uppercase characters",
+    "contain_lower_case": "Contains lowercase characters",
+    "contain_number": "Contains numbers",
+    "only_latin": "Only latin characters",
+    "special_symbol": "Contains special symbols",
+    "min_length": "Minimum length {{minLength}}"
   }
 }

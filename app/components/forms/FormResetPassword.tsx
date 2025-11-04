@@ -1,4 +1,4 @@
-import { useMemo, type ComponentType } from 'react';
+import { useMemo, useRef, useState, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
@@ -14,6 +14,7 @@ import { PASSWORD_MIN_LENGTH, PASSWORD_VALIDATOR } from '~/validators/password.v
 import { useErrorMessage } from '~/hooks/errors/use-error-message';
 import InputPassword from '~/components/inputs/InputPassword';
 import FieldClientErrors from '~/components/forms/FieldClientErrors';
+import PasswordValidationHint from '~/components/forms/PasswordValidationHint';
 
 import type { IFormResetPassword } from '~/types/forms/form-reset-password';
 
@@ -25,8 +26,14 @@ interface IProps {
 
 const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
-  const { register, reset, handleSubmit, watch, formState } = useForm<IFormResetPassword>({ mode: 'onBlur' });
+  const { formState, register, reset, handleSubmit, watch } = useForm<IFormResetPassword>({
+    mode: 'all',
+    criteriaMode: 'all',
+  });
   const errors = formState.errors;
+
+  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
+  const passwordRef = useRef(null);
 
   const fieldPassword = register('password', PASSWORD_VALIDATOR);
   const fieldConfirmPassword = register('confirmPassword', {
@@ -46,7 +53,7 @@ const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, o
     try {
       await (onSubmit && onSubmit(formValue));
       reset();
-    } catch {}
+    } catch { }
   }
 
   const isProcessing = useMemo(() => submitStatus === EStatus.PROCESSING, [submitStatus]);
@@ -73,8 +80,19 @@ const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, o
         <InputPassword
           id="new_password"
           {...fieldPassword}
+          ref={el => {
+            fieldPassword.ref(el);
+            passwordRef.current = el as any;
+          }}
           error={!!errors.password}
           disabled={isProcessing}
+          onFocus={() => setIsPasswordFocus(true)}
+          onBlur={e => {setIsPasswordFocus(false); fieldPassword.onBlur(e)}}
+        />
+        <PasswordValidationHint
+          ref={passwordRef}
+          open={isPasswordFocus}
+          error={errors.password}
         />
         <FieldClientErrors
           error={errors.password}
