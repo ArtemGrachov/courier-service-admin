@@ -1,4 +1,4 @@
-import { lazy, useMemo, type ComponentType } from 'react';
+import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
@@ -14,10 +14,6 @@ import { EStatus } from '~/constants/status';
 import { useErrorMessage } from '~/hooks/errors/use-error-message';
 
 import type { IFormLogin } from '~/types/forms/form-login';
-
-const Dialog = lazy(() => import('@mui/material/Dialog'));
-const DialogContent = lazy(() => import('@mui/material/DialogContent'));
-const DialogContentText = lazy(() => import('@mui/material/DialogContentText'));
 
 interface IProps {
   submitStatus?: EStatus;
