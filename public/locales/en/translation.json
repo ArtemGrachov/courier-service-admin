@@ -88,11 +88,17 @@
   "courier_status": {
     "offline": "Offline",
     "idle": "Idle",
-    "delivering": "Delivering"
+    "delivering": "Delivering",
+    "blocked": "Blocked"
   },
   "view_couriers": {
     "couriers_header": {
       "add_courier": "Add courier"
+    },
+    "couriers_filters": {
+      "name": "Search by name",
+      "status": "Status",
+      "rating": "Rating"
     }
   }
 }

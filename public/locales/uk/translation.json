@@ -88,11 +88,17 @@
   "courier_status": {
     "offline": "Не на роботі",
     "idle": "Простій",
-    "delivering": "Доставка"
+    "delivering": "Доставка",
+    "blocked": "Заблоковано"
   },
   "view_couriers": {
     "couriers_header": {
       "add_courier": "Додати кур'єра"
+    },
+    "couriers_filters": {
+      "name": "Пошук за іменем",
+      "status": "Статус",
+      "rating": "Рейтинг"
     }
   }
 }
