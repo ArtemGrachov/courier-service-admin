@@ -40,6 +40,14 @@
     "alert_title": "Error"
   },
   "common_modals": {
-    "close": "Close"
+    "close": "Close",
+    "reject": "Reject",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "logout": {
+    "title": "Log out",
+    "question": "Are you sure you want to log out?"
   }
 }
