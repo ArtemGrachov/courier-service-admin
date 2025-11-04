@@ -23,7 +23,7 @@ interface IProps {
 
 const FormForgotPassword: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, reset } = useForm<IFormForgotPassword>();
+  const { register, handleSubmit, reset } = useForm<IFormForgotPassword>({ mode: 'onBlur' });
 
   const fieldEmail = register('email', {
     required: true,

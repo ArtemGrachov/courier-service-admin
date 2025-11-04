@@ -9,9 +9,11 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 
 import { EStatus } from '~/constants/status';
+import { PASSWORD_MIN_LENGTH, PASSWORD_VALIDATOR } from '~/validators/password.validator';
 
 import { useErrorMessage } from '~/hooks/errors/use-error-message';
 import InputPassword from '~/components/inputs/InputPassword';
+import FieldClientErrors from '~/components/forms/FieldClientErrors';
 
 import type { IFormResetPassword } from '~/types/forms/form-reset-password';
 
@@ -23,13 +25,15 @@ interface IProps {
 
 const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
-  const { register, reset, handleSubmit } = useForm<IFormResetPassword>();
+  const { register, reset, handleSubmit, watch, formState } = useForm<IFormResetPassword>({ mode: 'onBlur' });
+  const errors = formState.errors;
 
-  const fieldPassword = register('password', {
-    required: true,
-  });
+  const fieldPassword = register('password', PASSWORD_VALIDATOR);
   const fieldConfirmPassword = register('confirmPassword', {
     required: true,
+    validate: {
+      sameAs: (v: string) => v === watch('password'),
+    },
   });
 
   const errorMessage = useErrorMessage(submitError);
@@ -60,23 +64,39 @@ const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, o
       onSubmit={handleSubmit(submitHandler)}
     >
       <FormControl>
-        <FormLabel htmlFor="new_password">
+        <FormLabel
+          htmlFor="new_password"
+          error={!!errors.password}
+        >
           {t('form_common.new_password')}
         </FormLabel>
         <InputPassword
           id="new_password"
           {...fieldPassword}
+          error={!!errors.password}
           disabled={isProcessing}
+        />
+        <FieldClientErrors
+          error={errors.password}
+          customMessages={{ minLength: t('common_validation.min_length', { minLength: PASSWORD_MIN_LENGTH }) }}
         />
       </FormControl>
       <FormControl>
-        <FormLabel htmlFor="repeat_password">
+        <FormLabel
+          htmlFor="confirm_password"
+          error={!!errors.confirmPassword}
+        >
           {t('form_common.repeat_password')}
         </FormLabel>
         <InputPassword
-          id="repeat_password"
+          id="confirm_password"
           {...fieldConfirmPassword}
+          error={!!errors.confirmPassword}
           disabled={isProcessing}
+        />
+        <FieldClientErrors
+          error={errors.confirmPassword}
+          customMessages={{ sameAs: t('common_validation.confirm_password') }}
         />
       </FormControl>
       <Button

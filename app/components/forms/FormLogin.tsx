@@ -24,7 +24,7 @@ interface IProps {
 
 const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, reset } = useForm<IFormLogin>();
+  const { register, handleSubmit, reset } = useForm<IFormLogin>({ mode: 'onBlur' });
 
   const fieldLogin = register('login', {
     required: true,

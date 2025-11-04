@@ -55,5 +55,17 @@
   "input_password": {
     "show_password": "Show password",
     "hide_password": "Hide password"
+  },
+  "common_validation": {
+    "required": "This field is required",
+    "pattern": "This field has incorrect pattern",
+    "email": "This field must be a valid email",
+    "contain_upper_case": "This field must contain uppercase character",
+    "contain_lower_case": "This field must contain lowercase character",
+    "contain_number": "This field must contain number",
+    "only_latin": "This field must contain only lating characters",
+    "special_symbol": "This field must contain special symbols",
+    "min_length": "This field must have at least {{minLength}} characters",
+    "confirm_password": "Passwords must match"
   }
 }
