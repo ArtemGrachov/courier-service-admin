@@ -34,12 +34,13 @@ const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, o
 
   const [isPasswordFocus, setIsPasswordFocus] = useState(false);
   const passwordRef = useRef(null);
+  const passwordValue = watch('password');
 
   const fieldPassword = register('password', PASSWORD_VALIDATOR);
   const fieldConfirmPassword = register('confirmPassword', {
     required: true,
     validate: {
-      sameAs: (v: string) => v === watch('password'),
+      sameAs: (v: string) => v === passwordValue,
     },
   });
 
@@ -91,6 +92,7 @@ const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, o
         />
         <PasswordValidationHint
           ref={passwordRef}
+          value={passwordValue}
           open={isPasswordFocus}
           error={errors.password}
         />

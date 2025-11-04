@@ -14,9 +14,10 @@ import { PASSWORD_MIN_LENGTH } from '~/validators/password.validator';
 const Popper = lazy(() => import('@mui/material/Popper'));
 
 interface IProps {
-  error?: FieldError;
   ref: RefObject<any>;
   open?: boolean;
+  value?: string | null;
+  error?: FieldError;
 }
 
 const VALIDATIONS = [
@@ -47,7 +48,7 @@ const VALIDATIONS = [
   },
 ];
 
-const PasswordValidationHint: ComponentType<IProps> = ({ ref, open, error }) => {
+const PasswordValidationHint: ComponentType<IProps> = ({ ref, open, value, error }) => {
   const { t } = useTranslation();
 
   return (
@@ -61,7 +62,7 @@ const PasswordValidationHint: ComponentType<IProps> = ({ ref, open, error }) => 
           {VALIDATIONS.map(item => (
             <ListItem key={item.key}>
               <ListItemIcon>
-                {error?.types?.[item.key] ?  <CloseIcon color="error" /> : <CheckIcon color="success" />}
+                {(!value || error?.types?.[item.key]) ?  <CloseIcon color="error" /> : <CheckIcon color="success" />}
               </ListItemIcon>
               <ListItemText>
                 {t(item.translation, item.translationParameters)}
