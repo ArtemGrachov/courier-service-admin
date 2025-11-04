@@ -75,5 +75,13 @@
     "only_latin": "Only latin characters",
     "special_symbol": "Contains special symbols",
     "min_length": "Minimum length {{minLength}}"
+  },
+  "couriers_table": {
+    "id": "ID",
+    "name": "Name",
+    "status": "Status",
+    "current_orders_count": "Active orders",
+    "total_orders_count": "Total orders",
+    "rating": "Rating"
   }
 }
