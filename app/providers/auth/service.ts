@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { STORAGE_AUTH_TOKEN_KEY } from '~/constants/auth';
 
@@ -32,6 +32,10 @@ export const useAuthService = () => {
     authStore.current.authorize(false);
     storage.removeItem(STORAGE_AUTH_TOKEN_KEY);
   }
+
+  useEffect(() => {
+    init();
+  }, []);
 
   return {
     store: authStore.current,
