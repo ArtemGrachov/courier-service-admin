@@ -25,9 +25,14 @@
   "form_common": {
     "email": "Email",
     "password": "Password",
+    "new_password": "New password",
+    "repeat_password": "Repeat password",
     "submit": "Submit"
   },
   "view_forgot_password": {
     "title": "Forgot password"
+  },
+  "view_reset_password": {
+    "title": "Reset password"
   }
 }

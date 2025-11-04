@@ -25,9 +25,14 @@
   "form_common": {
     "email": "Email",
     "password": "Пароль",
+    "new_password": "Новий пароль",
+    "repeat_password": "Повторити пароль",
     "submit": "Відправити"
   },
   "view_forgot_password": {
     "title": "Забули пароль"
+  },
+  "view_reset_password": {
+    "title": "Скинути пароль"
   }
 }
