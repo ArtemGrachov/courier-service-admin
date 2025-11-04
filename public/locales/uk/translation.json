@@ -10,5 +10,70 @@
   "common_locales": {
     "en": "Англійська / English",
     "uk": "Українська"
+  },
+  "form_login": {
+    "login": "Email / Номер телефону",
+    "submit": "Увійти"
+  },
+  "view_login": {
+    "title": "Вхід"
+  },
+  "auth_links": {
+    "login_link": "Увійти",
+    "forgot_password_link": "Забули пароль"
+  },
+  "form_common": {
+    "email": "Email",
+    "password": "Пароль",
+    "new_password": "Новий пароль",
+    "repeat_password": "Повторити пароль",
+    "submit": "Відправити"
+  },
+  "view_forgot_password": {
+    "title": "Забули пароль",
+    "success_hint": "Лист із посиланням для скидання паролю було надіслано на {{email}}"
+  },
+  "view_reset_password": {
+    "title": "Скинути пароль",
+    "success_hint": "Ваш пароль було успішно скинуто. Тепер ви можете <Link>увійти в систему</Link>."
+  },
+  "common_errors": {
+    "generic": "Сталася помилка",
+    "alert_title": "Помилка"
+  },
+  "common_modals": {
+    "close": "Закрити",
+    "reject": "Відхилити",
+    "confirm": "Прийняти",
+    "yes": "Так",
+    "no": "Ні"
+  },
+  "logout": {
+    "title": "Вихід із системи",
+    "question": "Ви впевнені, що бажаєте вийти із системи?"
+  },
+  "input_password": {
+    "show_password": "Показати пароль",
+    "hide_password": "Приховати пароль"
+  },
+  "common_validation": {
+    "required": "Це поле обов'язкове",
+    "pattern": "У цього поля некоректний паттерн",
+    "email": "Це поле має відповідати формату email",
+    "contain_upper_case": "Це поле має містити велику літеру",
+    "contain_lower_case": "Це поле має містити маленьку літеру",
+    "contain_number": "Це поле має містити цифру",
+    "only_latin": "Це поле має містити лише латинські символи",
+    "special_symbol": "Це поле має містити спеціальний символ",
+    "min_length": "Це поле має містити не менше {{minLength}} символів",
+    "confirm_password": "Паролі повинні співпадати"
+  },
+  "password_validation_hint": {
+    "contain_upper_case": "Містить великі літери",
+    "contain_lower_case": "Містить маленькі літери",
+    "contain_number": "Містить цифри",
+    "only_latin": "Тільки латинські символи",
+    "special_symbol": "Містить спеціальні символи",
+    "min_length": "Мінімум {{minLength}} символів"
   }
 }

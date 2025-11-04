@@ -10,5 +10,70 @@
   "common_locales": {
     "en": "English",
     "uk": "Ukrainian / Українська"
+  },
+  "form_login": {
+    "login": "Email / Phone number",
+    "submit": "Log in"
+  },
+  "view_login": {
+    "title": "Log in"
+  },
+  "auth_links": {
+    "login_link": "Log in",
+    "forgot_password_link": "Forgot password"
+  },
+  "form_common": {
+    "email": "Email",
+    "password": "Password",
+    "new_password": "New password",
+    "repeat_password": "Repeat password",
+    "submit": "Submit"
+  },
+  "view_forgot_password": {
+    "title": "Forgot password",
+    "success_hint": "Password reset link was sent to {{email}}"
+  },
+  "view_reset_password": {
+    "title": "Reset password",
+    "success_hint": "Your password was resetted successfully. Now you can <Link>log in</Link>."
+  },
+  "common_errors": {
+    "generic": "An error occured",
+    "alert_title": "Error"
+  },
+  "common_modals": {
+    "close": "Close",
+    "reject": "Reject",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "logout": {
+    "title": "Log out",
+    "question": "Are you sure you want to log out?"
+  },
+  "input_password": {
+    "show_password": "Show password",
+    "hide_password": "Hide password"
+  },
+  "common_validation": {
+    "required": "This field is required",
+    "pattern": "This field has incorrect pattern",
+    "email": "This field must be a valid email",
+    "contain_upper_case": "This field must contain uppercase character",
+    "contain_lower_case": "This field must contain lowercase character",
+    "contain_number": "This field must contain number",
+    "only_latin": "This field must contain only lating characters",
+    "special_symbol": "This field must contain special symbols",
+    "min_length": "This field must have at least {{minLength}} characters",
+    "confirm_password": "Passwords must match"
+  },
+  "password_validation_hint": {
+    "contain_upper_case": "Contains uppercase characters",
+    "contain_lower_case": "Contains lowercase characters",
+    "contain_number": "Contains numbers",
+    "only_latin": "Only latin characters",
+    "special_symbol": "Contains special symbols",
+    "min_length": "Minimum length {{minLength}}"
   }
 }
