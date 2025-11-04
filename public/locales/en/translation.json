@@ -89,5 +89,10 @@
     "offline": "Offline",
     "idle": "Idle",
     "delivering": "Delivering"
+  },
+  "view_couriers": {
+    "couriers_header": {
+      "add_courier": "Add courier"
+    }
   }
 }
