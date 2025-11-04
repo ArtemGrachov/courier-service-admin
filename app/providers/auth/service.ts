@@ -24,12 +24,12 @@ export const useAuthService = () => {
   }
 
   const authorize = (authToken: string) => {
-    authStore.current.isAuthorized = true;
+    authStore.current.authorize(true);
     storage.setItem(STORAGE_AUTH_TOKEN_KEY, authToken);
   }
 
   const unauthorize = () => {
-    authStore.current.isAuthorized = false;
+    authStore.current.authorize(false);
     storage.removeItem(STORAGE_AUTH_TOKEN_KEY);
   }
 

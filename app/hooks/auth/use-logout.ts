@@ -1,7 +1,4 @@
-import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-
-import { ROUTES } from '~/router/routes';
 
 import { useConfirmation } from '~/hooks/other/use-confirmation';
 import { useAuthCtx } from '~/providers/auth/hooks/use-auth-ctx'
@@ -10,7 +7,6 @@ export const useLogout = () => {
   const { t } = useTranslation();
   const { unauthorize } = useAuthCtx();
   const confirmation = useConfirmation();
-  const navigate = useNavigate();
 
   return async () => {
     const confirmed = await confirmation({
@@ -25,6 +21,5 @@ export const useLogout = () => {
     }
 
     unauthorize();
-    navigate(ROUTES.LOGIN);
   }
 }
