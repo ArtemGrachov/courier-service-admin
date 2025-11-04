@@ -51,5 +51,9 @@
   "logout": {
     "title": "Log out",
     "question": "Are you sure you want to log out?"
+  },
+  "input_password": {
+    "show_password": "Show password",
+    "hide_password": "Hide password"
   }
 }

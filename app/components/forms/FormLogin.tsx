@@ -12,6 +12,7 @@ import Alert from '@mui/material/Alert';
 import { EStatus } from '~/constants/status';
 
 import { useErrorMessage } from '~/hooks/errors/use-error-message';
+import InputPassword from '~/components/inputs/InputPassword';
 
 import type { IFormLogin } from '~/types/forms/form-login';
 
@@ -73,8 +74,7 @@ const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit 
         <FormLabel htmlFor="password">
           {t('form_common.password')}
         </FormLabel>
-        <TextField
-          type="password"
+        <InputPassword
           id="password"
           {...fieldPassword}
           disabled={isProcessing}
@@ -91,7 +91,6 @@ const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit 
       {isError && <Alert severity="error">
         {errorMessage}
       </Alert>}
-      {isError}
     </Box>
   )
 }

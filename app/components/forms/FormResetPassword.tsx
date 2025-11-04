@@ -5,13 +5,13 @@ import { useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 
 import { EStatus } from '~/constants/status';
 
 import { useErrorMessage } from '~/hooks/errors/use-error-message';
+import InputPassword from '~/components/inputs/InputPassword';
 
 import type { IFormResetPassword } from '~/types/forms/form-reset-password';
 
@@ -63,7 +63,7 @@ const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, o
         <FormLabel htmlFor="new_password">
           {t('form_common.new_password')}
         </FormLabel>
-        <TextField
+        <InputPassword
           id="new_password"
           {...fieldPassword}
           disabled={isProcessing}
@@ -73,7 +73,7 @@ const FormResetPassword: ComponentType<IProps> = ({ submitStatus, submitError, o
         <FormLabel htmlFor="repeat_password">
           {t('form_common.repeat_password')}
         </FormLabel>
-        <TextField
+        <InputPassword
           id="repeat_password"
           {...fieldConfirmPassword}
           disabled={isProcessing}
