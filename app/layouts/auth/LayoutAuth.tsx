@@ -8,14 +8,16 @@ import { ROUTES } from '~/router/routes';
 
 import { useAuthCtx } from '~/providers/auth/hooks/use-auth-ctx';
 
+import { useRoutePath } from '~/hooks/routing/use-route-path';
 import LanguageSwitch from '~/components/other/LanguageSwitch';
 import ThemeSwitch from '~/components/other/ThemeSwitch';
 
 const LayoutAuth: ComponentType = () => {
   const { store } = useAuthCtx();
+  const routePath = useRoutePath();
 
   if (store.isAuthorized) {
-    return <Navigate to={ROUTES.HOME} />
+    return <Navigate to={routePath(ROUTES.HOME)} />
   }
 
   return (

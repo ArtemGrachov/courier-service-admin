@@ -7,14 +7,16 @@ import { ROUTES } from '~/router/routes';
 
 import { useAuthCtx } from '~/providers/auth/hooks/use-auth-ctx';
 
+import { useRoutePath } from '~/hooks/routing/use-route-path';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 
 const LayoutDefault: ComponentType = observer(() => {
   const { store } = useAuthCtx();
+  const routePath = useRoutePath();
 
   if (!store.isAuthorized) {
-    return <Navigate to={ROUTES.LOGIN} />
+    return <Navigate to={routePath(ROUTES.LOGIN)} />
   }
 
   return (
