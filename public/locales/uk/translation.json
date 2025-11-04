@@ -82,6 +82,12 @@
     "status": "Статус",
     "current_orders_count": "Активних замовлень",
     "total_orders_count": "Замовлень загалом",
-    "rating": "Рейтинг"
+    "rating": "Рейтинг",
+    "details": "Деталі"
+  },
+  "courier_status": {
+    "offline": "Не на роботі",
+    "idle": "Простій",
+    "delivering": "Доставка"
   }
 }

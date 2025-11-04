@@ -82,6 +82,12 @@
     "status": "Status",
     "current_orders_count": "Active orders",
     "total_orders_count": "Total orders",
-    "rating": "Rating"
+    "rating": "Rating",
+    "details": "Details"
+  },
+  "courier_status": {
+    "offline": "Offline",
+    "idle": "Idle",
+    "delivering": "Delivering"
   }
 }
