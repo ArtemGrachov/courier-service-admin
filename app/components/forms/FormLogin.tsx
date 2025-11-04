@@ -13,6 +13,7 @@ import { EStatus } from '~/constants/status';
 
 import { useErrorMessage } from '~/hooks/errors/use-error-message';
 import InputPassword from '~/components/inputs/InputPassword';
+import FieldClientErrors from '~/components/forms/FieldClientErrors';
 
 import type { IFormLogin } from '~/types/forms/form-login';
 
@@ -24,7 +25,8 @@ interface IProps {
 
 const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, reset } = useForm<IFormLogin>({ mode: 'onBlur' });
+  const { formState, register, handleSubmit, reset } = useForm<IFormLogin>({ mode: 'all' });
+  const errors = formState.errors;
 
   const fieldLogin = register('login', {
     required: true,
@@ -61,23 +63,37 @@ const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit 
       onSubmit={handleSubmit(submitHandler)}
     >
       <FormControl>
-        <FormLabel htmlFor="login">
+        <FormLabel
+          htmlFor="login"
+          error={!!errors.login}
+        >
           {t('form_login.login')}
         </FormLabel>
         <TextField
           id="login"
           {...fieldLogin}
+          error={!!errors.login}
           disabled={isProcessing}
+        />
+        <FieldClientErrors
+          error={errors.login}
         />
       </FormControl>
       <FormControl>
-        <FormLabel htmlFor="password">
+        <FormLabel
+          htmlFor="password"
+          error={!!errors.password}
+        >
           {t('form_common.password')}
         </FormLabel>
         <InputPassword
           id="password"
           {...fieldPassword}
+          error={!!errors.password}
           disabled={isProcessing}
+        />
+        <FieldClientErrors
+          error={errors.password}
         />
       </FormControl>
       <Button

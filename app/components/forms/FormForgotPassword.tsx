@@ -10,8 +10,10 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 
 import { EStatus } from '~/constants/status';
+import { EMAIL_VALIDATOR } from '~/validators/email.validator';
 
 import { useErrorMessage } from '~/hooks/errors/use-error-message';
+import FieldClientErrors from '~/components/forms/FieldClientErrors';
 
 import type { IFormForgotPassword } from '~/types/forms/form-forgot-password';
 
@@ -23,10 +25,14 @@ interface IProps {
 
 const FormForgotPassword: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, reset } = useForm<IFormForgotPassword>({ mode: 'onBlur' });
+  const { formState, register, handleSubmit, reset } = useForm<IFormForgotPassword>({ mode: 'all' });
+  const errors = formState.errors;
 
   const fieldEmail = register('email', {
     required: true,
+    validate: {
+      email: EMAIL_VALIDATOR
+    }
   });
 
   const errorMessage = useErrorMessage(submitError);
@@ -57,13 +63,20 @@ const FormForgotPassword: ComponentType<IProps> = ({ submitStatus, submitError, 
       onSubmit={handleSubmit(submitHandler)}
     >
       <FormControl>
-        <FormLabel htmlFor="email">
+        <FormLabel
+          htmlFor="email"
+          error={!!errors.email}
+        >
           {t('form_common.email')}
         </FormLabel>
         <TextField
           id="email"
           {...fieldEmail}
+          error={!!errors.email}
           disabled={isProcessing}
+        />
+        <FieldClientErrors
+          error={errors.email}
         />
       </FormControl>
       <Button
