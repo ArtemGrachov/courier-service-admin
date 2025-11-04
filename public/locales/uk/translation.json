@@ -30,7 +30,8 @@
     "submit": "Відправити"
   },
   "view_forgot_password": {
-    "title": "Забули пароль"
+    "title": "Забули пароль",
+    "success_hint": "Лист із посиланням для скидання паролю було надіслано на {{email}}"
   },
   "view_reset_password": {
     "title": "Скинути пароль"

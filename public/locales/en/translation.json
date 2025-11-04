@@ -30,7 +30,8 @@
     "submit": "Submit"
   },
   "view_forgot_password": {
-    "title": "Forgot password"
+    "title": "Forgot password",
+    "success_hint": "Password reset link was sent to {{email}}"
   },
   "view_reset_password": {
     "title": "Reset password"

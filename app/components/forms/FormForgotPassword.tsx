@@ -1,14 +1,50 @@
-import type { ComponentType } from 'react';
+import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 
-const FormForgotPassword: ComponentType = () => {
+import { EStatus } from '~/constants/status';
+
+import { useErrorMessage } from '~/hooks/errors/use-error-message';
+
+import type { IFormForgotPassword } from '~/types/forms/form-forgot-password';
+
+interface IProps {
+  submitStatus?: EStatus;
+  submitError?: any;
+  onSubmit?: (formValue: IFormForgotPassword) => any;
+}
+
+const FormForgotPassword: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
+  const { register, handleSubmit, reset } = useForm<IFormForgotPassword>();
+
+  const fieldEmail = register('email', {
+    required: true,
+  });
+
+  const errorMessage = useErrorMessage(submitError);
+
+  const submitHandler = async (formValue: IFormForgotPassword) => {
+    if (isProcessing) {
+      return;
+    }
+
+    try {
+      await (onSubmit && onSubmit(formValue));
+      reset();
+    } catch {}
+  }
+
+  const isProcessing = useMemo(() => submitStatus === EStatus.PROCESSING, [submitStatus]);
+  const isError = useMemo(() => submitStatus === EStatus.ERROR, [submitStatus]);
+
   return (
     <Box
       component="form"
@@ -18,20 +54,29 @@ const FormForgotPassword: ComponentType = () => {
         flexDirection: 'column',
         width: '100%',
       }}
+      onSubmit={handleSubmit(submitHandler)}
     >
       <FormControl>
         <FormLabel htmlFor="email">
           {t('form_common.email')}
         </FormLabel>
-        <TextField id="email" />
+        <TextField
+          id="email"
+          {...fieldEmail}
+          disabled={isProcessing}
+        />
       </FormControl>
       <Button
         variant="contained"
         size="large"
+        loading={isProcessing}
         type="submit"
       >
         {t('form_common.submit')}
       </Button>
+      {isError && <Alert severity="error">
+        {errorMessage}
+      </Alert>}
     </Box>
   )
 }

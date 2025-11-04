@@ -5,10 +5,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
-import { useModalsCtx } from '~/providers/modals/hooks/use-modals-ctx';
 import { LoginProvider, useLoginCtx } from './providers/login';
 
-import { useGetErrorMessage } from '~/hooks/errors/use-error-message';
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 
 import AuthLinks from '~/components/auth/AuthLinks';
 import FormLogin from '~/components/forms/FormLogin';
@@ -20,20 +19,13 @@ const ModalAlert = lazy(() => import('~/components/modals/ModalAlert'));
 const ViewLogin: ComponentType = observer(() => {
   const { t } = useTranslation();
   const { store, submit } = useLoginCtx();
-  const { openModal } = useModalsCtx();
-  const getErrorMessage = useGetErrorMessage();
+  const errorSnackbar = useErrorSnackbar();
 
   const submitHandler = async (formValue: IFormLogin) => {
     try {
       await submit(formValue);
     } catch (err) {
-      openModal({
-        component: ModalAlert,
-        props: {
-          title: t('common_errors.alert_title'),
-          children: getErrorMessage(err),
-        },
-      });
+      errorSnackbar(err);
       throw err;
     }
   }
