@@ -12,6 +12,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import type { Route } from './+types/root';
 
+import { StorageProvider } from '~/providers/storage';
+import { AuthProvider } from '~/providers/auth';
+
 import '~/i18n/config';
 import './app.scss';
 
@@ -32,10 +35,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
+        <StorageProvider>
+          <AuthProvider>
+            <ThemeProvider theme={darkTheme}>
+              <CssBaseline />
+              {children}
+            </ThemeProvider>
+          </AuthProvider>
+        </StorageProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
