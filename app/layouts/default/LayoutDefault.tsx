@@ -20,10 +20,10 @@ const LayoutDefault: ComponentType = observer(() => {
   }
 
   return (
-    <Box sx={{ display: 'flex '}}>
+    <Box sx={{ display: 'flex '}} boxSizing="border-box">
       <Header />
       <Sidebar />
-      <Box component="main">
+      <Box component="main" width="100%" boxSizing="border-box">
         <Toolbar />
         <Outlet />
       </Box>

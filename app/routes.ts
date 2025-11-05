@@ -5,7 +5,7 @@ export default [
   layout('./layouts/default/LayoutDefault.tsx', [
     index('routes/home.tsx'),
     route(ROUTE_PATHS.MAP, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.MAP }),
-    route(ROUTE_PATHS.COURIERS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.COURIERS }),
+    route(ROUTE_PATHS.COURIERS, './routes/ViewCouriers/ViewCouriers.tsx', { id: ROUTE_PATHS.COURIERS }),
     route(ROUTE_PATHS.ORDERS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.ORDERS }),
     route(ROUTE_PATHS.CLIENTS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.CLIENTS }),
   ]),

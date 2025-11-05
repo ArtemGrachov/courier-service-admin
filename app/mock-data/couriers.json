@@ -1,0 +1,242 @@
+[
+  {
+    "id": 1,
+    "name": "Alex Johnson",
+    "status": "delivering",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 184,
+    "rating": 4.7
+  },
+  {
+    "id": 2,
+    "name": "Maria Lopez",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 201,
+    "rating": 4.9
+  },
+  {
+    "id": 3,
+    "name": "James Smith",
+    "status": "offline",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 67,
+    "rating": 4.3
+  },
+  {
+    "id": 4,
+    "name": "Sofia Rossi",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 152,
+    "rating": 4.8
+  },
+  {
+    "id": 5,
+    "name": "Omar Haddad",
+    "status": "delivering",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 99,
+    "rating": 4.5
+  },
+  {
+    "id": 6,
+    "name": "Emma Müller",
+    "status": "offline",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 45,
+    "rating": 4.1
+  },
+  {
+    "id": 7,
+    "name": "Lucas Brown",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 220,
+    "rating": 4.9
+  },
+  {
+    "id": 8,
+    "name": "Anna Petrova",
+    "status": "delivering",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 180,
+    "rating": 4.6
+  },
+  {
+    "id": 9,
+    "name": "Daniel Kim",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 164,
+    "rating": 4.7
+  },
+  {
+    "id": 10,
+    "name": "Sara Cohen",
+    "status": "offline",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 51,
+    "rating": 4.2
+  },
+  {
+    "id": 11,
+    "name": "Ahmed Ali",
+    "status": "delivering",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 175,
+    "rating": 4.8
+  },
+  {
+    "id": 12,
+    "name": "Nina Novak",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 208,
+    "rating": 4.9
+  },
+  {
+    "id": 13,
+    "name": "Robert Williams",
+    "status": "offline",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 36,
+    "rating": 3.9
+  },
+  {
+    "id": 14,
+    "name": "Chloe Dubois",
+    "status": "delivering",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 144,
+    "rating": 4.6
+  },
+  {
+    "id": 15,
+    "name": "Mateo García",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 193,
+    "rating": 4.7
+  },
+  {
+    "id": 16,
+    "name": "Elena Popescu",
+    "status": "delivering",
+    "currentOrdersCount": 4,
+    "totalOrdersCount": 212,
+    "rating": 4.9
+  },
+  {
+    "id": 17,
+    "name": "John Davis",
+    "status": "offline",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 58,
+    "rating": 4.1
+  },
+  {
+    "id": 18,
+    "name": "Hiroshi Tanaka",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 240,
+    "rating": 4.8
+  },
+  {
+    "id": 19,
+    "name": "Isabella Rossi",
+    "status": "delivering",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 189,
+    "rating": 4.7
+  },
+  {
+    "id": 20,
+    "name": "David Miller",
+    "status": "offline",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 33,
+    "rating": 4.0
+  },
+  {
+    "id": 21,
+    "name": "Lina Andersson",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 166,
+    "rating": 4.6
+  },
+  {
+    "id": 22,
+    "name": "Igor Kovalenko",
+    "status": "delivering",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 190,
+    "rating": 4.8
+  },
+  {
+    "id": 23,
+    "name": "Mia Nguyen",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 147,
+    "rating": 4.7
+  },
+  {
+    "id": 24,
+    "name": "Tomás Silva",
+    "status": "offline",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 62,
+    "rating": 4.2
+  },
+  {
+    "id": 25,
+    "name": "Emily Clark",
+    "status": "delivering",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 199,
+    "rating": 4.8
+  },
+  {
+    "id": 26,
+    "name": "Sergey Ivanov",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 158,
+    "rating": 4.5
+  },
+  {
+    "id": 27,
+    "name": "Olivia Wilson",
+    "status": "delivering",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 172,
+    "rating": 4.9
+  },
+  {
+    "id": 28,
+    "name": "Mohamed Hassan",
+    "status": "offline",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 40,
+    "rating": 4.1
+  },
+  {
+    "id": 29,
+    "name": "Patricia Costa",
+    "status": "idle",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 210,
+    "rating": 4.8
+  },
+  {
+    "id": 30,
+    "name": "Ethan Baker",
+    "status": "delivering",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 155,
+    "rating": 4.6
+  }
+]

@@ -75,5 +75,24 @@
     "only_latin": "Тільки латинські символи",
     "special_symbol": "Містить спеціальні символи",
     "min_length": "Мінімум {{minLength}} символів"
+  },
+  "couriers_table": {
+    "id": "ID",
+    "name": "Ім'я",
+    "status": "Статус",
+    "current_orders_count": "Активних замовлень",
+    "total_orders_count": "Замовлень загалом",
+    "rating": "Рейтинг",
+    "details": "Деталі"
+  },
+  "courier_status": {
+    "offline": "Не на роботі",
+    "idle": "Простій",
+    "delivering": "Доставка"
+  },
+  "view_couriers": {
+    "couriers_header": {
+      "add_courier": "Додати кур'єра"
+    }
   }
 }
