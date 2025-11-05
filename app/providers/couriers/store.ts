@@ -9,7 +9,11 @@ export class CouriersStore {
   getError: any = null;
   data: IGetCouriersResponse | null = null;
 
-  constructor() {
+  constructor(initialData?: IGetCouriersResponse) {
+    if (initialData) {
+      this.data = initialData;
+    }
+
     makeAutoObservable(this);
   }
 
