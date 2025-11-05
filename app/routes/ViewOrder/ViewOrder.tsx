@@ -12,6 +12,7 @@ import { fetchOrder } from '~/providers/order/data';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import PageError from '~/components/other/PageError';
+import OrderCard from '~/components/orders/OrderCard';
 
 const ViewOrder: ComponentType = observer(() => {
   const { store: orderStore, fetch } = useOrderCtx();
@@ -42,7 +43,11 @@ const ViewOrder: ComponentType = observer(() => {
           />
         )}
       </ReloadPageProvider>
-      {!showPageError && <div>@todo</div>}
+      {!showPageError && orderStore.data && (
+        <>
+          <OrderCard order={orderStore.data} />
+        </>
+      )}
     </Box>
   )
 })
