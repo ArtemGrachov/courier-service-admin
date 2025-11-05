@@ -4,12 +4,22 @@ import { EStatus } from '~/constants/status';
 
 import type { IGetCourierResponse } from '~/types/api/couriers';
 
-export class CourierStore {
+export interface ICourierStoreData {
+  getStatus: EStatus;
+  getError: any;
+  data: IGetCourierResponse | null;
+}
+
+export class CourierStore implements ICourierStoreData {
   getStatus: EStatus = EStatus.INIT;
   getError: any = null;
   data: IGetCourierResponse | null = null;
 
-  constructor() {
+  constructor(initialData?: ICourierStoreData) {
+    if (initialData) {
+      Object.assign(this, initialData);
+    }
+
     makeAutoObservable(this);
   }
 
