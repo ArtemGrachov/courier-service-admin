@@ -23,10 +23,12 @@
     "forgot_password_link": "Забули пароль"
   },
   "form_common": {
+    "name": "Ім'я",
     "email": "Email",
     "password": "Пароль",
     "new_password": "Новий пароль",
     "repeat_password": "Повторити пароль",
+    "phone": "Номер телефону",
     "submit": "Відправити"
   },
   "view_forgot_password": {
@@ -94,5 +96,8 @@
     "couriers_header": {
       "add_courier": "Додати кур'єра"
     }
+  },
+  "form_courier": {
+    "password_hint": "Залишіть це поле пустим, щоб пароль було згенеровано автоматично. Пароль буде надіслано на пошту кур'єра"
   }
 }
