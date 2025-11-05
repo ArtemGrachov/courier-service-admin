@@ -1,13 +1,15 @@
-import { useCallback, useMemo, type ComponentType } from 'react';
+import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DataGrid, GridCell, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
-import type { ICourier } 
-from '~/types/models/courier';
+
+import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import CourierStatus from '~/components/couriers/CourierStatus';
 import CourierRating from '~/components/couriers/CourierRating';
+
+import type { ICourier } from '~/types/models/courier';
 
 interface IProps {
   isProcessing?: boolean;
@@ -86,6 +88,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
 
 const CouriersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
   const { t, i18n } = useTranslation();
+  const localeText = useDataGridLabels();
 
   const outputColumns = useMemo((): GridColDef[] => {
     const statusCol = BASE_COLUMNS[EColumns.STATUS] as GridSingleSelectColDef;
@@ -120,6 +123,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
         cell: props => (<GridCell {...props}></GridCell>),
       }}
       showToolbar={true}
+      localeText={localeText}
     />
   )
 }
