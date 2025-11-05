@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, type ComponentType } from 'react';
+import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router';
 import { DataGrid, GridCell, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import EditIcon from '@mui/icons-material/Edit';
+import { Link } from '@mui/material';
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -12,13 +12,15 @@ import timezone from 'dayjs/plugin/timezone';
 
 import { EOrderStatus, ORDER_STATUSES } from '~/constants/order';
 import { DATE_TIME_FORMAT } from '~/constants/datetime';
-import { ROUTE_PATHS } from '~/router/routes';
+import { ROUTE_PATHS, ROUTES } from '~/router/routes';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import { useRoutePath } from '~/hooks/routing/use-route-path';
 import OrderStatus from '~/components/orders/OrderStatus';
 
 import type { IOrder } from '~/types/models/order';
+import type { ICourier } from '~/types/models/courier';
+import type { IClient } from '~/types/models/client';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -51,14 +53,48 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     type: 'string',
     headerName: 'orders_table.client',
     flex: 1,
-    valueFormatter: v => 'Client Client', // @todo
+    valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
+    renderCell: (params) => {
+      const client = (params.row as IOrder).client;
+      const routePath = useRoutePath();
+
+      if (!client) {
+        return '-';
+      }
+
+      return (
+        <Link
+          to={routePath(ROUTES.CLIENT, { clientId: client.id })}
+          component={RouterLink}
+        >
+          {client.name}
+        </Link>
+      )
+    },
   },
   [EColumns.COURIER]: {
     field: 'courier',
     type: 'string',
     headerName: 'orders_table.courier',
     flex: 1,
-    valueFormatter: () => 'Courier Courier', // @todo
+    valueFormatter: (v: ICourier | undefined) => v?.name ?? '-',
+    renderCell: (params) => {
+      const courier = (params.row as IOrder).courier;
+      const routePath = useRoutePath();
+
+      if (!courier) {
+        return '-';
+      }
+
+      return (
+        <Link
+          to={routePath(ROUTES.COURIER, { courierId: courier.id })}
+          component={RouterLink}
+        >
+          {courier.name}
+        </Link>
+      )
+    },
   },
   [EColumns.STATUS]: {
     field: 'status',
@@ -88,28 +124,20 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     field: 'actions',
     type: 'custom',
     headerName: EMPTY,
-    width: 110,
+    width: 60,
     renderCell: (params) => {
       const { t } = useTranslation();
-      // @todo
-      // const courier = params.row as IOrder;
-      // const routePath = useRoutePath();
+      const order = params.row as IOrder;
+      const routePath = useRoutePath();
 
       return (
-        <>
-          <IconButton
-            // @todo
-            // component={RouterLink}
-            // to={routePath(ROUTE_PATHS.COURIER_EDIT, { courierId: courier.id })}
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            aria-label={t('orders_table.details')}
-          >
-            <RemoveRedEyeIcon />
-          </IconButton>
-        </>
+        <IconButton
+          component={RouterLink}
+          to={routePath(ROUTE_PATHS.ORDER, { orderId: order.id })}
+          aria-label={t('orders_table.details')}
+        >
+          <RemoveRedEyeIcon />
+        </IconButton>
       )
     },
     filterable: false,
