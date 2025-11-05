@@ -1,13 +1,15 @@
 import Box from '@mui/material/Box';
-import { useEffect, useMemo, type ComponentType } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useMemo, type ComponentType } from 'react';
+import { useLoaderData, useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
+import type { Route } from '.react-router/types/app/routes/ViewUpsertCourier/+types/ViewUpsertCourier';
 
 import { ROUTES } from '~/router/routes';
 
 import { UpsertCourierProvider, useUpsertCourierCtx } from './providers/upsert-courier';
 import { CourierProvider, useCourierCtx } from '~/providers/courier';
+import { fetchCourier } from '~/providers/courier/data';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import { useSuccessSnackbar } from '~/hooks/other/use-success-snackbar';
@@ -58,20 +60,6 @@ const ViewUpsertCourier: ComponentType = observer(() => {
     await navigate(ROUTES.COURIERS);
   }
 
-  const getData = async () => {
-    try {
-      await fetch(+courierId!);
-    } catch (err) {
-      errorSnackbar(err);
-    }
-  }
-
-  useEffect(() => {
-    if (courierId) {
-      getData();
-    }
-  }, []);
-
   return (
     <Box padding={3}>
       <Box maxWidth={500} margin="auto">
@@ -87,6 +75,8 @@ const ViewUpsertCourier: ComponentType = observer(() => {
 })
 
 const Wrapper = () => {
+  const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
+
   return (
     <CourierProvider>
       <UpsertCourierProvider>
@@ -97,3 +87,13 @@ const Wrapper = () => {
 }
 
 export default Wrapper;
+
+export async function clientLoader({
+  params,
+}: Route.ClientLoaderArgs) {
+  const courierData = await fetchCourier(+params.courierId!);
+
+  return {
+    courierData,
+  };
+}

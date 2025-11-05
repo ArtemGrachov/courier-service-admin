@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import { CourierStore } from './store';
 
-import type { ICourier } from '~/types/models/courier';
+import { fetchCourier } from '~/providers/courier/data';
 
 export const useCourierService = () => {
   const courierStore = useRef<CourierStore>(null as unknown as CourierStore);
@@ -15,12 +15,7 @@ export const useCourierService = () => {
     try {
       courierStore.current.doGetInit();
 
-      const couriers = await import('~/mock-data/couriers.json').then(m => m.default as ICourier[]);
-      const data = couriers.find(c => c.id === courierId);
-
-      if (!data) {
-        throw new Error('404');
-      }
+      const data = await fetchCourier(courierId)
 
       courierStore.current.doGetSuccess(data);
     } catch (err) {

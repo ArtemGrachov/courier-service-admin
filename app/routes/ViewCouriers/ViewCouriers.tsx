@@ -1,32 +1,16 @@
-import { useEffect, type ComponentType } from 'react';
+import { type ComponentType } from 'react';
 import { Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { useLoaderData } from 'react-router';
 
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
+import { fetchCouriers } from '~/providers/couriers/data';
 
-import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import CouriersHeader from './components/CouriersHeader';
 import CouriersTable from '~/components/couriers/CouriersTable';
 
 const ViewCouriers: ComponentType = observer(() => {
-  const { store, fetch } = useCouriersCtx();
-  const errorSnackbar = useErrorSnackbar();
-
-  const getData = async () => {
-    try {
-      if (store.isProcessing) {
-        return;
-      }
-
-      await fetch();
-    } catch (err) {
-      errorSnackbar(err);
-    }
-  }
-
-  useEffect(() => {
-    getData();
-  }, []);
+  const { store } = useCouriersCtx();
 
   return (
     <Box
@@ -47,11 +31,21 @@ const ViewCouriers: ComponentType = observer(() => {
 })
 
 const Wrapper: ComponentType = () => {
+  const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
+
   return (
-    <CouriersProvider>
+    <CouriersProvider initialData={loaderData.couriersData}>
       <ViewCouriers />
     </CouriersProvider>
   )
 }
 
 export default Wrapper;
+
+export async function clientLoader() {
+  const couriersData = await fetchCouriers();
+
+  return {
+    couriersData,
+  };
+}
