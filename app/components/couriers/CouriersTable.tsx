@@ -74,7 +74,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
 
   return (
     <DataGrid
-      sx={{ width: '100%' }}
+      sx={{ width: '100%', boxSizing: 'border-box' }}
       columns={outputColumns}
       rows={items}
       loading={isProcessing}

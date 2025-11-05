@@ -23,9 +23,6 @@ const CouriersHeader: ComponentType = () => {
           {t('view_couriers.couriers_header.add_courier')}
         </Button>
       </Stack>
-      <div>
-        asd
-      </div>
     </Stack>
   )
 }

@@ -35,6 +35,7 @@ const ViewCouriers: ComponentType = observer(() => {
       gap={2}
       padding={3}
       width="100%"
+      boxSizing="border-box"
     >
       <CouriersHeader />
       <CouriersTable
