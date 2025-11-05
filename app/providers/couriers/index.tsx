@@ -2,12 +2,12 @@ import { createContext, useContext, type ComponentType, type PropsWithChildren }
 
 import { useCouriersService } from './service';
 
-import type { IGetCouriersResponse } from '~/types/api/couriers';
+import type { ICouriersStoreData } from '~/providers/couriers/store';
 
 export const CouriersContext = createContext<ReturnType<typeof useCouriersService>>(null as any);
 
 interface IProps {
-  initialData?: IGetCouriersResponse;
+  initialData?: ICouriersStoreData;
 }
 
 export const CouriersProvider: ComponentType<PropsWithChildren & IProps> = ({ children, initialData }) => {

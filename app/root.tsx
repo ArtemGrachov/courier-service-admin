@@ -17,6 +17,7 @@ import { AuthProvider } from '~/providers/auth';
 import { ModalsProvider } from '~/providers/modals';
 
 import ModalRoot from '~/components/modals/ModalRoot';
+import PageLoader from '~/components/other/PageLoader';
 
 import '~/i18n/config';
 import './app.scss';
@@ -43,6 +44,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <ThemeProvider theme={darkTheme}>
               <ModalsProvider>
                 <CssBaseline />
+                <PageLoader />
                 {children}
                 <ModalRoot />
               </ModalsProvider>

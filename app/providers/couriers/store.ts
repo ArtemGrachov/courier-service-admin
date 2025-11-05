@@ -4,14 +4,20 @@ import { EStatus } from '~/constants/status';
 
 import type { IGetCouriersResponse } from '~/types/api/couriers';
 
-export class CouriersStore {
+export interface ICouriersStoreData {
+  getStatus: EStatus;
+  getError: any;
+  data: IGetCouriersResponse | null;
+}
+
+export class CouriersStore implements ICouriersStoreData {
   getStatus: EStatus = EStatus.INIT;
   getError: any = null;
   data: IGetCouriersResponse | null = null;
 
-  constructor(initialData?: IGetCouriersResponse) {
+  constructor(initialData?: ICouriersStoreData) {
     if (initialData) {
-      this.data = initialData;
+      Object.assign(this, initialData);
     }
 
     makeAutoObservable(this);
@@ -19,7 +25,6 @@ export class CouriersStore {
 
   public doGetInit() {
     this.getStatus = EStatus.PROCESSING;
-    this.getError = null;
   }
 
   public doGetSuccess(data: IGetCouriersResponse) {
@@ -35,5 +40,9 @@ export class CouriersStore {
 
   public get isProcessing() {
     return this.getStatus === EStatus.PROCESSING;
+  }
+
+  public get isError() {
+    return this.getStatus === EStatus.ERROR;
   }
 }
