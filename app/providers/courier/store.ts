@@ -25,7 +25,6 @@ export class CourierStore implements ICourierStoreData {
 
   public doGetInit() {
     this.getStatus = EStatus.PROCESSING;
-    this.getError = null;
   }
 
   public doGetSuccess(data: IGetCourierResponse) {
@@ -45,5 +44,9 @@ export class CourierStore implements ICourierStoreData {
 
   public get isSuccess(){
     return this.getStatus === EStatus.SUCCESS;
+  }
+
+  public get isError(){
+    return this.getStatus === EStatus.ERROR;
   }
 }

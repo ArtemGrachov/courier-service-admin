@@ -103,5 +103,11 @@
   "view_upsert_courier": {
     "create_success": "Courier was reigstered successfully",
     "edit_success": "Courier data was updated successfully"
+  },
+  "page_error": {
+    "title": "Page data loading error",
+    "tip_native_reload": "Try to fully reload page",
+    "tip_reload": "Press the reload button to try again",
+    "reload": "Reload"
   }
 }

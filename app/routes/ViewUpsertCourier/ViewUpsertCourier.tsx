@@ -13,10 +13,12 @@ import { UpsertCourierProvider, useUpsertCourierCtx } from './providers/upsert-c
 import { CourierProvider, useCourierCtx } from '~/providers/courier';
 import { fetchCourier } from '~/providers/courier/data';
 import type { ICourierStoreData } from '~/providers/courier/store';
+import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import { useSuccessSnackbar } from '~/hooks/other/use-success-snackbar';
 import FormCourier from '~/components/forms/FormCourier';
+import PageError from '~/components/other/PageError';
 
 import type { IFormCourier } from '~/types/forms/form-courier';
 
@@ -63,8 +65,20 @@ const ViewUpsertCourier: ComponentType = observer(() => {
     await navigate(ROUTES.COURIERS);
   }
 
+  const reloadPageData = () => {
+    fetch(+courierId!)
+  }
+
   return (
     <Box padding={3}>
+      <ReloadPageProvider reloadFunction={reloadPageData}>
+        {(courierStore.isError || courierStore.getError) && (
+          <PageError
+            isProcessing={courierStore.isProcessing}
+            error={courierStore.getError}
+          />
+        )}
+      </ReloadPageProvider>
       <Box maxWidth={500} margin="auto">
         {showForm && <FormCourier
           initialValue={courierStore.data!}
