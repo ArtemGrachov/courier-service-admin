@@ -10,7 +10,7 @@ export default [
     route(ROUTE_PATHS.COURIER_EDIT, './routes/ViewUpsertCourier/ViewUpsertCourier.tsx', { id: ROUTE_PATHS.COURIER_EDIT }),
     route(ROUTE_PATHS.COURIER, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.COURIER }),
     route(ROUTE_PATHS.ORDERS, './routes/ViewOrders/ViewOrders.tsx', { id: ROUTE_PATHS.ORDERS }),
-    route(ROUTE_PATHS.ORDER, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.ORDER }),
+    route(ROUTE_PATHS.ORDER, './routes/ViewOrder/ViewOrder.tsx', { id: ROUTE_PATHS.ORDER }),
     route(ROUTE_PATHS.CLIENTS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.CLIENTS }),
     route(ROUTE_PATHS.CLIENT, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.CLIENT }),
   ]),
