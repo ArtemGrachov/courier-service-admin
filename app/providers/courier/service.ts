@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 
-import { CourierStore } from './store';
+import { CourierStore, type ICourierStoreData } from './store';
 
 import { fetchCourier } from '~/providers/courier/data';
 
-export const useCourierService = () => {
+export const useCourierService = (initialData?: ICourierStoreData) => {
   const courierStore = useRef<CourierStore>(null as unknown as CourierStore);
 
   if (!courierStore.current) {
-    courierStore.current = new CourierStore();
+    courierStore.current = new CourierStore(initialData);
   }
 
   const fetch = async (courierId: number) => {

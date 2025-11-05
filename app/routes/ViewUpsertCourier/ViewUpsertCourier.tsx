@@ -7,13 +7,18 @@ import type { Route } from '.react-router/types/app/routes/ViewUpsertCourier/+ty
 
 import { ROUTES } from '~/router/routes';
 
+import { EStatus } from '~/constants/status';
+
 import { UpsertCourierProvider, useUpsertCourierCtx } from './providers/upsert-courier';
 import { CourierProvider, useCourierCtx } from '~/providers/courier';
 import { fetchCourier } from '~/providers/courier/data';
+import type { ICourierStoreData } from '~/providers/courier/store';
+import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import { useSuccessSnackbar } from '~/hooks/other/use-success-snackbar';
 import FormCourier from '~/components/forms/FormCourier';
+import PageError from '~/components/other/PageError';
 
 import type { IFormCourier } from '~/types/forms/form-courier';
 
@@ -60,8 +65,20 @@ const ViewUpsertCourier: ComponentType = observer(() => {
     await navigate(ROUTES.COURIERS);
   }
 
+  const reloadPageData = () => {
+    fetch(+courierId!)
+  }
+
   return (
     <Box padding={3}>
+      <ReloadPageProvider reloadFunction={reloadPageData}>
+        {(courierStore.isError || courierStore.getError) && (
+          <PageError
+            isProcessing={courierStore.isProcessing}
+            error={courierStore.getError}
+          />
+        )}
+      </ReloadPageProvider>
       <Box maxWidth={500} margin="auto">
         {showForm && <FormCourier
           initialValue={courierStore.data!}
@@ -78,7 +95,7 @@ const Wrapper = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
   return (
-    <CourierProvider>
+    <CourierProvider initialData={loaderData.courierData}>
       <UpsertCourierProvider>
         <ViewUpsertCourier />
       </UpsertCourierProvider>
@@ -91,9 +108,24 @@ export default Wrapper;
 export async function clientLoader({
   params,
 }: Route.ClientLoaderArgs) {
-  const courierData = await fetchCourier(+params.courierId!);
+  const courierState: ICourierStoreData = {
+    getStatus: EStatus.INIT,
+    getError: null,
+    data: null,
+  };
+
+  if (params.courierId) {
+    try {
+      const data = await fetchCourier(+params.courierId!);
+      courierState.data = data;
+      courierState.getStatus = EStatus.SUCCESS;
+    } catch (err) {
+      courierState.getError = err;
+      courierState.getStatus = EStatus.ERROR;
+    }
+  }
 
   return {
-    courierData,
+    courierData: courierState,
   };
 }
