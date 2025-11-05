@@ -2,6 +2,8 @@ import { useMemo, type ComponentType } from 'react';
 import { useLoaderData, useParams } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewOrder/+types/ViewOrder';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import { observer } from 'mobx-react-lite';
 
 import { EStatus } from '~/constants/status';
@@ -14,6 +16,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import PageError from '~/components/other/PageError';
 import OrderCard from '~/components/orders/OrderCard';
 import ClientCard from '~/components/clients/ClientCard';
+import Map from '~/components/map/Map';
 
 const ViewOrder: ComponentType = observer(() => {
   const { store: orderStore, fetch } = useOrderCtx();
@@ -48,9 +51,18 @@ const ViewOrder: ComponentType = observer(() => {
       </ReloadPageProvider>
       {!showPageError && order && (
         <>
-          <OrderCard order={order} />
-          {order.sender && <ClientCard client={order.sender} isSender={true} />}
-          {order.receiver && <ClientCard client={order.receiver} isReceiver={true} />}
+          <Grid container spacing={2}>
+            <Grid size={3}>
+              <Stack gap={2}>
+                <OrderCard order={order} />
+                {order.sender && <ClientCard client={order.sender} isSender={true} />}
+                {order.receiver && <ClientCard client={order.receiver} isReceiver={true} />}
+              </Stack>
+            </Grid>
+            <Grid size={9}>
+              <Map />
+            </Grid>
+          </Grid>
         </>
       )}
     </Box>
