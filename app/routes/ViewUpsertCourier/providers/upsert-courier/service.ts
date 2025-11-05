@@ -24,8 +24,20 @@ export const useUpsertCourierService = () => {
     }
   }
 
+  const submitUpdate = async (_formValue: IFormCourier) => {
+    try {
+      upsertCourierStore.current.doSubmitInit();
+      await mockRequest();
+      upsertCourierStore.current.doSubmitSuccess();
+    } catch (err) {
+      upsertCourierStore.current.doSubmitError(err);
+      throw err;
+    }
+  }
+
   return {
     store: upsertCourierStore.current,
     submitCreate,
+    submitUpdate,
   };
 }

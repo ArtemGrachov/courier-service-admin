@@ -35,13 +35,27 @@ const ViewUpsertCourier: ComponentType = observer(() => {
 
   const submitHandler = async (formValue: IFormCourier) => {
     try {
-      await submit(formValue);
-      successSnackbar(t('view_upsert_courier.create_success'));
-      await navigate(ROUTES.COURIERS);
+      if (isEdit) {
+        await submitUpdate(formValue);
+      } else {
+        await submitCreate(formValue);
+      }
     } catch (err) {
       errorSnackbar(err);
       throw err;
     }
+  }
+
+  const submitCreate = async (formValue: IFormCourier) => {
+    await submit(formValue);
+    successSnackbar(t('view_upsert_courier.create_success'));
+    await navigate(ROUTES.COURIERS);
+  }
+
+  const submitUpdate = async (formValue: IFormCourier) => {
+    await submit(formValue);
+    successSnackbar(t('view_upsert_courier.edit_success'));
+    await navigate(ROUTES.COURIERS);
   }
 
   const getData = async () => {
