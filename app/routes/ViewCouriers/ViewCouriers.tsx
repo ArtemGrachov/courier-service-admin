@@ -1,4 +1,4 @@
-import { type ComponentType } from 'react';
+import { useMemo, type ComponentType } from 'react';
 import { Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
@@ -8,12 +8,22 @@ import { EStatus } from '~/constants/status';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { fetchCouriers } from '~/providers/couriers/data';
 import type { ICouriersStoreData } from '~/providers/couriers/store';
+import { ReloadPageProvider } from '~/providers/reload-page';
 
 import CouriersHeader from './components/CouriersHeader';
 import CouriersTable from '~/components/couriers/CouriersTable';
+import PageError from '~/components/other/PageError';
 
 const ViewCouriers: ComponentType = observer(() => {
-  const { store } = useCouriersCtx();
+  const { store: couriersStore, fetch } = useCouriersCtx();
+
+  const showPageError = useMemo(() => {
+    return couriersStore.isError || couriersStore.getError;
+  }, [couriersStore.isError, couriersStore.getError]);
+
+  const reloadPageData = () => {
+    fetch()
+  }
 
   return (
     <Box
@@ -24,11 +34,21 @@ const ViewCouriers: ComponentType = observer(() => {
       width="100%"
       boxSizing="border-box"
     >
-      <CouriersHeader />
-      <CouriersTable
-        isProcessing={store.isProcessing}
-        items={store.data?.data}
-      />
+      <ReloadPageProvider reloadFunction={reloadPageData}>
+        {showPageError && (
+          <PageError
+            isProcessing={couriersStore.isProcessing}
+            error={couriersStore.getError}
+          />
+        )}
+      </ReloadPageProvider>
+      {!showPageError && (<>
+        <CouriersHeader />
+        <CouriersTable
+          isProcessing={couriersStore.isProcessing}
+          items={couriersStore.data?.data}
+        />
+      </>)}
     </Box>
   )
 })
