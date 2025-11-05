@@ -99,5 +99,9 @@
   },
   "form_courier": {
     "password_hint": "Leave this field empty to generate the password automatically. The password will be sent to the courier's email"
+  },
+  "view_upsert_courier": {
+    "create_success": "Courier was reigstered successfully",
+    "edit_success": "Courier data was updated successfully"
   }
 }

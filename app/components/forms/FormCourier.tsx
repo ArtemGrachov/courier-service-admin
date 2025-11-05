@@ -22,14 +22,13 @@ import type { IFormCourier } from '~/types/forms/form-courier';
 import { FormHelperText } from '@mui/material';
 
 interface IProps {
-  isEdit?: boolean;
   initialValue?: IFormCourier;
   submitStatus?: EStatus;
   submitError?: any;
   onSubmit?: (formValue: IFormCourier) => any;
 }
 
-const FormCourier: ComponentType<IProps> = ({ isEdit, initialValue, submitStatus, submitError, onSubmit }) => {
+const FormCourier: ComponentType<IProps> = ({ initialValue, submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
   const { formState, register, handleSubmit, reset, watch } = useForm<IFormCourier>({
     mode: 'all',
