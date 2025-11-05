@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 
-import { CouriersStore } from './store';
+import { CouriersStore, type ICouriersStoreData } from './store';
 
-import type { IGetCouriersQuery, IGetCouriersResponse } from '~/types/api/couriers';
+import type { IGetCouriersQuery } from '~/types/api/couriers';
 
 import { fetchCouriers } from '~/providers/couriers/data';
 
-export const useCouriersService = (initialData?: IGetCouriersResponse) => {
+export const useCouriersService = (initialData?: ICouriersStoreData) => {
   const couriersStore = useRef<CouriersStore>(null as unknown as CouriersStore);
 
   if (!couriersStore.current) {
