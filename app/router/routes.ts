@@ -3,6 +3,7 @@ export const ROUTE_PATHS = {
   MAP: 'map',
   COURIERS: 'couriers',
   COURIER_ADD: 'couriers/add',
+  COURIER_EDIT: 'couriers/:courierId/edit',
   ORDERS: 'orders',
   CLIENTS: 'clients',
   LOGIN: 'login',
