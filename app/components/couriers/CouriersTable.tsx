@@ -1,15 +1,20 @@
 import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link as RouterLink } from 'react-router';
 import { DataGrid, GridCell, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
+import { useRoutePath } from '~/hooks/routing/use-route-path';
 import CourierStatus from '~/components/couriers/CourierStatus';
 import CourierRating from '~/components/couriers/CourierRating';
 
 import type { ICourier } from '~/types/models/courier';
+import { ROUTE_PATHS } from '~/router/routes';
 
 interface IProps {
   isProcessing?: boolean;
@@ -71,13 +76,26 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     field: 'actions',
     type: 'custom',
     headerName: EMPTY,
-    width: 200,
+    width: 110,
     renderCell: (params) => {
       const { t } = useTranslation();
+      const courier = params.row as ICourier;
+      const routePath = useRoutePath();
+
       return (
-        <Button>
-          {t('couriers_table.details')}
-        </Button>
+        <>
+          <IconButton
+            component={RouterLink}
+            to={routePath(ROUTE_PATHS.COURIER_EDIT, { courierId: courier.id })}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            aria-label={t('couriers_table.details')}
+          >
+            <RemoveRedEyeIcon />
+          </IconButton>
+        </>
       )
     },
     filterable: false,
