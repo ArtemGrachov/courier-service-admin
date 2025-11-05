@@ -5,7 +5,9 @@
     "status": "delivering",
     "currentOrdersCount": 2,
     "totalOrdersCount": 184,
-    "rating": 4.7
+    "rating": 4.7,
+    "email": "alex.johnson@example.com",
+    "phoneNumber": "+1-202-555-0101"
   },
   {
     "id": 2,
@@ -13,7 +15,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 201,
-    "rating": 4.9
+    "rating": 4.9,
+    "email": "maria.lopez@example.com",
+    "phoneNumber": "+1-202-555-0102"
   },
   {
     "id": 3,
@@ -21,7 +25,9 @@
     "status": "offline",
     "currentOrdersCount": 0,
     "totalOrdersCount": 67,
-    "rating": 4.3
+    "rating": 4.3,
+    "email": "james.smith@example.com",
+    "phoneNumber": "+1-202-555-0103"
   },
   {
     "id": 4,
@@ -29,7 +35,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 152,
-    "rating": 4.8
+    "rating": 4.8,
+    "email": "sofia.rossi@example.com",
+    "phoneNumber": "+1-202-555-0104"
   },
   {
     "id": 5,
@@ -37,7 +45,9 @@
     "status": "delivering",
     "currentOrdersCount": 1,
     "totalOrdersCount": 99,
-    "rating": 4.5
+    "rating": 4.5,
+    "email": "omar.haddad@example.com",
+    "phoneNumber": "+1-202-555-0105"
   },
   {
     "id": 6,
@@ -45,7 +55,9 @@
     "status": "offline",
     "currentOrdersCount": 0,
     "totalOrdersCount": 45,
-    "rating": 4.1
+    "rating": 4.1,
+    "email": "emma.muller@example.com",
+    "phoneNumber": "+1-202-555-0106"
   },
   {
     "id": 7,
@@ -53,7 +65,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 220,
-    "rating": 4.9
+    "rating": 4.9,
+    "email": "lucas.brown@example.com",
+    "phoneNumber": "+1-202-555-0107"
   },
   {
     "id": 8,
@@ -61,7 +75,9 @@
     "status": "delivering",
     "currentOrdersCount": 3,
     "totalOrdersCount": 180,
-    "rating": 4.6
+    "rating": 4.6,
+    "email": "anna.petrova@example.com",
+    "phoneNumber": "+1-202-555-0108"
   },
   {
     "id": 9,
@@ -69,7 +85,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 164,
-    "rating": 4.7
+    "rating": 4.7,
+    "email": "daniel.kim@example.com",
+    "phoneNumber": "+1-202-555-0109"
   },
   {
     "id": 10,
@@ -77,7 +95,9 @@
     "status": "offline",
     "currentOrdersCount": 0,
     "totalOrdersCount": 51,
-    "rating": 4.2
+    "rating": 4.2,
+    "email": "sara.cohen@example.com",
+    "phoneNumber": "+1-202-555-0110"
   },
   {
     "id": 11,
@@ -85,7 +105,9 @@
     "status": "delivering",
     "currentOrdersCount": 2,
     "totalOrdersCount": 175,
-    "rating": 4.8
+    "rating": 4.8,
+    "email": "ahmed.ali@example.com",
+    "phoneNumber": "+1-202-555-0111"
   },
   {
     "id": 12,
@@ -93,7 +115,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 208,
-    "rating": 4.9
+    "rating": 4.9,
+    "email": "nina.novak@example.com",
+    "phoneNumber": "+1-202-555-0112"
   },
   {
     "id": 13,
@@ -101,7 +125,9 @@
     "status": "offline",
     "currentOrdersCount": 0,
     "totalOrdersCount": 36,
-    "rating": 3.9
+    "rating": 3.9,
+    "email": "robert.williams@example.com",
+    "phoneNumber": "+1-202-555-0113"
   },
   {
     "id": 14,
@@ -109,7 +135,9 @@
     "status": "delivering",
     "currentOrdersCount": 1,
     "totalOrdersCount": 144,
-    "rating": 4.6
+    "rating": 4.6,
+    "email": "chloe.dubois@example.com",
+    "phoneNumber": "+1-202-555-0114"
   },
   {
     "id": 15,
@@ -117,7 +145,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 193,
-    "rating": 4.7
+    "rating": 4.7,
+    "email": "mateo.garcia@example.com",
+    "phoneNumber": "+1-202-555-0115"
   },
   {
     "id": 16,
@@ -125,7 +155,9 @@
     "status": "delivering",
     "currentOrdersCount": 4,
     "totalOrdersCount": 212,
-    "rating": 4.9
+    "rating": 4.9,
+    "email": "elena.popescu@example.com",
+    "phoneNumber": "+1-202-555-0116"
   },
   {
     "id": 17,
@@ -133,7 +165,9 @@
     "status": "offline",
     "currentOrdersCount": 0,
     "totalOrdersCount": 58,
-    "rating": 4.1
+    "rating": 4.1,
+    "email": "john.davis@example.com",
+    "phoneNumber": "+1-202-555-0117"
   },
   {
     "id": 18,
@@ -141,7 +175,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 240,
-    "rating": 4.8
+    "rating": 4.8,
+    "email": "hiroshi.tanaka@example.com",
+    "phoneNumber": "+1-202-555-0118"
   },
   {
     "id": 19,
@@ -149,7 +185,9 @@
     "status": "delivering",
     "currentOrdersCount": 2,
     "totalOrdersCount": 189,
-    "rating": 4.7
+    "rating": 4.7,
+    "email": "isabella.rossi@example.com",
+    "phoneNumber": "+1-202-555-0119"
   },
   {
     "id": 20,
@@ -157,7 +195,9 @@
     "status": "offline",
     "currentOrdersCount": 0,
     "totalOrdersCount": 33,
-    "rating": 4.0
+    "rating": 4.0,
+    "email": "david.miller@example.com",
+    "phoneNumber": "+1-202-555-0120"
   },
   {
     "id": 21,
@@ -165,7 +205,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 166,
-    "rating": 4.6
+    "rating": 4.6,
+    "email": "lina.andersson@example.com",
+    "phoneNumber": "+1-202-555-0121"
   },
   {
     "id": 22,
@@ -173,7 +215,9 @@
     "status": "delivering",
     "currentOrdersCount": 1,
     "totalOrdersCount": 190,
-    "rating": 4.8
+    "rating": 4.8,
+    "email": "igor.kovalenko@example.com",
+    "phoneNumber": "+1-202-555-0122"
   },
   {
     "id": 23,
@@ -181,7 +225,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 147,
-    "rating": 4.7
+    "rating": 4.7,
+    "email": "mia.nguyen@example.com",
+    "phoneNumber": "+1-202-555-0123"
   },
   {
     "id": 24,
@@ -189,7 +235,9 @@
     "status": "offline",
     "currentOrdersCount": 0,
     "totalOrdersCount": 62,
-    "rating": 4.2
+    "rating": 4.2,
+    "email": "tomas.silva@example.com",
+    "phoneNumber": "+1-202-555-0124"
   },
   {
     "id": 25,
@@ -197,7 +245,9 @@
     "status": "delivering",
     "currentOrdersCount": 3,
     "totalOrdersCount": 199,
-    "rating": 4.8
+    "rating": 4.8,
+    "email": "emily.clark@example.com",
+    "phoneNumber": "+1-202-555-0125"
   },
   {
     "id": 26,
@@ -205,7 +255,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 158,
-    "rating": 4.5
+    "rating": 4.5,
+    "email": "sergey.ivanov@example.com",
+    "phoneNumber": "+1-202-555-0126"
   },
   {
     "id": 27,
@@ -213,7 +265,9 @@
     "status": "delivering",
     "currentOrdersCount": 2,
     "totalOrdersCount": 172,
-    "rating": 4.9
+    "rating": 4.9,
+    "email": "olivia.wilson@example.com",
+    "phoneNumber": "+1-202-555-0127"
   },
   {
     "id": 28,
@@ -221,7 +275,9 @@
     "status": "offline",
     "currentOrdersCount": 0,
     "totalOrdersCount": 40,
-    "rating": 4.1
+    "rating": 4.1,
+    "email": "mohamed.hassan@example.com",
+    "phoneNumber": "+1-202-555-0128"
   },
   {
     "id": 29,
@@ -229,7 +285,9 @@
     "status": "idle",
     "currentOrdersCount": 0,
     "totalOrdersCount": 210,
-    "rating": 4.8
+    "rating": 4.8,
+    "email": "patricia.costa@example.com",
+    "phoneNumber": "+1-202-555-0129"
   },
   {
     "id": 30,
@@ -237,6 +295,8 @@
     "status": "delivering",
     "currentOrdersCount": 1,
     "totalOrdersCount": 155,
-    "rating": 4.6
+    "rating": 4.6,
+    "email": "ethan.baker@example.com",
+    "phoneNumber": "+1-202-555-0130"
   }
 ]

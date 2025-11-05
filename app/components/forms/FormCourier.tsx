@@ -67,7 +67,6 @@ const FormCourier: ComponentType<IProps> = ({ initialValue, submitStatus, submit
 
     try {
       await (onSubmit && onSubmit(formValue));
-      reset();
     } catch {}
   }
 
