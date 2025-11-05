@@ -109,5 +109,20 @@
     "tip_native_reload": "Try to fully reload page",
     "tip_reload": "Press the reload button to try again",
     "reload": "Reload"
+  },
+  "order_status": {
+    "received": "Received",
+    "processing": "Processing",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "orders_table": {
+    "id": "ID",
+    "client": "Client",
+    "courier": "Courier",
+    "status": "Status",
+    "ordered_at": "Ordered date/time",
+    "closed_at": "Closed date/time",
+    "details": "Details"
   }
 }
