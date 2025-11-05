@@ -43,7 +43,7 @@ const ClientCard: ComponentType<IProps> = ({ client, isReceiver, isSender }) => 
             {idLabel} #{client.id}
           </Typography>
           <Box gap={1}>
-            <Typography variant="subtitle1" component="div">
+            <Typography variant="caption" component="div">
               {t('client_card.rating')}
             </Typography>
             <Rating rating={client.rating} />

@@ -39,7 +39,7 @@ const OrderCard: ComponentType<IProps> = ({ order }) => {
             <OrderStatus status={order.status} />
           </Box>
           <Box gap={1}>
-            <Typography variant="caption" component="div">
+            <Typography variant="subtitle1" component="div">
               {t('order_card.ordered_at')}
             </Typography>
             <Typography variant="h5" component="div">
@@ -47,7 +47,7 @@ const OrderCard: ComponentType<IProps> = ({ order }) => {
             </Typography>
           </Box>
           <Box gap={1}>
-            <Typography variant="caption" component="div">
+            <Typography variant="subtitle1" component="div">
               {t('order_card.closed_at')}
             </Typography>
             <Typography variant="h5" component="div">
