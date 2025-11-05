@@ -130,5 +130,13 @@
     "id": "Order ID",
     "ordered_at": "Ordered date/time",
     "closed_at": "Closed date/time"
+  },
+  "client_card": {
+    "receiver_id": "Receiver ID",
+    "sender_id": "Sender ID",
+    "client_id": "Client ID",
+    "rating": "Rating",
+    "name": "Name",
+    "link": "Details"
   }
 }

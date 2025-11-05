@@ -13,10 +13,13 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 
 import PageError from '~/components/other/PageError';
 import OrderCard from '~/components/orders/OrderCard';
+import ClientCard from '~/components/clients/ClientCard';
 
 const ViewOrder: ComponentType = observer(() => {
   const { store: orderStore, fetch } = useOrderCtx();
   const { orderId } = useParams();
+
+  const order = orderStore.data;
 
   const showPageError = useMemo(() => {
     return orderStore.isError || orderStore.getError;
@@ -43,9 +46,11 @@ const ViewOrder: ComponentType = observer(() => {
           />
         )}
       </ReloadPageProvider>
-      {!showPageError && orderStore.data && (
+      {!showPageError && order && (
         <>
-          <OrderCard order={orderStore.data} />
+          <OrderCard order={order} />
+          {order.sender && <ClientCard client={order.sender} isSender={true} />}
+          {order.receiver && <ClientCard client={order.receiver} isReceiver={true} />}
         </>
       )}
     </Box>
