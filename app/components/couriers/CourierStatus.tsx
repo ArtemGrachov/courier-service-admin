@@ -22,9 +22,6 @@ const CourierStatus: ComponentType<IProps> = ({ status }) => {
       case ECourierStatus.OFFLINE: {
         return 'default';
       }
-      case ECourierStatus.BLOCKED: {
-        return 'error';
-      }
     }
   }, [status]);
 

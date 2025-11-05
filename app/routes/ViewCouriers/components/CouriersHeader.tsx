@@ -6,8 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import CouriersFilters from '~/routes/ViewCouriers/components/CouriersFilters';
-
 const CouriersHeader: ComponentType = () => {
   const { t } = useTranslation();
 
@@ -25,7 +23,9 @@ const CouriersHeader: ComponentType = () => {
           {t('view_couriers.couriers_header.add_courier')}
         </Button>
       </Stack>
-      <CouriersFilters />
+      <div>
+        asd
+      </div>
     </Stack>
   )
 }
