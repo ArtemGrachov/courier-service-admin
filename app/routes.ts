@@ -6,6 +6,8 @@ export default [
     index('routes/home.tsx'),
     route(ROUTE_PATHS.MAP, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.MAP }),
     route(ROUTE_PATHS.COURIERS, './routes/ViewCouriers/ViewCouriers.tsx', { id: ROUTE_PATHS.COURIERS }),
+    route(ROUTE_PATHS.COURIER_ADD, './routes/ViewUpsertCourier/ViewUpsertCourier.tsx', { id: ROUTE_PATHS.COURIER_ADD }),
+    route(ROUTE_PATHS.COURIER_EDIT, './routes/ViewUpsertCourier/ViewUpsertCourier.tsx', { id: ROUTE_PATHS.COURIER_EDIT }),
     route(ROUTE_PATHS.ORDERS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.ORDERS }),
     route(ROUTE_PATHS.CLIENTS, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.CLIENTS }),
   ]),

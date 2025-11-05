@@ -10,3 +10,5 @@ export interface IGetCouriersResponse {
   data: ICourier[];
   pagination: IPagination;
 }
+
+export interface IGetCourierResponse extends ICourier { }
