@@ -14,7 +14,7 @@ import FormCourier from '~/components/forms/FormCourier';
 
 import type { IFormCourier } from '~/types/forms/form-courier';
 
-const ViewEditCourier: ComponentType = observer(() => {
+const ViewUpsertCourier: ComponentType = observer(() => {
   const { store, submitCreate: submit } = useUpsertCourierCtx();
   const { t } = useTranslation();
   const errorSnackbar = useErrorSnackbar();
@@ -48,7 +48,7 @@ const ViewEditCourier: ComponentType = observer(() => {
 const Wrapper = () => {
   return (
     <UpsertCourierProvider>
-      <ViewEditCourier />
+      <ViewUpsertCourier />
     </UpsertCourierProvider>
   )
 }
