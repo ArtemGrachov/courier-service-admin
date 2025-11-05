@@ -100,10 +100,29 @@
   "form_courier": {
     "password_hint": "Залишіть це поле пустим, щоб пароль було згенеровано автоматично. Пароль буде надіслано на пошту кур'єра"
   },
+  "view_upsert_courier": {
+    "create_success": "Кур'єра було успішно зареєстровано",
+    "edit_success": "Дані кур'єра було успішно оновлено"
+  },
   "page_error": {
     "title": "Помилка завантаження даних сторінки",
     "tip_native_reload": "Спробуйте перезавантажити сторінку",
     "tip_reload": "Натисніть кнопку перезавантаження щоб спробувати знову",
     "reload": "Перезавантажити"
+  },
+  "order_status": {
+    "received": "Received",
+    "processing": "Processing",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "orders_table": {
+    "id": "ID",
+    "client": "Клієнт",
+    "courier": "Кур'єр",
+    "status": "Статус",
+    "ordered_at": "Дата/час замовлення",
+    "closed_at": "Дата/час закриття",
+    "details": "Деталі"
   }
 }
