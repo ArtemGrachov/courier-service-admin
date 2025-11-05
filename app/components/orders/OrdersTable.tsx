@@ -17,6 +17,7 @@ import { ROUTE_PATHS, ROUTES } from '~/router/routes';
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import { useRoutePath } from '~/hooks/routing/use-route-path';
 import OrderStatus from '~/components/orders/OrderStatus';
+import OrderClient from '~/components/orders/OrderClient';
 
 import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
@@ -34,7 +35,8 @@ const EMPTY = 'EMPTY';
 
 const enum EColumns {
   ID = 'id',
-  CLIENT = 'client',
+  SENDER = 'sender',
+  RECEIVER = 'receiver',
   COURIER = 'courier',
   STATUS = 'status',
   ORDERED_AT = 'orderedAt',
@@ -48,29 +50,39 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     headerName: 'orders_table.id',
     width: 70,
   },
-  [EColumns.CLIENT]: {
-    field: 'client',
+  [EColumns.SENDER]: {
+    field: 'sender',
     type: 'string',
-    headerName: 'orders_table.client',
+    headerName: 'orders_table.sender',
     flex: 1,
     valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
     renderCell: (params) => {
-      const client = (params.row as IOrder).client;
-      const routePath = useRoutePath();
+      const client = (params.row as IOrder).sender;
 
       if (!client) {
         return '-';
       }
 
-      return (
-        <Link
-          to={routePath(ROUTES.CLIENT, { clientId: client.id })}
-          component={RouterLink}
-        >
-          {client.name}
-        </Link>
-      )
+      return <OrderClient client={client} />
     },
+    valueGetter: (v: IClient | undefined) => v?.name ?? '-',
+  },
+  [EColumns.RECEIVER]: {
+    field: 'receiver',
+    type: 'string',
+    headerName: 'orders_table.receiver',
+    flex: 1,
+    valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
+    renderCell: (params) => {
+      const client = (params.row as IOrder).receiver;
+
+      if (!client) {
+        return '-';
+      }
+
+      return <OrderClient client={client} />
+    },
+    valueGetter: (v: IClient | undefined) => v?.name ?? '-',
   },
   [EColumns.COURIER]: {
     field: 'courier',
@@ -95,6 +107,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
         </Link>
       )
     },
+    valueGetter: (v: IClient | undefined) => v?.name ?? '-',
   },
   [EColumns.STATUS]: {
     field: 'status',
@@ -155,7 +168,8 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
 
     return [
       BASE_COLUMNS[EColumns.ID],
-      BASE_COLUMNS[EColumns.CLIENT],
+      BASE_COLUMNS[EColumns.SENDER],
+      BASE_COLUMNS[EColumns.RECEIVER],
       BASE_COLUMNS[EColumns.COURIER],
       {
         ...statusCol,

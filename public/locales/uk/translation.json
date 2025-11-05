@@ -111,18 +111,19 @@
     "reload": "Перезавантажити"
   },
   "order_status": {
-    "received": "Received",
-    "processing": "Processing",
-    "completed": "Completed",
-    "cancelled": "Cancelled"
+    "ordered": "Замовлено",
+    "processing": "Виконується",
+    "completed": "Виконано",
+    "cancelled": "Скасовано"
   },
   "orders_table": {
     "id": "ID",
-    "client": "Клієнт",
+    "sender": "Відправник",
+    "receiver": "Отримувач",
     "courier": "Кур'єр",
     "status": "Статус",
     "ordered_at": "Дата/час замовлення",
-    "closed_at": "Дата/час закриття",
+    "closed_at": "Дата/час завершення",
     "details": "Деталі"
   }
 }

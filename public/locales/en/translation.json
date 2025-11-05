@@ -111,14 +111,15 @@
     "reload": "Reload"
   },
   "order_status": {
-    "received": "Received",
+    "ordered": "Ordered",
     "processing": "Processing",
     "completed": "Completed",
     "cancelled": "Cancelled"
   },
   "orders_table": {
     "id": "ID",
-    "client": "Client",
+    "sender": "Sender",
+    "receiver": "Receiver",
     "courier": "Courier",
     "status": "Status",
     "ordered_at": "Ordered date/time",

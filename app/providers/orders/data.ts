@@ -18,7 +18,7 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
 
   const data = await mockPaginationRequest<IGetOrdersResponse, IOrder>(
     query?.page ?? 1,
-    query?.itemsPerPage ?? 30,
+    query?.itemsPerPage ?? 100,
     orders,
   );
 
@@ -34,7 +34,8 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
 
   data?.data.forEach(order => {
     order.courier = couriersMap[order.courierId];
-    order.client = clientsMap[order.clientId];
+    order.sender = clientsMap[order.senderId];
+    order.receiver = clientsMap[order.receiverId];
   });
 
   return data!;
