@@ -161,6 +161,10 @@
     "phone": "Номер телефону",
     "email": "Email"
   },
+  "view_client": {
+    "error_client_data": "Помилка завантаження даних клієнта",
+    "error_orders_data": "Помилка завантаження замовлень"
+  },
   "courier_details": {
     "id": "Кур'єр ID",
     "rating": "Рейтинг",
@@ -169,5 +173,10 @@
     "total_orders_count": "Замовлень загалом",
     "phone": "Номер телефону",
     "email": "Email"
+  },
+  "view_courier": {
+    "error_courier_data": "Помилка завантаження даних кур'єра",
+    "error_active_orders_data": "Помилка завантаження даних карти",
+    "error_orders_data": "Помилка завантаження замовлень"
   }
 }
