@@ -39,23 +39,22 @@ const ClientCard: ComponentType<IProps> = ({ client, isReceiver, isSender }) => 
     <Card>
       <CardContent>
         <Stack gap={2}>
-          <Typography variant="subtitle1" component="div">
-            {idLabel} #{client.id}
-          </Typography>
-          <Box gap={1}>
-            <Typography variant="caption" component="div">
-              {t('client_card.rating')}
-            </Typography>
-            <Rating rating={client.rating} />
-          </Box>
-          <Box gap={1}>
-            <Typography variant="subtitle1" component="div">
-              {t('client_card.name')}
-            </Typography>
-            <Typography variant="h5" component="div">
-              {client.name}
-            </Typography>
-          </Box>
+          <Stack direction="row" gap={2} justifyContent="space-between">
+            <Box gap={1}>
+              <Typography variant="subtitle1" component="div">
+                {idLabel} #{client.id}
+              </Typography>
+              <Typography variant="h5" component="div">
+                {client.name}
+              </Typography>
+            </Box>
+            <Box gap={1}>
+              <Typography variant="caption" component="div">
+                {t('client_card.rating')}
+              </Typography>
+              <Rating rating={client.rating} />
+            </Box>
+          </Stack>
           <Box>
             <Link
               to={routePath(ROUTES.CLIENT, { clientId: client.id })}

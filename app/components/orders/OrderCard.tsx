@@ -32,28 +32,30 @@ const OrderCard: ComponentType<IProps> = ({ order }) => {
     <Card>
       <CardContent>
         <Stack gap={2}>
-          <Typography variant="subtitle1" component="div">
-            {t('order_card.id')} #{order.id}
-          </Typography>
-          <Box>
+          <Stack gap={2} direction="row" justifyContent="space-between">
+            <Typography variant="subtitle1" component="div">
+              {t('order_card.id')} #{order.id}
+            </Typography>
             <OrderStatus status={order.status} />
-          </Box>
-          <Box gap={1}>
-            <Typography variant="subtitle1" component="div">
-              {t('order_card.ordered_at')}
-            </Typography>
-            <Typography variant="h5" component="div">
-              {orderedDateFormatted}
-            </Typography>
-          </Box>
-          <Box gap={1}>
-            <Typography variant="subtitle1" component="div">
-              {t('order_card.closed_at')}
-            </Typography>
-            <Typography variant="h5" component="div">
-              {closedDateFormatted}
-            </Typography>
-          </Box>
+          </Stack>
+          <Stack gap={2} direction="row" justifyContent="space-between">
+            <Box gap={1}>
+              <Typography variant="caption" component="div">
+                {t('order_card.ordered_at')}
+              </Typography>
+              <Typography variant="body1" component="div">
+                {orderedDateFormatted}
+              </Typography>
+            </Box>
+            <Box gap={1}>
+              <Typography variant="caption" component="div">
+                {t('order_card.closed_at')}
+              </Typography>
+              <Typography variant="body1" component="div">
+                {closedDateFormatted}
+              </Typography>
+            </Box>
+          </Stack>
         </Stack>
       </CardContent>
     </Card>
