@@ -2,3 +2,18 @@ html,
 body {
   height: 100%;
 }
+
+.csa-map-popup {
+  .leaflet-popup-content-wrapper {
+    border: none;
+    padding: 0;
+  }
+
+  .leaflet-popup-content {
+    margin: 0;
+  }
+
+  .leaflet-popup-tip {
+    background: var(--leaflet-popup-tip-background);
+  }
+}

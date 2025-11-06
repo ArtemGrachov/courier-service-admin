@@ -26,7 +26,7 @@ const darkTheme = createTheme({
   colorSchemes: {
     dark: true,
     light: true,
-  }
+  },
 });
 
 export function Layout({ children }: { children: React.ReactNode }) {

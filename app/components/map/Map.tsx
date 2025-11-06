@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type ComponentType } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
 import L from 'leaflet';
@@ -16,6 +16,7 @@ import 'leaflet/dist/leaflet.css';
 import srcIconSender from '~/assets/icons/map/sender.svg';
 import srcIconReceiver from '~/assets/icons/map/receiver.svg';
 import srcIconCourier from '~/assets/icons/map/courier.svg';
+import { useTheme } from '@mui/material';
 
 interface IProps {
   orders?: IOrder[];
@@ -70,6 +71,11 @@ const Map: ComponentType<IProps> = ({ orders }) => {
   const map = useRef<L.Map | null>(null);
   const markers = useRef<Record<MarkerKey, IMarker>>({});
   const [markerPopups, setMarkerPopups] = useState<Array<string>>([]);
+  const theme = useTheme();
+
+  const paperBg = useMemo(() => {
+    return (theme.vars || theme).palette.background.paper;
+  }, [theme]);
 
   useEffect(() => {
     renderMarkers();
@@ -171,6 +177,7 @@ const Map: ComponentType<IProps> = ({ orders }) => {
         autoClose: false,
         minWidth: 300,
         maxWidth: 1000,
+        className: 'csa-map-popup',
       })
       .setLatLng(lMarker.getLatLng())
       .setContent(`<div id="popup_${data.key}"></div>`)
@@ -231,41 +238,39 @@ const Map: ComponentType<IProps> = ({ orders }) => {
   }, []);
 
   return (
-    <>
-      <div style={{ position: 'absolute', zIndex: 1000 }}>
-        {markerPopups.map(markerKey => {
-          const markerData = markers.current[markerKey];
+    <Box width="100%" height="100%" sx={{ '--leaflet-popup-tip-background': paperBg }}>
+      {markerPopups.map(markerKey => {
+        const markerData = markers.current[markerKey];
 
-          if (!markerData) {
-            return null;
+        if (!markerData) {
+          return null;
+        }
+
+        let el;
+
+        switch (markerData.data.type) {
+          case EMarkerTypes.SENDER: {
+            el = <ClientCard client={markerData.data.data as IClient} isSender={true} />
+            break;
           }
-
-          let el;
-
-          switch (markerData.data.type) {
-            case EMarkerTypes.SENDER: {
-              el = <ClientCard client={markerData.data.data as IClient} isSender={true} />
-              break;
-            }
-            case EMarkerTypes.RECEIVER: {
-              el = <ClientCard client={markerData.data.data as IClient} isReceiver={true} />
-              break;
-            }
-            case EMarkerTypes.COURIER: {
-              el = <CourierCard courier={markerData.data.data as ICourier} />
-              break;
-            }
+          case EMarkerTypes.RECEIVER: {
+            el = <ClientCard client={markerData.data.data as IClient} isReceiver={true} />
+            break;
           }
+          case EMarkerTypes.COURIER: {
+            el = <CourierCard courier={markerData.data.data as ICourier} />
+            break;
+          }
+        }
 
-          return (
-            <Portal key={markerKey} container={() => document.getElementById(`popup_${markerKey}`)}>
-              {el}
-            </Portal>
-          )
-        })}
-      </div>
+        return (
+          <Portal key={markerKey} container={() => document.getElementById(`popup_${markerKey}`)}>
+            {el}
+          </Portal>
+        )
+      })}
       <Box width="100%" height="100%" ref={mapRef} />
-    </>
+    </Box>
   )
 }
 
