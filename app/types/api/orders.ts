@@ -5,6 +5,7 @@ export interface IGetOrdersQuery {
   page?: number | null;
   itemsPerPage?: number | null;
   clientIds?: number[];
+  courierIds?: number[];
 }
 
 export interface IGetOrdersResponse {

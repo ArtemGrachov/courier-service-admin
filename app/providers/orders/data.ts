@@ -21,6 +21,11 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     orders = orders.filter(o => set.has(o.senderId) || set.has(o.receiverId));
   }
 
+  if (query?.courierIds) {
+    const set = new Set(query.courierIds);
+    orders = orders.filter(o => set.has(o.courierId));
+  }
+
   const data = await mockPaginationRequest<IGetOrdersResponse, IOrder>(
     query?.page ?? 1,
     query?.itemsPerPage ?? 100,
