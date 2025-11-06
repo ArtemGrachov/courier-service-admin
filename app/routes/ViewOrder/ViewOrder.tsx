@@ -16,6 +16,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import PageError from '~/components/other/PageError';
 import OrderCard from '~/components/orders/OrderCard';
 import ClientCard from '~/components/clients/ClientCard';
+import CourierCard from '~/components/couriers/CourierCard';
 import Map from '~/components/map/Map';
 
 const ViewOrder: ComponentType = observer(() => {
@@ -58,6 +59,7 @@ const ViewOrder: ComponentType = observer(() => {
                 <OrderCard order={order} />
                 {order.sender && <ClientCard client={order.sender} isSender={true} />}
                 {order.receiver && <ClientCard client={order.receiver} isReceiver={true} />}
+                {order.courier && <CourierCard courier={order.courier} />}
               </Stack>
             </Grid>
             <Grid size={9}>

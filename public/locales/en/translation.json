@@ -138,5 +138,11 @@
     "rating": "Rating",
     "name": "Name",
     "link": "Details"
+  },
+  "courier_card": {
+    "id": "Courier ID",
+    "rating": "Rating",
+    "current_orders_count": "Active orders",
+    "link": "Details"
   }
 }

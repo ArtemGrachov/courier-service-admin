@@ -138,5 +138,11 @@
     "rating": "Рейтинг",
     "name": "Ім'я",
     "link": "Деталі"
+  },
+  "courier_card": {
+    "id": "Кур'єр ID",
+    "rating": "Рейтинг",
+    "current_orders_count": "Активних замовлень",
+    "link": "Деталі"
   }
 }
