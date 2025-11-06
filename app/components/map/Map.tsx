@@ -1,54 +1,25 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
-import Portal from '@mui/material/Portal';
+import { useTheme } from '@mui/material';
 import L from 'leaflet';
 
-import CourierCard from '~/components/couriers/CourierCard';
-import ClientCard from '~/components/clients/ClientCard';
+import { EMarkerTypes } from './constants';
 
+import MapPopup from './MapPopup';
+
+import type { IMarker, MarkerData, MarkerKey } from './types';
 import type { IOrder } from '~/types/models/order';
-import type { IGeoPos } from '~/types/models/geo-pos';
-import type { IClient } from '~/types/models/client';
-import type { ICourier } from '~/types/models/courier';
+
+import { popupPortalName } from '~/components/map/utils';
 
 import 'leaflet/dist/leaflet.css';
 
 import srcIconSender from '~/assets/icons/map/sender.svg';
 import srcIconReceiver from '~/assets/icons/map/receiver.svg';
 import srcIconCourier from '~/assets/icons/map/courier.svg';
-import { useTheme } from '@mui/material';
 
 interface IProps {
   orders?: IOrder[];
-}
-
-const enum EMarkerTypes {
-  SENDER,
-  RECEIVER,
-  COURIER,
-}
-
-interface IMarkerData<T> {
-  key: string;
-  location: IGeoPos;
-  type: EMarkerTypes;
-  data: T;
-}
-
-interface IMarkerDataSender extends IMarkerData<IClient> { }
-
-interface IMarkerDataReceiver extends IMarkerData<IClient> { }
-
-interface IMarkerDataCourier extends IMarkerData<ICourier> { }
-
-type MarkerData = IMarkerDataSender | IMarkerDataReceiver | IMarkerDataCourier;
-
-type MarkerKey = string;
-
-interface IMarker {
-  lMarker: L.Marker;
-  key: MarkerKey;
-  data: MarkerData;
 }
 
 const ICONS = {
@@ -180,7 +151,7 @@ const Map: ComponentType<IProps> = ({ orders }) => {
         className: 'csa-map-popup',
       })
       .setLatLng(lMarker.getLatLng())
-      .setContent(`<div id="popup_${data.key}"></div>`)
+      .setContent(`<div id="${popupPortalName(data.key)}"></div>`)
       .openOn(map.current!)
       .addEventListener('remove', () => {
         setMarkerPopups(v => {
@@ -240,34 +211,13 @@ const Map: ComponentType<IProps> = ({ orders }) => {
   return (
     <Box width="100%" height="100%" sx={{ '--leaflet-popup-tip-background': paperBg }}>
       {markerPopups.map(markerKey => {
-        const markerData = markers.current[markerKey];
+        const markerItem = markers.current[markerKey];
 
-        if (!markerData) {
+        if (!markerItem) {
           return null;
         }
 
-        let el;
-
-        switch (markerData.data.type) {
-          case EMarkerTypes.SENDER: {
-            el = <ClientCard client={markerData.data.data as IClient} isSender={true} />
-            break;
-          }
-          case EMarkerTypes.RECEIVER: {
-            el = <ClientCard client={markerData.data.data as IClient} isReceiver={true} />
-            break;
-          }
-          case EMarkerTypes.COURIER: {
-            el = <CourierCard courier={markerData.data.data as ICourier} />
-            break;
-          }
-        }
-
-        return (
-          <Portal key={markerKey} container={() => document.getElementById(`popup_${markerKey}`)}>
-            {el}
-          </Portal>
-        )
+        return <MapPopup markerItem={markerItem} />
       })}
       <Box width="100%" height="100%" ref={mapRef} />
     </Box>
