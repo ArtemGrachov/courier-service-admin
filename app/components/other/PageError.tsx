@@ -32,7 +32,7 @@ const PageError: ComponentType<IProps> = ({ title, error, isProcessing }) => {
   }
 
   return (
-    <Alert color="error" sx={{ maxWidth: 500, margin: 'auto' }}>
+    <Alert color="error" sx={{ maxWidth: 500, margin: '0 auto', width: '100%' }}>
       <AlertTitle>
         {title ?? t('page_error.title')}
       </AlertTitle>
