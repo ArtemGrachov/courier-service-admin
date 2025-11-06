@@ -9,6 +9,7 @@ import MapPopup from './MapPopup';
 
 import type { IMarker, MarkerData, MarkerKey } from './types';
 import type { IOrder } from '~/types/models/order';
+import type { ICourier } from '~/types/models/courier';
 
 import { popupPortalName } from '~/components/map/utils';
 
@@ -20,6 +21,7 @@ import srcIconCourier from '~/assets/icons/map/courier.svg';
 
 interface IProps {
   orders?: IOrder[];
+  couriers?: ICourier[];
 }
 
 const ICONS = {
@@ -37,7 +39,7 @@ const ICONS = {
   }),
 };
 
-const Map: ComponentType<IProps> = ({ orders }) => {
+const Map: ComponentType<IProps> = ({ orders, couriers }) => {
   const mapRef = useRef<HTMLElement | null>(null);
   const map = useRef<L.Map | null>(null);
   const markers = useRef<Record<MarkerKey, IMarker>>({});
@@ -52,6 +54,19 @@ const Map: ComponentType<IProps> = ({ orders }) => {
   useEffect(() => {
     renderMarkers();
   }, [orders]);
+
+  const getCourierMarkerData = useCallback((courier: ICourier) => {
+    if (!courier?.location) {
+      return null;
+    }
+
+    return {
+      key: `courier_${courier.id}`,
+      location: courier.location,
+      type: EMarkerTypes.COURIER,
+      data: courier,
+    };
+  }, []);
 
   const getOrderMarkerData = useCallback((order: IOrder) => {
     const markersData: MarkerData[] = [];
@@ -184,6 +199,18 @@ const Map: ComponentType<IProps> = ({ orders }) => {
     }, [] as MarkerData[]);
 
     markersData?.forEach(markerData => renderMarker(markerData));
+
+    if (couriers) {
+      const orderCouriersSet = new Set(orders?.map(o => o.courierId));
+
+      const courierMarkers = couriers
+        .filter(c => !orderCouriersSet.has(c.id))
+        .map(c => getCourierMarkerData(c))
+
+      courierMarkers
+        .filter(mD => mD)
+        .forEach(markerData => renderMarker(markerData!));
+    }
   }
 
   const initMap = () => {
