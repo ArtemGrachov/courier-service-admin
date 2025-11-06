@@ -22,7 +22,7 @@ interface IProps {
 }
 
 const ClientCard: ComponentType<IProps> = ({ client, isReceiver, isSender }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const routePath = useRoutePath();
 
   const idLabel = useMemo(() => {
@@ -33,7 +33,7 @@ const ClientCard: ComponentType<IProps> = ({ client, isReceiver, isSender }) => 
     } else {
       return t('client_card.client_id');
     }
-  }, [isReceiver, isSender])
+  }, [isReceiver, isSender, i18n.language])
 
   return (
     <Card>
