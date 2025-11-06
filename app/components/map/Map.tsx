@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState, type ComponentType } from 'react';
+import { useCallback, useEffect, useRef, useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
 import L from 'leaflet';
+
+import CourierCard from '~/components/couriers/CourierCard';
+import ClientCard from '~/components/clients/ClientCard';
 
 import type { IOrder } from '~/types/models/order';
 import type { IGeoPos } from '~/types/models/geo-pos';
@@ -13,8 +16,6 @@ import 'leaflet/dist/leaflet.css';
 import srcIconSender from '~/assets/icons/map/sender.svg';
 import srcIconReceiver from '~/assets/icons/map/receiver.svg';
 import srcIconCourier from '~/assets/icons/map/courier.svg';
-import CourierCard from '~/components/couriers/CourierCard';
-import ClientCard from '~/components/clients/ClientCard';
 
 interface IProps {
   orders?: IOrder[];
@@ -74,109 +75,128 @@ const Map: ComponentType<IProps> = ({ orders }) => {
     renderMarkers();
   }, [orders]);
 
+  const getOrderMarkerData = useCallback((order: IOrder) => {
+    const markersData: MarkerData[] = [];
+    const { senderGeoPos, receiverGeoPos, courier } = order;
+
+    if (senderGeoPos && order.sender) {
+      markersData.push({
+        key: `sender_${order.id}`,
+        location: senderGeoPos,
+        type: EMarkerTypes.SENDER,
+        data: order.sender,
+      });
+    }
+
+    if (receiverGeoPos && order.receiver) {
+      markersData.push({
+        key: `receiver_${order.id}`,
+        location: receiverGeoPos,
+        type: EMarkerTypes.RECEIVER,
+        data: order.receiver,
+      });
+    }
+
+    if (courier?.location) {
+      markersData.push({
+        key: `courier_${courier.id}`,
+        location: courier.location,
+        type: EMarkerTypes.COURIER,
+        data: courier,
+      });
+    }
+
+    return markersData;
+  }, []);
+
+  const createMarker = useCallback((markerData: MarkerData) => {
+    const mrkrs = markers.current;
+    let icon;
+
+    switch (markerData.type) {
+      case EMarkerTypes.SENDER: {
+        icon = ICONS.SENDER;
+        break;
+      }
+      case EMarkerTypes.RECEIVER: {
+        icon = ICONS.RECEIVER;
+        break;
+      }
+      case EMarkerTypes.COURIER: {
+        icon = ICONS.COURIER;
+        break;
+      }
+    }
+
+    const lMarker = L.marker(
+      [markerData.location.lat, markerData.location.lng],
+      { icon },
+    )
+      .addTo(map.current!)
+      .addEventListener('click', () => markerClickHandler(marker));
+
+    const marker = {
+      key: markerData.key,
+      data: markerData,
+      lMarker,
+    };
+
+    mrkrs[markerData.key] = marker;
+  }, []);
+
+  const updateMarker = useCallback((marker: IMarker, markerData: MarkerData) => {
+    marker.lMarker.setLatLng([
+      markerData.location.lat,
+      markerData.location.lng,
+    ]);
+  }, []);
+
+  const renderMarker = useCallback((markerData: MarkerData) => {
+    const mrkrs = markers.current;
+    const marker = mrkrs[markerData.key];
+
+    if (marker) {
+      updateMarker(marker, markerData);
+      return;
+    }
+
+    createMarker(markerData);
+  }, []);
+
+  const markerClickHandler = ({ lMarker, data }: IMarker) => {
+    L
+      .popup({
+        closeOnClick: false,
+        closeOnEscapeKey: false,
+        autoClose: false,
+        minWidth: 300,
+        maxWidth: 1000,
+      })
+      .setLatLng(lMarker.getLatLng())
+      .setContent(`<div id="popup_${data.key}"></div>`)
+      .openOn(map.current!)
+      .addEventListener('remove', () => {
+        setMarkerPopups(v => {
+          return v.filter(k => k !== data.key);
+        });
+      });
+
+    setMarkerPopups(v => {
+      return Array.from(new Set([...v, data.key]));
+    });
+  }
+
   const renderMarkers = () => {
     if (!map.current) {
       return;
     }
 
-    const mrkrs = markers.current;
-
     const markersData = orders?.reduce((acc, curr) => {
-      const { senderGeoPos, receiverGeoPos, courier } = curr;
-
-      if (senderGeoPos && curr.sender) {
-        acc.push({
-          key: `sender_${curr.id}`,
-          location: senderGeoPos,
-          type: EMarkerTypes.SENDER,
-          data: curr.sender,
-        });
-      }
-
-      if (receiverGeoPos && curr.receiver) {
-        acc.push({
-          key: `receiver_${curr.id}`,
-          location: receiverGeoPos,
-          type: EMarkerTypes.RECEIVER,
-          data: curr.receiver,
-        });
-      }
-
-      if (courier?.location) {
-        acc.push({
-          key: `courier_${courier.id}`,
-          location: courier.location,
-          type: EMarkerTypes.COURIER,
-          data: courier,
-        });
-      }
-
+      acc.push(...getOrderMarkerData(curr));
       return acc;
     }, [] as MarkerData[]);
 
-    markersData?.forEach(markerData => {
-      let marker = mrkrs[markerData.key];
-
-      if (mrkrs[markerData.key]) {
-        marker.lMarker.setLatLng([markerData.location.lat, markerData.location.lng]);
-        return;
-      }
-
-      let icon;
-
-      switch (markerData.type) {
-        case EMarkerTypes.SENDER: {
-          icon = ICONS.SENDER;
-          break;
-        }
-        case EMarkerTypes.RECEIVER: {
-          icon = ICONS.RECEIVER;
-          break;
-        }
-        case EMarkerTypes.COURIER: {
-          icon = ICONS.COURIER;
-          break;
-        }
-      }
-
-      const lMarker = L.marker(
-        [markerData.location.lat, markerData.location.lng],
-        { icon },
-      )
-        .addTo(map.current!)
-        .addEventListener('click', () => {
-          L
-            .popup({
-              closeOnClick: false,
-              closeOnEscapeKey: false,
-              keepInView: true,
-              autoClose: false,
-              minWidth: 300,
-              maxWidth: 1000,
-            })
-            .setLatLng(lMarker.getLatLng())
-            .setContent(`<div id="popup_${markerData.key}"></div>`)
-            .openOn(map.current!)
-            .addEventListener('remove', () => {
-              setMarkerPopups(v => {
-                return v.filter(k => k !== markerData.key);
-              });
-            });
-
-          setMarkerPopups(v => {
-            return Array.from(new Set([...v, markerData.key]));
-          });
-        });
-
-      marker = {
-        key: markerData.key,
-        data: markerData,
-        lMarker,
-      };
-
-
-      mrkrs[markerData.key] = marker;
-    });
+    markersData?.forEach(markerData => renderMarker(markerData));
   }
 
   const initMap = () => {
