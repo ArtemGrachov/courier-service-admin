@@ -160,5 +160,13 @@
     "rating": "Рейтинг",
     "phone": "Номер телефону",
     "email": "Email"
+  },
+  "courier_details": {
+    "id": "Кур'єр ID",
+    "rating": "Рейтинг",
+    "current_orders_count": "Активних замовлень",
+    "total_orders_count": "Замовлень загалом",
+    "phone": "Номер телефону",
+    "email": "Email"
   }
 }

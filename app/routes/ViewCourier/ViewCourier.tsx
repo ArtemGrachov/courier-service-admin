@@ -20,6 +20,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import PageError from '~/components/other/PageError';
 import OrdersTable from '~/components/orders/OrdersTable';
+import CourierDetails from '~/components/couriers/CourierDetails';
 
 interface IProps {
   courierLoadingError?: boolean;
@@ -110,9 +111,7 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
         )}
       </ReloadPageProvider>
       {!showCourierError && courier && (
-        // @todo
-        // <CourierDetails courier={courier} />
-        <div>@todo</div>
+        <CourierDetails courier={courier} />
       )}
       <ReloadPageProvider reloadFunction={reloadOrdersData}>
         {!showPageError && showOrdersError && (
