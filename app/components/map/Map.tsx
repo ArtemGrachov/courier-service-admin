@@ -34,11 +34,19 @@ const Map: ComponentType<IProps> = ({ orders }) => {
       return L.marker([order.receiverGeoPos.lat, order.receiverGeoPos.lng]);
     });
 
+    const courierMarkers = orders?.filter(o => !!o.courier).map(order => {
+      return L.marker([order.courier!.location.lat, order.courier!.location.lng]);
+    });
+
     senderMarkers?.forEach(marker => {
       marker.addTo(map.current!);
     });
 
     receiverMarkers?.forEach(marker => {
+      marker.addTo(map.current!);
+    });
+
+    courierMarkers?.forEach(marker => {
       marker.addTo(map.current!);
     });
   }
