@@ -6,7 +6,7 @@ import type { IOrder } from '~/types/models/order';
 import { mockPaginationRequest } from '~/utils/mock-request';
 
 export const fetchOrders = async (query?: IGetOrdersQuery) => {
-  const [
+  let [
     orders,
     couriers,
     clients,
@@ -15,6 +15,11 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     import('~/mock-data/couriers.json').then(m => m.default as ICourier[]),
     import('~/mock-data/clients.json').then(m => m.default as IClient[]),
   ]);
+
+  if (query?.clientIds) {
+    const set = new Set(query.clientIds);
+    orders = orders.filter(o => set.has(o.senderId) || set.has(o.receiverId));
+  }
 
   const data = await mockPaginationRequest<IGetOrdersResponse, IOrder>(
     query?.page ?? 1,
