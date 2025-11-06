@@ -154,5 +154,11 @@
     "email": "Email",
     "rating": "Rating",
     "details": "Details"
+  },
+  "client_details": {
+    "client_id": "Client ID",
+    "rating": "Rating",
+    "phone": "Phone number",
+    "email": "Email"
   }
 }

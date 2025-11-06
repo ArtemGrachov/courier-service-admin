@@ -12,6 +12,7 @@ import { fetchClient } from '~/providers/client/data';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import PageError from '~/components/other/PageError';
+import ClientDetails from '~/components/clients/ClientDetails';
 
 const ViewClient: ComponentType = observer(() => {
   const { store: clientStore, fetch } = useClientCtx();
@@ -46,7 +47,9 @@ const ViewClient: ComponentType = observer(() => {
         )}
       </ReloadPageProvider>
       {!showPageError && client && (
-        <div>@todo</div>
+        <>
+          <ClientDetails client={client} />
+        </>
       )}
     </Box>
   )
