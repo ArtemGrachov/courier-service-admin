@@ -1,5 +1,5 @@
 import { type RouteConfig, index, layout, route } from '@react-router/dev/routes';
-import { ROUTE_PATHS, ROUTES } from './router/routes';
+import { ROUTE_PATHS } from './router/routes';
 
 export default [
   layout('./layouts/default/LayoutDefault.tsx', [
@@ -8,7 +8,7 @@ export default [
     route(ROUTE_PATHS.COURIERS, './routes/ViewCouriers/ViewCouriers.tsx', { id: ROUTE_PATHS.COURIERS }),
     route(ROUTE_PATHS.COURIER_ADD, './routes/ViewUpsertCourier/ViewUpsertCourier.tsx', { id: ROUTE_PATHS.COURIER_ADD }),
     route(ROUTE_PATHS.COURIER_EDIT, './routes/ViewUpsertCourier/ViewUpsertCourier.tsx', { id: ROUTE_PATHS.COURIER_EDIT }),
-    route(ROUTE_PATHS.COURIER, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.COURIER }),
+    route(ROUTE_PATHS.COURIER, './routes/ViewCourier/ViewCourier.tsx', { id: ROUTE_PATHS.COURIER }),
     route(ROUTE_PATHS.ORDERS, './routes/ViewOrders/ViewOrders.tsx', { id: ROUTE_PATHS.ORDERS }),
     route(ROUTE_PATHS.ORDER, './routes/ViewOrder/ViewOrder.tsx', { id: ROUTE_PATHS.ORDER }),
     route(ROUTE_PATHS.CLIENTS, './routes/ViewClients/ViewClients.tsx', { id: ROUTE_PATHS.CLIENTS }),

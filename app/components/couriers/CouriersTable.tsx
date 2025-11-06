@@ -91,6 +91,8 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
             <EditIcon />
           </IconButton>
           <IconButton
+            component={RouterLink}
+            to={routePath(ROUTE_PATHS.COURIER, { courierId: courier.id })}
             aria-label={t('couriers_table.details')}
           >
             <RemoveRedEyeIcon />
