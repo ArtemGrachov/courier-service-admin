@@ -40,6 +40,7 @@ const ViewOrder: ComponentType = observer(() => {
       padding={3}
       width="100%"
       boxSizing="border-box"
+      flexGrow={1}
     >
       <ReloadPageProvider reloadFunction={reloadPageData}>
         {showPageError && (
@@ -51,7 +52,7 @@ const ViewOrder: ComponentType = observer(() => {
       </ReloadPageProvider>
       {!showPageError && order && (
         <>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} flexGrow={1} alignItems="stretch" boxSizing="border-box">
             <Grid size={3}>
               <Stack gap={2}>
                 <OrderCard order={order} />
