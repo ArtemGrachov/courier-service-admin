@@ -164,5 +164,19 @@
   "view_client": {
     "error_client_data": "Client data loading error",
     "error_orders_data": "Orders data loading error"
+  },
+  "courier_details": {
+    "id": "Courier ID",
+    "rating": "Rating",
+    "status": "Status",
+    "current_orders_count": "Active orders",
+    "total_orders_count": "Total orders",
+    "phone": "Phone number",
+    "email": "Email"
+  },
+  "view_courier": {
+    "error_courier_data": "Courier data loading error",
+    "error_active_orders_data": "Map data loading error",
+    "error_orders_data": "Orders data loading error"
   }
 }
