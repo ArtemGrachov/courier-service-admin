@@ -168,6 +168,7 @@
   "courier_details": {
     "id": "Courier ID",
     "rating": "Rating",
+    "status": "Status",
     "current_orders_count": "Active orders",
     "total_orders_count": "Total orders",
     "phone": "Phone number",

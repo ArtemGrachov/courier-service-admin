@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
 import Rating from '~/components/other/Rating';
+import CourierStatus from '~/components/couriers/CourierStatus';
 
 import type { ICourier } from '~/types/models/courier';
 
@@ -35,12 +36,20 @@ const CourierDetails: ComponentType<IProps> = ({ courier }) => {
               </Box>
             </Grid>
             <Grid size={6} gap={2}>
-              <Box gap={1}>
-                <Typography variant="subtitle1" component="div">
-                  {t('courier_details.rating')}
-                </Typography>
-                <Rating rating={courier.rating} />
-              </Box>
+              <Stack direction="row" gap={2} justifyContent="space-between">
+                <Box gap={1}>
+                  <Typography variant="subtitle1" component="div">
+                    {t('courier_details.rating')}
+                  </Typography>
+                  <Rating rating={courier.rating} />
+                </Box>
+                <Box gap={1}>
+                  <Typography variant="subtitle1" component="div">
+                    {t('courier_details.status')}
+                  </Typography>
+                  <CourierStatus status={courier.status} />
+                </Box>
+              </Stack>
             </Grid>
           </Grid>
           <Grid container spacing={2}>

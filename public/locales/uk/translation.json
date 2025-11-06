@@ -164,6 +164,7 @@
   "courier_details": {
     "id": "Кур'єр ID",
     "rating": "Рейтинг",
+    "status": "Статус",
     "current_orders_count": "Активних замовлень",
     "total_orders_count": "Замовлень загалом",
     "phone": "Номер телефону",
