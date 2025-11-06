@@ -145,6 +145,24 @@ const Map: ComponentType<IProps> = ({ orders }) => {
       )
         .addTo(map.current!)
         .addEventListener('click', () => {
+          L
+            .popup({
+              closeOnClick: false,
+              closeOnEscapeKey: false,
+              keepInView: true,
+              autoClose: false,
+              minWidth: 300,
+              maxWidth: 1000,
+            })
+            .setLatLng(lMarker.getLatLng())
+            .setContent(`<div id="popup_${markerData.key}"></div>`)
+            .openOn(map.current!)
+            .addEventListener('remove', () => {
+              setMarkerPopups(v => {
+                return v.filter(k => k !== markerData.key);
+              });
+            });
+
           setMarkerPopups(v => {
             return Array.from(new Set([...v, markerData.key]));
           });
@@ -202,26 +220,31 @@ const Map: ComponentType<IProps> = ({ orders }) => {
             return null;
           }
 
+          let el;
+
           switch (markerData.data.type) {
             case EMarkerTypes.SENDER: {
-              return <ClientCard client={markerData.data.data as IClient} isSender={true} />
+              el = <ClientCard client={markerData.data.data as IClient} isSender={true} />
+              break;
             }
             case EMarkerTypes.RECEIVER: {
-              return <ClientCard client={markerData.data.data as IClient} isReceiver={true} />
+              el = <ClientCard client={markerData.data.data as IClient} isReceiver={true} />
+              break;
             }
             case EMarkerTypes.COURIER: {
-              return <CourierCard courier={markerData.data.data as ICourier} />
+              el = <CourierCard courier={markerData.data.data as ICourier} />
+              break;
             }
           }
+
+          return (
+            <Portal key={markerKey} container={() => document.getElementById(`popup_${markerKey}`)}>
+              {el}
+            </Portal>
+          )
         })}
       </div>
-      {/* <div id="portal-test" style={{ background: 'red'}}></div> */}
       <Box width="100%" height="100%" ref={mapRef} />
-      {/* <Portal container={() => document.getElementById('portal-test')}>
-        <div>
-          test
-        </div>
-      </Portal> */}
     </>
   )
 }
