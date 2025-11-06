@@ -37,7 +37,7 @@ const MapPopup: ComponentType<IProps> = ({ markerItem }) => {
   }
 
   return (
-    <Portal key={markerKey} container={() => document.getElementById(popupPortalName(markerKey))}>
+    <Portal container={() => document.getElementById(popupPortalName(markerKey))}>
       {el}
     </Portal>
   )

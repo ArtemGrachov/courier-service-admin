@@ -41,6 +41,7 @@ const Map: ComponentType<IProps> = ({ orders }) => {
   const mapRef = useRef<HTMLElement | null>(null);
   const map = useRef<L.Map | null>(null);
   const markers = useRef<Record<MarkerKey, IMarker>>({});
+  const markerPopupsActive = useRef<Record<string, boolean>>({});
   const [markerPopups, setMarkerPopups] = useState<Array<string>>([]);
   const theme = useTheme();
 
@@ -140,7 +141,13 @@ const Map: ComponentType<IProps> = ({ orders }) => {
     createMarker(markerData);
   }, []);
 
-  const markerClickHandler = ({ lMarker, data }: IMarker) => {
+  const markerClickHandler = ({ lMarker, key }: IMarker) => {
+    if (markerPopupsActive.current[key]) {
+      return;
+    }
+
+    markerPopupsActive.current[key] = true;
+
     L
       .popup({
         closeOnClick: false,
@@ -151,16 +158,18 @@ const Map: ComponentType<IProps> = ({ orders }) => {
         className: 'csa-map-popup',
       })
       .setLatLng(lMarker.getLatLng())
-      .setContent(`<div id="${popupPortalName(data.key)}"></div>`)
+      .setContent(`<div id="${popupPortalName(key)}"></div>`)
       .openOn(map.current!)
       .addEventListener('remove', () => {
+        markerPopupsActive.current[key] = false;
+
         setMarkerPopups(v => {
-          return v.filter(k => k !== data.key);
+          return v.filter(k => k !== key);
         });
       });
 
     setMarkerPopups(v => {
-      return Array.from(new Set([...v, data.key]));
+      return Array.from(new Set([...v, key]));
     });
   }
 
@@ -217,7 +226,7 @@ const Map: ComponentType<IProps> = ({ orders }) => {
           return null;
         }
 
-        return <MapPopup markerItem={markerItem} />
+        return <MapPopup key={markerKey} markerItem={markerItem} />
       })}
       <Box width="100%" height="100%" ref={mapRef} />
     </Box>
