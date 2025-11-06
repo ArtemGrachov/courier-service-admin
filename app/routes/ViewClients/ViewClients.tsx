@@ -1,4 +1,4 @@
-import { useMemo, type ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import { Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
@@ -10,46 +10,59 @@ import { fetchClients } from '~/providers/clients/data';
 import type { IClientsStoreData } from '~/providers/clients/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import ClientsHeader from './components/ClientsHeader';
 import PageError from '~/components/other/PageError';
 import ClientsTable from '~/components/clients/ClientsTable';
 
-const ViewClients: ComponentType = observer(() => {
+interface IProps {
+  loadingError?: boolean;
+}
+
+const ViewClients: ComponentType<IProps> = observer(({ loadingError }) => {
   const { store: clientsStore, fetch } = useClientsCtx();
+  const errorSnackbar = useErrorSnackbar();
+  const [showPageError, setShowPageError] = useState(loadingError);
 
-  const showPageError = useMemo(() => {
-    return clientsStore.isError || clientsStore.getError;
-  }, [clientsStore.isError, clientsStore.getError]);
+  const reloadPageData = async () => {
+    if (clientsStore.isProcessing) {
+      return;
+    }
 
-  const reloadPageData = () => {
-    fetch()
+    try {
+      await fetch();
+      setShowPageError(false);
+    } catch (err) {
+      console.error(err);
+      errorSnackbar(err);
+    }
   }
 
   return (
-    <Box
-      flexDirection="column"
-      display="flex"
-      gap={2}
-      padding={3}
-      width="100%"
-      boxSizing="border-box"
-    >
-      <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Box
+        flexDirection="column"
+        display="flex"
+        gap={2}
+        padding={3}
+        width="100%"
+        boxSizing="border-box"
+      >
         {showPageError && (
           <PageError
             isProcessing={clientsStore.isProcessing}
             error={clientsStore.getError}
           />
         )}
-      </ReloadPageProvider>
-      {!showPageError && (<>
-        <ClientsHeader />
-        <ClientsTable
-          isProcessing={clientsStore.isProcessing}
-          items={clientsStore.data?.data}
-        />
-      </>)}
-    </Box>
+        {!showPageError && (<>
+          <ClientsHeader />
+          <ClientsTable
+            isProcessing={clientsStore.isProcessing}
+            items={clientsStore.data?.data}
+          />
+        </>)}
+      </Box>
+    </ReloadPageProvider>
   )
 })
 
@@ -58,7 +71,7 @@ const Wrapper: ComponentType = () => {
 
   return (
     <ClientsProvider initialData={loaderData.clientsState}>
-      <ViewClients />
+      <ViewClients loadingError={loaderData.clientsState.getStatus === EStatus.ERROR} />
     </ClientsProvider>
   )
 }
