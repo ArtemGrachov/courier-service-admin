@@ -21,6 +21,8 @@ import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import PageError from '~/components/other/PageError';
 import OrdersTable from '~/components/orders/OrdersTable';
 import CourierDetails from '~/components/couriers/CourierDetails';
+import { Grid } from '@mui/material';
+import Map from '~/components/map/Map';
 
 interface IProps {
   courierLoadingError?: boolean;
@@ -101,18 +103,26 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
           />
         )}
       </ReloadPageProvider>
-      <ReloadPageProvider reloadFunction={reloadCourierData}>
-        {!showPageError && showCourierError && (
-          <PageError
-            title={t('view_courier.error_courier_data')}
-            isProcessing={courierStore.isProcessing}
-            error={courierStore.getError}
-          />
-        )}
-      </ReloadPageProvider>
-      {!showCourierError && courier && (
-        <CourierDetails courier={courier} />
-      )}
+      <Grid container spacing={2}>
+        <Grid size={5}>
+          <ReloadPageProvider reloadFunction={reloadCourierData}>
+            {!showPageError && showCourierError && (
+              <PageError
+                title={t('view_courier.error_courier_data')}
+                isProcessing={courierStore.isProcessing}
+                error={courierStore.getError}
+              />
+            )}
+          </ReloadPageProvider>
+          {!showCourierError && courier && (
+            <CourierDetails courier={courier} />
+          )}
+        </Grid>
+        <Grid size={7} minHeight={400} display="flex">
+          {/* @todo separate store for active orders */}
+          <Map orders={ordersStore.data?.data} />
+        </Grid>
+      </Grid>
       <ReloadPageProvider reloadFunction={reloadOrdersData}>
         {!showPageError && showOrdersError && (
           <PageError
