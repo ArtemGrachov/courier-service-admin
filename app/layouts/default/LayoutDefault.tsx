@@ -20,10 +20,22 @@ const LayoutDefault: ComponentType = observer(() => {
   }
 
   return (
-    <Box sx={{ display: 'flex '}} boxSizing="border-box">
+    <Box
+      display="flex"
+      boxSizing="border-box"
+      minHeight="100%"
+    >
       <Header />
       <Sidebar />
-      <Box component="main" width="100%" minWidth={0} boxSizing="border-box">
+      <Box
+        component="main"
+        width="100%"
+        display="flex"
+        flexDirection="column"
+        alignItems="stretch"
+        minWidth={0}
+        boxSizing="border-box"
+      >
         <Toolbar />
         <Outlet />
       </Box>

@@ -111,18 +111,38 @@
     "reload": "Reload"
   },
   "order_status": {
-    "received": "Received",
+    "ordered": "Ordered",
     "processing": "Processing",
     "completed": "Completed",
     "cancelled": "Cancelled"
   },
   "orders_table": {
     "id": "ID",
-    "client": "Client",
+    "sender": "Sender",
+    "receiver": "Receiver",
     "courier": "Courier",
     "status": "Status",
     "ordered_at": "Ordered date/time",
     "closed_at": "Closed date/time",
     "details": "Details"
+  },
+  "order_card": {
+    "id": "Order ID",
+    "ordered_at": "Ordered date/time",
+    "closed_at": "Closed date/time"
+  },
+  "client_card": {
+    "receiver_id": "Receiver ID",
+    "sender_id": "Sender ID",
+    "client_id": "Client ID",
+    "rating": "Rating",
+    "name": "Name",
+    "link": "Details"
+  },
+  "courier_card": {
+    "id": "Courier ID",
+    "rating": "Rating",
+    "current_orders_count": "Active orders",
+    "link": "Details"
   }
 }

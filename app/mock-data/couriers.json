@@ -7,7 +7,11 @@
     "totalOrdersCount": 184,
     "rating": 4.7,
     "email": "alex.johnson@example.com",
-    "phoneNumber": "+1-202-555-0101"
+    "phoneNumber": "+1-202-555-0101",
+    "location": {
+      "lat": 51.5098,
+      "lng": -0.1180
+    }
   },
   {
     "id": 2,
@@ -17,7 +21,11 @@
     "totalOrdersCount": 201,
     "rating": 4.9,
     "email": "maria.lopez@example.com",
-    "phoneNumber": "+1-202-555-0102"
+    "phoneNumber": "+1-202-555-0102",
+    "location": {
+      "lat": 51.5143,
+      "lng": -0.1027
+    }
   },
   {
     "id": 3,
@@ -27,7 +35,8 @@
     "totalOrdersCount": 67,
     "rating": 4.3,
     "email": "james.smith@example.com",
-    "phoneNumber": "+1-202-555-0103"
+    "phoneNumber": "+1-202-555-0103",
+    "location": null
   },
   {
     "id": 4,
@@ -37,7 +46,11 @@
     "totalOrdersCount": 152,
     "rating": 4.8,
     "email": "sofia.rossi@example.com",
-    "phoneNumber": "+1-202-555-0104"
+    "phoneNumber": "+1-202-555-0104",
+    "location": {
+      "lat": 51.5221,
+      "lng": -0.1275
+    }
   },
   {
     "id": 5,
@@ -47,7 +60,11 @@
     "totalOrdersCount": 99,
     "rating": 4.5,
     "email": "omar.haddad@example.com",
-    "phoneNumber": "+1-202-555-0105"
+    "phoneNumber": "+1-202-555-0105",
+    "location": {
+      "lat": 51.5076,
+      "lng": -0.0762
+    }
   },
   {
     "id": 6,
@@ -57,7 +74,8 @@
     "totalOrdersCount": 45,
     "rating": 4.1,
     "email": "emma.muller@example.com",
-    "phoneNumber": "+1-202-555-0106"
+    "phoneNumber": "+1-202-555-0106",
+    "location": null
   },
   {
     "id": 7,
@@ -67,7 +85,11 @@
     "totalOrdersCount": 220,
     "rating": 4.9,
     "email": "lucas.brown@example.com",
-    "phoneNumber": "+1-202-555-0107"
+    "phoneNumber": "+1-202-555-0107",
+    "location": {
+      "lat": 51.5305,
+      "lng": -0.0923
+    }
   },
   {
     "id": 8,
@@ -77,7 +99,11 @@
     "totalOrdersCount": 180,
     "rating": 4.6,
     "email": "anna.petrova@example.com",
-    "phoneNumber": "+1-202-555-0108"
+    "phoneNumber": "+1-202-555-0108",
+    "location": {
+      "lat": 51.4999,
+      "lng": -0.0856
+    }
   },
   {
     "id": 9,
@@ -87,7 +113,11 @@
     "totalOrdersCount": 164,
     "rating": 4.7,
     "email": "daniel.kim@example.com",
-    "phoneNumber": "+1-202-555-0109"
+    "phoneNumber": "+1-202-555-0109",
+    "location": {
+      "lat": 51.5184,
+      "lng": -0.1113
+    }
   },
   {
     "id": 10,
@@ -97,7 +127,8 @@
     "totalOrdersCount": 51,
     "rating": 4.2,
     "email": "sara.cohen@example.com",
-    "phoneNumber": "+1-202-555-0110"
+    "phoneNumber": "+1-202-555-0110",
+    "location": null
   },
   {
     "id": 11,
@@ -107,7 +138,11 @@
     "totalOrdersCount": 175,
     "rating": 4.8,
     "email": "ahmed.ali@example.com",
-    "phoneNumber": "+1-202-555-0111"
+    "phoneNumber": "+1-202-555-0111",
+    "location": {
+      "lat": 51.5055,
+      "lng": -0.0901
+    }
   },
   {
     "id": 12,
@@ -117,7 +152,11 @@
     "totalOrdersCount": 208,
     "rating": 4.9,
     "email": "nina.novak@example.com",
-    "phoneNumber": "+1-202-555-0112"
+    "phoneNumber": "+1-202-555-0112",
+    "location": {
+      "lat": 51.5267,
+      "lng": -0.0949
+    }
   },
   {
     "id": 13,
@@ -127,7 +166,8 @@
     "totalOrdersCount": 36,
     "rating": 3.9,
     "email": "robert.williams@example.com",
-    "phoneNumber": "+1-202-555-0113"
+    "phoneNumber": "+1-202-555-0113",
+    "location": null
   },
   {
     "id": 14,
@@ -137,7 +177,11 @@
     "totalOrdersCount": 144,
     "rating": 4.6,
     "email": "chloe.dubois@example.com",
-    "phoneNumber": "+1-202-555-0114"
+    "phoneNumber": "+1-202-555-0114",
+    "location": {
+      "lat": 51.5033,
+      "lng": -0.0767
+    }
   },
   {
     "id": 15,
@@ -147,7 +191,11 @@
     "totalOrdersCount": 193,
     "rating": 4.7,
     "email": "mateo.garcia@example.com",
-    "phoneNumber": "+1-202-555-0115"
+    "phoneNumber": "+1-202-555-0115",
+    "location": {
+      "lat": 51.5285,
+      "lng": -0.0872
+    }
   },
   {
     "id": 16,
@@ -157,7 +205,11 @@
     "totalOrdersCount": 212,
     "rating": 4.9,
     "email": "elena.popescu@example.com",
-    "phoneNumber": "+1-202-555-0116"
+    "phoneNumber": "+1-202-555-0116",
+    "location": {
+      "lat": 51.5009,
+      "lng": -0.1204
+    }
   },
   {
     "id": 17,
@@ -167,7 +219,8 @@
     "totalOrdersCount": 58,
     "rating": 4.1,
     "email": "john.davis@example.com",
-    "phoneNumber": "+1-202-555-0117"
+    "phoneNumber": "+1-202-555-0117",
+    "location": null
   },
   {
     "id": 18,
@@ -177,7 +230,11 @@
     "totalOrdersCount": 240,
     "rating": 4.8,
     "email": "hiroshi.tanaka@example.com",
-    "phoneNumber": "+1-202-555-0118"
+    "phoneNumber": "+1-202-555-0118",
+    "location": {
+      "lat": 51.5321,
+      "lng": -0.0983
+    }
   },
   {
     "id": 19,
@@ -187,7 +244,11 @@
     "totalOrdersCount": 189,
     "rating": 4.7,
     "email": "isabella.rossi@example.com",
-    "phoneNumber": "+1-202-555-0119"
+    "phoneNumber": "+1-202-555-0119",
+    "location": {
+      "lat": 51.5061,
+      "lng": -0.0829
+    }
   },
   {
     "id": 20,
@@ -197,7 +258,8 @@
     "totalOrdersCount": 33,
     "rating": 4.0,
     "email": "david.miller@example.com",
-    "phoneNumber": "+1-202-555-0120"
+    "phoneNumber": "+1-202-555-0120",
+    "location": null
   },
   {
     "id": 21,
@@ -207,7 +269,11 @@
     "totalOrdersCount": 166,
     "rating": 4.6,
     "email": "lina.andersson@example.com",
-    "phoneNumber": "+1-202-555-0121"
+    "phoneNumber": "+1-202-555-0121",
+    "location": {
+      "lat": 51.5175,
+      "lng": -0.1005
+    }
   },
   {
     "id": 22,
@@ -217,7 +283,11 @@
     "totalOrdersCount": 190,
     "rating": 4.8,
     "email": "igor.kovalenko@example.com",
-    "phoneNumber": "+1-202-555-0122"
+    "phoneNumber": "+1-202-555-0122",
+    "location": {
+      "lat": 51.5044,
+      "lng": -0.0792
+    }
   },
   {
     "id": 23,
@@ -227,7 +297,11 @@
     "totalOrdersCount": 147,
     "rating": 4.7,
     "email": "mia.nguyen@example.com",
-    "phoneNumber": "+1-202-555-0123"
+    "phoneNumber": "+1-202-555-0123",
+    "location": {
+      "lat": 51.5208,
+      "lng": -0.1087
+    }
   },
   {
     "id": 24,
@@ -237,7 +311,8 @@
     "totalOrdersCount": 62,
     "rating": 4.2,
     "email": "tomas.silva@example.com",
-    "phoneNumber": "+1-202-555-0124"
+    "phoneNumber": "+1-202-555-0124",
+    "location": null
   },
   {
     "id": 25,
@@ -247,7 +322,11 @@
     "totalOrdersCount": 199,
     "rating": 4.8,
     "email": "emily.clark@example.com",
-    "phoneNumber": "+1-202-555-0125"
+    "phoneNumber": "+1-202-555-0125",
+    "location": {
+      "lat": 51.5021,
+      "lng": -0.0831
+    }
   },
   {
     "id": 26,
@@ -257,7 +336,11 @@
     "totalOrdersCount": 158,
     "rating": 4.5,
     "email": "sergey.ivanov@example.com",
-    "phoneNumber": "+1-202-555-0126"
+    "phoneNumber": "+1-202-555-0126",
+    "location": {
+      "lat": 51.5259,
+      "lng": -0.1135
+    }
   },
   {
     "id": 27,
@@ -267,7 +350,11 @@
     "totalOrdersCount": 172,
     "rating": 4.9,
     "email": "olivia.wilson@example.com",
-    "phoneNumber": "+1-202-555-0127"
+    "phoneNumber": "+1-202-555-0127",
+    "location": {
+      "lat": 51.5083,
+      "lng": -0.0987
+    }
   },
   {
     "id": 28,
@@ -277,7 +364,8 @@
     "totalOrdersCount": 40,
     "rating": 4.1,
     "email": "mohamed.hassan@example.com",
-    "phoneNumber": "+1-202-555-0128"
+    "phoneNumber": "+1-202-555-0128",
+    "location": null
   },
   {
     "id": 29,
@@ -287,7 +375,11 @@
     "totalOrdersCount": 210,
     "rating": 4.8,
     "email": "patricia.costa@example.com",
-    "phoneNumber": "+1-202-555-0129"
+    "phoneNumber": "+1-202-555-0129",
+    "location": {
+      "lat": 51.5294,
+      "lng": -0.0908
+    }
   },
   {
     "id": 30,
@@ -297,6 +389,10 @@
     "totalOrdersCount": 155,
     "rating": 4.6,
     "email": "ethan.baker@example.com",
-    "phoneNumber": "+1-202-555-0130"
+    "phoneNumber": "+1-202-555-0130",
+    "location": {
+      "lat": 51.5102,
+      "lng": -0.0837
+    }
   }
 ]

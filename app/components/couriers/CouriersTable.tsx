@@ -11,7 +11,7 @@ import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import { useRoutePath } from '~/hooks/routing/use-route-path';
 import CourierStatus from '~/components/couriers/CourierStatus';
-import CourierRating from '~/components/couriers/CourierRating';
+import Rating from '~/components/other/Rating';
 
 import type { ICourier } from '~/types/models/courier';
 import { ROUTE_PATHS } from '~/router/routes';
@@ -70,7 +70,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     type: 'number',
     headerName: 'couriers_table.rating',
     width: 100,
-    renderCell: params => <CourierRating rating={params.value} />
+    renderCell: params => <Rating rating={params.value} />
   },
   [EColumns.ACTIONS]: {
     field: 'actions',

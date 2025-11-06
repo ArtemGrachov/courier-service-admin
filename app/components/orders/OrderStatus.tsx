@@ -22,7 +22,7 @@ const OrderStatus: ComponentType<IProps> = ({ status }) => {
       case EOrderStatus.PROCESSING: {
         return 'secondary';
       }
-      case EOrderStatus.RECEIVED: {
+      case EOrderStatus.ORDERED: {
         return 'primary';
       }
     }

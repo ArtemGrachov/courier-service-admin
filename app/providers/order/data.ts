@@ -1,11 +1,11 @@
-import type { IGetOrdersQuery, IGetOrdersResponse } from '~/types/api/orders';
+import type { IGetOrderResponse } from '~/types/api/orders';
 import type { IClient } from '~/types/models/client';
 import type { ICourier } from '~/types/models/courier';
 import type { IOrder } from '~/types/models/order';
 
-import { mockPaginationRequest } from '~/utils/mock-request';
+import { mockRequest } from '~/utils/mock-request';
 
-export const fetchOrders = async (query?: IGetOrdersQuery) => {
+export const fetchOrder = async (orderId: number) => {
   const [
     orders,
     couriers,
@@ -16,11 +16,12 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     import('~/mock-data/clients.json').then(m => m.default as IClient[]),
   ]);
 
-  const data = await mockPaginationRequest<IGetOrdersResponse, IOrder>(
-    query?.page ?? 1,
-    query?.itemsPerPage ?? 100,
-    orders,
-  );
+  const order = orders.find(o => o.id === orderId);
+  const data = (await mockRequest<IGetOrderResponse>(order));
+
+  if (!data) {
+    throw new Error('404');
+  }
 
   const couriersMap = couriers.reduce((acc, curr) => {
     acc[curr.id] = curr;
@@ -32,11 +33,9 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     return acc;
   }, {} as Record<number, IClient>);
 
-  data?.data.forEach(order => {
-    order.courier = couriersMap[order.courierId];
-    order.sender = clientsMap[order.senderId];
-    order.receiver = clientsMap[order.receiverId];
-  });
+  data.courier = couriersMap[data.courierId];
+  data.sender = clientsMap[data.senderId];
+  data.receiver = clientsMap[data.receiverId];
 
   return data!;
 }

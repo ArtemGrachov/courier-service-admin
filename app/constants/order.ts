@@ -1,12 +1,12 @@
 export const enum EOrderStatus {
-  RECEIVED = 'received',
+  ORDERED = 'ordered',
   PROCESSING = 'processing',
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
 }
 
 export const ORDER_STATUSES = [
-  EOrderStatus.RECEIVED,
+  EOrderStatus.ORDERED,
   EOrderStatus.PROCESSING,
   EOrderStatus.COMPLETED,
   EOrderStatus.CANCELLED,

@@ -5,7 +5,7 @@ interface IProps {
   rating: number;
 }
 
-const CourierRating: ComponentType<IProps> = ({ rating }) => {
+const Rating: ComponentType<IProps> = ({ rating }) => {
   const color = useMemo(() => {
     if (rating <= 2) {
       return 'error';
@@ -23,4 +23,4 @@ const CourierRating: ComponentType<IProps> = ({ rating }) => {
   )
 }
 
-export default CourierRating;
+export default Rating;
