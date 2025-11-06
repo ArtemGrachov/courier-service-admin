@@ -2,10 +2,12 @@ import { useMemo, useState, type ComponentType } from 'react';
 import { useLoaderData, useParams } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewCourier/+types/ViewCourier';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
 import { EStatus } from '~/constants/status';
+import { EOrderStatus } from '~/constants/order';
 
 import { CourierProvider, useCourierCtx } from '~/providers/courier';
 import type { ICourierStoreData } from '~/providers/courier/store';
@@ -15,38 +17,41 @@ import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import type { IOrdersStoreData } from '~/providers/orders/store';
 import { fetchOrders } from '~/providers/orders/data';
 
+import { ActiveOrdersProvider, useActiveOrdersCtx } from './providers/active-orders';
+
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import PageError from '~/components/other/PageError';
 import OrdersTable from '~/components/orders/OrdersTable';
 import CourierDetails from '~/components/couriers/CourierDetails';
-import { Grid } from '@mui/material';
 import Map from '~/components/map/Map';
 
 interface IProps {
   courierLoadingError?: boolean;
   ordersLoadingError?: boolean;
+  activeOrdersLoadingError?: boolean;
 }
 
-const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, ordersLoadingError }) => {
+const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, ordersLoadingError, activeOrdersLoadingError }) => {
   const { t } = useTranslation();
   const { courierId: rawCourierId } = useParams();
   const { store: courierStore, fetch: fetchCourier } = useCourierCtx();
   const { store: ordersStore, fetch: fetchOrders } = useOrdersCtx();
+  const { store: activeOrdersStore, fetch: fetchActiveOrders } = useActiveOrdersCtx();
   const errorSnackbar = useErrorSnackbar();
 
   const [showCourierError, setShowCourierError] = useState(courierLoadingError);
   const [showOrdersError, setShowOrdersError] = useState(ordersLoadingError);
+  const [showActiveOrdersError, setShowActiveOrdersError] = useState(activeOrdersLoadingError);
 
   const showPageError = useMemo(() => {
-    return showCourierError && showOrdersError;
+    return showCourierError && showOrdersError && showActiveOrdersError;
   }, [showCourierError, showOrdersError]);
 
   const courierId = useMemo(() => {
     return +rawCourierId!;
   }, [rawCourierId])
-
 
   const courier = courierStore.data;
 
@@ -78,10 +83,25 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
     }
   }
 
+  const reloadActiveOrdersData = async () => {
+    if (activeOrdersStore.isProcessing) {
+      return;
+    }
+
+    try {
+      await fetchActiveOrders({ courierIds: [courierId], statuses: [EOrderStatus.PROCESSING] });
+      setShowActiveOrdersError(false);
+    } catch (err) {
+      console.error(err);
+      errorSnackbar(err);
+    }
+  }
+
   const reloadPageData = async () => {
     await Promise.all([
       reloadCourierData(),
       reloadOrdersData(),
+      reloadActiveOrdersData(),
     ]);
   }
 
@@ -119,8 +139,18 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
           )}
         </Grid>
         <Grid size={7} minHeight={400} display="flex">
-          {/* @todo separate store for active orders */}
-          <Map orders={ordersStore.data?.data} />
+          <ReloadPageProvider reloadFunction={reloadActiveOrdersData}>
+            {!showPageError && showActiveOrdersError && (
+              <PageError
+                title={t('view_courier.error_active_orders_data')}
+                isProcessing={activeOrdersStore.isProcessing}
+                error={activeOrdersStore.getError}
+              />
+            )}
+          </ReloadPageProvider>
+          {!showActiveOrdersError && courier && (
+            <Map orders={activeOrdersStore.data?.data} />
+          )}
         </Grid>
       </Grid>
       <ReloadPageProvider reloadFunction={reloadOrdersData}>
@@ -147,12 +177,15 @@ const Wrapper: ComponentType = () => {
 
   return (
     <OrdersProvider initialData={loaderData.ordersState}>
-      <CourierProvider initialData={loaderData.courierState}>
-        <ViewCourier
-          courierLoadingError={loaderData.courierState.getStatus === EStatus.ERROR}
-          ordersLoadingError={loaderData.ordersState.getStatus === EStatus.ERROR}
-        />
-      </CourierProvider>
+      <ActiveOrdersProvider initialData={loaderData.activeOrdersState}>
+        <CourierProvider initialData={loaderData.courierState}>
+          <ViewCourier
+            courierLoadingError={loaderData.courierState.getStatus === EStatus.ERROR}
+            ordersLoadingError={loaderData.ordersState.getStatus === EStatus.ERROR}
+            activeOrdersLoadingError={loaderData.activeOrdersState.getStatus === EStatus.ERROR}
+          />
+        </CourierProvider>
+      </ActiveOrdersProvider>
     </OrdersProvider>
   )
 }
@@ -174,7 +207,13 @@ export async function clientLoader({
     getStatus: EStatus.INIT,
     getError: null,
     data: null,
-  }
+  };
+
+  const activeOrdersState: IOrdersStoreData = {
+    getStatus: EStatus.INIT,
+    getError: null,
+    data: null,
+  };
 
   if (!isNaN(courierId)) {
     await Promise.all([
@@ -195,12 +234,22 @@ export async function clientLoader({
         .catch(err => {
           ordersState.getError = err;
           ordersState.getStatus = EStatus.ERROR;
+        }),
+      fetchOrders({ courierIds: [courierId], statuses: [EOrderStatus.PROCESSING] })
+        .then(data => {
+          activeOrdersState.data = data;
+          activeOrdersState.getStatus = EStatus.SUCCESS;
         })
+        .catch(err => {
+          activeOrdersState.getError = err;
+          activeOrdersState.getStatus = EStatus.ERROR;
+        }),
     ]);
   }
 
   return {
     courierState,
     ordersState,
+    activeOrdersState,
   };
 }
