@@ -63,7 +63,7 @@ const ViewOrder: ComponentType = observer(() => {
               </Stack>
             </Grid>
             <Grid size={9}>
-              <Map />
+              <Map orders={[order]} />
             </Grid>
           </Grid>
         </>

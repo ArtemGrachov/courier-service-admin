@@ -2,9 +2,15 @@ import { useEffect, useRef, type ComponentType } from 'react';
 import { Box } from '@mui/material';
 import L from 'leaflet';
 
+import type { IOrder } from '~/types/models/order';
+
 import 'leaflet/dist/leaflet.css';
 
-const Map: ComponentType = () => {
+interface IProps {
+  orders?: IOrder[];
+}
+
+const Map: ComponentType<IProps> = ({ orders }) => {
   const mapRef = useRef<HTMLElement | null>(null);
   const map = useRef<L.Map | null>(null);
 
@@ -19,6 +25,22 @@ const Map: ComponentType = () => {
       maxZoom: 19,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map.current);
+
+    const senderMarkers = orders?.map(order => {
+      return L.marker([order.senderGeoPos.lat, order.senderGeoPos.lng]);
+    });
+
+    const receiverMarkers = orders?.map(order => {
+      return L.marker([order.receiverGeoPos.lat, order.receiverGeoPos.lng]);
+    });
+
+    senderMarkers?.forEach(marker => {
+      marker.addTo(map.current!);
+    });
+
+    receiverMarkers?.forEach(marker => {
+      marker.addTo(map.current!);
+    });
   }
 
   const destroyMap = () => {
@@ -37,8 +59,7 @@ const Map: ComponentType = () => {
   }, []);
 
   return (
-    <Box width="100%" height="100%" ref={mapRef}>
-    </Box>
+    <Box width="100%" height="100%" ref={mapRef} />
   )
 }
 
