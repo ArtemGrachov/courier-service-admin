@@ -11,8 +11,8 @@ import type { IClientsStoreData } from '~/providers/clients/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import ClientsHeader from './components/ClientsHeader';
-// import CouriersTable from '~/components/couriers/CouriersTable';
 import PageError from '~/components/other/PageError';
+import ClientsTable from '~/components/clients/ClientsTable';
 
 const ViewClients: ComponentType = observer(() => {
   const { store: clientsStore, fetch } = useClientsCtx();
@@ -44,11 +44,10 @@ const ViewClients: ComponentType = observer(() => {
       </ReloadPageProvider>
       {!showPageError && (<>
         <ClientsHeader />
-        {/* @todo */}
-        {/* <CouriersTable
-          isProcessing={couriersStore.isProcessing}
-          items={couriersStore.data?.data}
-        /> */}
+        <ClientsTable
+          isProcessing={clientsStore.isProcessing}
+          items={clientsStore.data?.data}
+        />
       </>)}
     </Box>
   )

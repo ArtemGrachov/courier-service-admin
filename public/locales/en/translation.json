@@ -144,5 +144,15 @@
     "rating": "Rating",
     "current_orders_count": "Active orders",
     "link": "Details"
+  },
+  "clients_table": {
+    "id": "ID",
+    "name": "Name",
+    "current_orders_count": "Active orders",
+    "total_orders_count": "Total orders",
+    "phone": "Phone number",
+    "email": "Email",
+    "rating": "Rating",
+    "details": "Details"
   }
 }
