@@ -2,201 +2,361 @@
   {
     "id": 1,
     "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "phoneNumber": "+1-202-555-1001",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 53,
     "rating": 4.8
   },
   {
     "id": 2,
     "name": "Michael Smith",
+    "email": "michael.smith@example.com",
+    "phoneNumber": "+1-202-555-1002",
+    "currentOrdersCount": 4,
+    "totalOrdersCount": 119,
     "rating": 4.5
   },
   {
     "id": 3,
     "name": "Emma Williams",
+    "email": "emma.williams@example.com",
+    "phoneNumber": "+1-202-555-1003",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 63,
     "rating": 4.9
   },
   {
     "id": 4,
     "name": "Daniel Brown",
+    "email": "daniel.brown@example.com",
+    "phoneNumber": "+1-202-555-1004",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 60,
     "rating": 4.3
   },
   {
     "id": 5,
     "name": "Olivia Davis",
+    "email": "olivia.davis@example.com",
+    "phoneNumber": "+1-202-555-1005",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 47,
     "rating": 4.7
   },
   {
     "id": 6,
     "name": "James Miller",
+    "email": "james.miller@example.com",
+    "phoneNumber": "+1-202-555-1006",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 59,
     "rating": 4.6
   },
   {
     "id": 7,
     "name": "Sophia Wilson",
+    "email": "sophia.wilson@example.com",
+    "phoneNumber": "+1-202-555-1007",
+    "currentOrdersCount": 4,
+    "totalOrdersCount": 107,
     "rating": 4.4
   },
   {
     "id": 8,
     "name": "Benjamin Moore",
+    "email": "benjamin.moore@example.com",
+    "phoneNumber": "+1-202-555-1008",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 72,
     "rating": 4.9
   },
   {
     "id": 9,
     "name": "Isabella Taylor",
+    "email": "isabella.taylor@example.com",
+    "phoneNumber": "+1-202-555-1009",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 51,
     "rating": 4.8
   },
   {
     "id": 10,
     "name": "Lucas Anderson",
+    "email": "lucas.anderson@example.com",
+    "phoneNumber": "+1-202-555-1010",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 107,
     "rating": 4.2
   },
   {
     "id": 11,
     "name": "Mia Thomas",
+    "email": "mia.thomas@example.com",
+    "phoneNumber": "+1-202-555-1011",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 69,
     "rating": 4.5
   },
   {
     "id": 12,
     "name": "Ethan Jackson",
+    "email": "ethan.jackson@example.com",
+    "phoneNumber": "+1-202-555-1012",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 80,
     "rating": 4.3
   },
   {
     "id": 13,
     "name": "Charlotte White",
+    "email": "charlotte.white@example.com",
+    "phoneNumber": "+1-202-555-1013",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 119,
     "rating": 4.9
   },
   {
     "id": 14,
     "name": "Henry Harris",
+    "email": "henry.harris@example.com",
+    "phoneNumber": "+1-202-555-1014",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 91,
     "rating": 4.6
   },
   {
     "id": 15,
     "name": "Amelia Martin",
+    "email": "amelia.martin@example.com",
+    "phoneNumber": "+1-202-555-1015",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 77,
     "rating": 4.7
   },
   {
     "id": 16,
     "name": "William Thompson",
+    "email": "william.thompson@example.com",
+    "phoneNumber": "+1-202-555-1016",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 55,
     "rating": 4.4
   },
   {
     "id": 17,
     "name": "Ava Garcia",
+    "email": "ava.garcia@example.com",
+    "phoneNumber": "+1-202-555-1017",
+    "currentOrdersCount": 1,
+    "totalOrdersCount": 50,
     "rating": 4.8
   },
   {
     "id": 18,
     "name": "Noah Martinez",
+    "email": "noah.martinez@example.com",
+    "phoneNumber": "+1-202-555-1018",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 48,
     "rating": 4.2
   },
   {
     "id": 19,
     "name": "Luna Robinson",
+    "email": "luna.robinson@example.com",
+    "phoneNumber": "+1-202-555-1019",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 52,
     "rating": 4.5
   },
   {
     "id": 20,
     "name": "Elijah Clark",
+    "email": "elijah.clark@example.com",
+    "phoneNumber": "+1-202-555-1020",
+    "currentOrdersCount": 4,
+    "totalOrdersCount": 106,
     "rating": 4.9
   },
   {
     "id": 21,
     "name": "Harper Rodriguez",
+    "email": "harper.rodriguez@example.com",
+    "phoneNumber": "+1-202-555-1021",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 43,
     "rating": 4.6
   },
   {
     "id": 22,
     "name": "Jack Lewis",
+    "email": "jack.lewis@example.com",
+    "phoneNumber": "+1-202-555-1022",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 70,
     "rating": 4.3
   },
   {
     "id": 23,
     "name": "Ella Lee",
+    "email": "ella.lee@example.com",
+    "phoneNumber": "+1-202-555-1023",
+    "currentOrdersCount": 4,
+    "totalOrdersCount": 99,
     "rating": 4.7
   },
   {
     "id": 24,
     "name": "Logan Walker",
+    "email": "logan.walker@example.com",
+    "phoneNumber": "+1-202-555-1024",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 114,
     "rating": 4.4
   },
   {
     "id": 25,
     "name": "Grace Hall",
+    "email": "grace.hall@example.com",
+    "phoneNumber": "+1-202-555-1025",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 99,
     "rating": 4.9
   },
   {
     "id": 26,
     "name": "Alexander Allen",
+    "email": "alexander.allen@example.com",
+    "phoneNumber": "+1-202-555-1026",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 88,
     "rating": 4.5
   },
   {
     "id": 27,
     "name": "Chloe Young",
+    "email": "chloe.young@example.com",
+    "phoneNumber": "+1-202-555-1027",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 80,
     "rating": 4.8
   },
   {
     "id": 28,
     "name": "Sebastian Hernandez",
+    "email": "sebastian.hernandez@example.com",
+    "phoneNumber": "+1-202-555-1028",
+    "currentOrdersCount": 4,
+    "totalOrdersCount": 88,
     "rating": 4.3
   },
   {
     "id": 29,
     "name": "Ella King",
+    "email": "ella.king@example.com",
+    "phoneNumber": "+1-202-555-1029",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 42,
     "rating": 4.6
   },
   {
     "id": 30,
     "name": "Matthew Wright",
+    "email": "matthew.wright@example.com",
+    "phoneNumber": "+1-202-555-1030",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 54,
     "rating": 4.7
   },
   {
     "id": 31,
     "name": "Scarlett Scott",
+    "email": "scarlett.scott@example.com",
+    "phoneNumber": "+1-202-555-1031",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 110,
     "rating": 4.9
   },
   {
     "id": 32,
     "name": "Leo Green",
+    "email": "leo.green@example.com",
+    "phoneNumber": "+1-202-555-1032",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 106,
     "rating": 4.5
   },
   {
     "id": 33,
     "name": "Victoria Adams",
+    "email": "victoria.adams@example.com",
+    "phoneNumber": "+1-202-555-1033",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 66,
     "rating": 4.4
   },
   {
     "id": 34,
     "name": "Owen Baker",
+    "email": "owen.baker@example.com",
+    "phoneNumber": "+1-202-555-1034",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 64,
     "rating": 4.8
   },
   {
     "id": 35,
     "name": "Emily Gonzalez",
+    "email": "emily.gonzalez@example.com",
+    "phoneNumber": "+1-202-555-1035",
+    "currentOrdersCount": 4,
+    "totalOrdersCount": 103,
     "rating": 4.7
   },
   {
     "id": 36,
     "name": "Jacob Nelson",
+    "email": "jacob.nelson@example.com",
+    "phoneNumber": "+1-202-555-1036",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 105,
     "rating": 4.3
   },
   {
     "id": 37,
     "name": "Sofia Carter",
+    "email": "sofia.carter@example.com",
+    "phoneNumber": "+1-202-555-1037",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 76,
     "rating": 4.9
   },
   {
     "id": 38,
     "name": "Henry Perez",
+    "email": "henry.perez@example.com",
+    "phoneNumber": "+1-202-555-1038",
+    "currentOrdersCount": 3,
+    "totalOrdersCount": 76,
     "rating": 4.5
   },
   {
     "id": 39,
     "name": "Layla Mitchell",
+    "email": "layla.mitchell@example.com",
+    "phoneNumber": "+1-202-555-1039",
+    "currentOrdersCount": 0,
+    "totalOrdersCount": 72,
     "rating": 4.6
   },
   {
     "id": 40,
     "name": "Daniel Rivera",
+    "email": "daniel.rivera@example.com",
+    "phoneNumber": "+1-202-555-1040",
+    "currentOrdersCount": 2,
+    "totalOrdersCount": 58,
     "rating": 4.8
   }
 ]

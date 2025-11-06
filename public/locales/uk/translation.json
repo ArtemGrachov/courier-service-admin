@@ -144,5 +144,15 @@
     "rating": "Рейтинг",
     "current_orders_count": "Активних замовлень",
     "link": "Деталі"
+  },
+  "clients_table": {
+    "id": "ID",
+    "name": "Ім'я",
+    "current_orders_count": "Активних замовлень",
+    "total_orders_count": "Замовлень загалом",
+    "phone": "Номер телефону",
+    "email": "Email",
+    "rating": "Рейтинг",
+    "details": "Деталі"
   }
 }
