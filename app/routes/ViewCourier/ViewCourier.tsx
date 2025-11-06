@@ -98,11 +98,21 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
   }
 
   const reloadPageData = async () => {
-    await Promise.all([
-      reloadCourierData(),
-      reloadOrdersData(),
-      reloadActiveOrdersData(),
-    ]);
+    const requests: Array<Promise<any>> = [];
+
+    if (courierLoadingError) {
+      requests.push(reloadCourierData());
+    }
+
+    if (ordersLoadingError) {
+      requests.push(reloadOrdersData());
+    }
+
+    if (activeOrdersLoadingError) {
+      requests.push(reloadActiveOrdersData());
+    }
+
+    await Promise.all(requests);
   }
 
   return (
@@ -122,10 +132,8 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
             error={courierStore.getError || ordersStore.getError}
           />
         )}
-      </ReloadPageProvider>
-      <Grid container spacing={2}>
-        <Grid size={5}>
-          <ReloadPageProvider reloadFunction={reloadCourierData}>
+        <Grid container spacing={2}>
+          <Grid size={5}>
             {!showPageError && showCourierError && (
               <PageError
                 title={t('view_courier.error_courier_data')}
@@ -133,13 +141,11 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
                 error={courierStore.getError}
               />
             )}
-          </ReloadPageProvider>
-          {!showCourierError && courier && (
-            <CourierDetails courier={courier} />
-          )}
-        </Grid>
-        <Grid size={7} minHeight={400} display="flex">
-          <ReloadPageProvider reloadFunction={reloadActiveOrdersData}>
+            {!showCourierError && courier && (
+              <CourierDetails courier={courier} />
+            )}
+          </Grid>
+          <Grid size={7} minHeight={400} display="flex">
             {!showPageError && showActiveOrdersError && (
               <PageError
                 title={t('view_courier.error_active_orders_data')}
@@ -147,13 +153,11 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
                 error={activeOrdersStore.getError}
               />
             )}
-          </ReloadPageProvider>
-          {!showActiveOrdersError && courier && (
-            <Map orders={activeOrdersStore.data?.data} />
-          )}
+            {!showActiveOrdersError && courier && (
+              <Map orders={activeOrdersStore.data?.data} />
+            )}
+          </Grid>
         </Grid>
-      </Grid>
-      <ReloadPageProvider reloadFunction={reloadOrdersData}>
         {!showPageError && showOrdersError && (
           <PageError
             title={t('view_courier.error_orders_data')}
@@ -161,13 +165,13 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
             error={ordersStore.getError}
           />
         )}
+        {!showOrdersError && ordersStore.data && (
+          <OrdersTable
+            items={ordersStore.data?.data}
+            isProcessing={ordersStore.isProcessing}
+          />
+        )}
       </ReloadPageProvider>
-      {!showOrdersError && ordersStore.data && (
-        <OrdersTable
-          items={ordersStore.data?.data}
-          isProcessing={ordersStore.isProcessing}
-        />
-      )}
     </Box>
   )
 })
