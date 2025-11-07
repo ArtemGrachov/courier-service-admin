@@ -2,16 +2,20 @@ import { lazy, type ComponentType } from 'react';
 
 import { EMarkerTypes } from './constants';
 
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Portal from '@mui/material/Portal';
+
 import type { IMarker } from './types';
 import type { IClient } from '~/types/models/client';
 import type { ICourier } from '~/types/models/courier';
 
 import { popupPortalName } from './utils';
-import { Portal } from '@mui/material';
+import { Divider } from '@mui/material';
 
-const ClientCard = lazy(() => import('~/components/clients/ClientCard'));
-const CourierCard = lazy(() => import('~/components/couriers/CourierCard'));
-const OrderCard = lazy(() => import('~/components/orders/OrderCard'));
+const ClientPreview = lazy(() => import('~/components/clients/ClientPreview'));
+const CourierPreview = lazy(() => import('~/components/couriers/CourierPreview'));
+const OrderPreview = lazy(() => import('~/components/orders/OrderPreview'));
 
 interface IProps {
   markerItem: IMarker;
@@ -25,23 +29,30 @@ const MapPopup: ComponentType<IProps> = ({ markerItem, showOrderData }) => {
 
   switch (markerItem.data.type) {
     case EMarkerTypes.SENDER: {
-      el = <ClientCard client={data as IClient} isSender={true} />
+      el = <ClientPreview client={data as IClient} isSender={true} />
       break;
     }
     case EMarkerTypes.RECEIVER: {
-      el = <ClientCard client={data as IClient} isReceiver={true} />
+      el = <ClientPreview client={data as IClient} isReceiver={true} />
       break;
     }
     case EMarkerTypes.COURIER: {
-      el = <CourierCard courier={data as ICourier} />
+      el = <CourierPreview courier={data as ICourier} />
       break;
     }
   }
 
   return (
     <Portal container={() => document.getElementById(popupPortalName(key))}>
-      {showOrderData && order ? <OrderCard order={order} /> : null}
-      {el}
+      <Card>
+        <CardContent>
+          {showOrderData && order ? (<>
+            <OrderPreview order={order} />
+            <Divider sx={{ my: 2 }} />
+          </>) : null}
+          {el}
+        </CardContent>
+      </Card>
     </Portal>
   )
 }
