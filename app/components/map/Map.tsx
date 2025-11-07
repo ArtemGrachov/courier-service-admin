@@ -7,11 +7,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import L from 'leaflet';
 import { useTranslation } from 'react-i18next';
 
-import { EMarkerTypes } from './constants';
+import { EMarkerTypes, MARKER_CLASS_NAMES } from './constants';
 
 import MapPopup from './MapPopup';
 
-import type { IMarker, MarkerData, MarkerKey } from './types';
+import type { IMarker, IMarkerState, MarkerData, MarkerKey } from './types';
 import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
 
@@ -22,6 +22,8 @@ import 'leaflet/dist/leaflet.css';
 import srcIconSender from '~/assets/icons/map/sender.svg';
 import srcIconReceiver from '~/assets/icons/map/receiver.svg';
 import srcIconCourier from '~/assets/icons/map/courier.svg';
+
+import './Map.scss';
 
 interface IProps {
   orders?: IOrder[];
@@ -49,9 +51,11 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
   const mapRef = useRef<HTMLElement | null>(null);
   const map = useRef<L.Map | null>(null);
   const markers = useRef<Record<MarkerKey, IMarker>>({});
-  const markerPopupsActive = useRef<Record<string, L.Popup>>({});
-  const [markerPopups, setMarkerPopups] = useState<Array<string>>([]);
+  const markerPopupsActive = useRef<Record<MarkerKey, L.Popup>>({});
+  const markersState = useRef<Record<MarkerKey, IMarkerState>>({});
+  const [markerPopups, setMarkerPopups] = useState<Array<MarkerKey>>([]);
   const theme = useTheme();
+  const highlightedOrders = useRef<Set<number>>(new Set());
 
   const paperBg = useMemo(() => {
     return (theme.vars || theme).palette.background.paper;
@@ -72,6 +76,10 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
       type: EMarkerTypes.COURIER,
       data: courier,
     };
+  }, []);
+
+  const getMarkerState = useCallback((key: MarkerKey) => {
+    return markersState.current[key] ?? (markersState.current[key] = {});
   }, []);
 
   const getOrderMarkerData = useCallback((order: IOrder) => {
@@ -164,10 +172,47 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
     createMarker(markerData);
   }, []);
 
-  const markerClickHandler = ({ lMarker, key }: IMarker) => {
+  const changeMarkerState = useCallback((key: MarkerKey, newState: Partial<IMarkerState>) => {
+    const marker = markers.current[key];
+
+    if (!marker) {
+      return;
+    }
+
+    const markerState = getMarkerState(marker.key);
+    Object.assign(markerState, newState);
+
+    renderMarkerState(marker);
+  }, []);
+
+  const renderMarkerState = useCallback((marker: IMarker) => {
+    const markerEl = marker.lMarker.getElement();
+  
+    if (!markerEl) {
+      return;
+    }
+
+    const markerState = getMarkerState(marker.key);
+
+    if (markerState.isHighlighted) {
+      markerEl.classList.add(MARKER_CLASS_NAMES.IS_HIGHLIGHTED);
+    } else {
+      markerEl.classList.remove(MARKER_CLASS_NAMES.IS_HIGHLIGHTED);
+    }
+
+    if (markerState.isDimmed) {
+      markerEl.classList.add(MARKER_CLASS_NAMES.IS_DIMMED);
+    } else {
+      markerEl.classList.remove(MARKER_CLASS_NAMES.IS_DIMMED);
+    }
+  }, []);
+
+  const markerClickHandler = ({ lMarker, key, data: { data, type, order } }: IMarker) => {
     if (markerPopupsActive.current[key]) {
       return;
     }
+
+    changeMarkerState(key, { isHighlighted: true });
 
     const popup = L
       .popup({
@@ -184,6 +229,7 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
     popup.openOn(map.current!)
     popup.addEventListener('remove', () => {
       delete markerPopupsActive.current[key];
+      changeMarkerState(key, { isHighlighted: false });
 
       setMarkerPopups(v => {
         return v.filter(k => k !== key);

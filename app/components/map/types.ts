@@ -27,3 +27,8 @@ export interface IMarker {
   key: MarkerKey;
   data: MarkerData;
 }
+
+export interface IMarkerState {
+  isHighlighted?: boolean;
+  isDimmed?: boolean;
+}
