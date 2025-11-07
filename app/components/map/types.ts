@@ -10,6 +10,8 @@ export interface IMarkerData<T> {
   type: EMarkerTypes;
   data: T;
   order?: IOrder;
+  isHighlighted?: boolean;
+  isDimmed?: boolean;
 }
 
 export interface IMarkerDataSender extends IMarkerData<IClient> { }
@@ -26,9 +28,5 @@ export interface IMarker {
   lMarker: L.Marker;
   key: MarkerKey;
   data: MarkerData;
-}
-
-export interface IMarkerState {
-  isHighlighted?: boolean;
-  isDimmed?: boolean;
+  renderedData: MarkerData;
 }

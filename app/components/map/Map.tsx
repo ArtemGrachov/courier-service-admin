@@ -4,24 +4,19 @@ import { useTheme } from '@mui/material';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import CloseIcon from '@mui/icons-material/Close';
-import L from 'leaflet';
 import { useTranslation } from 'react-i18next';
 
-import { EMarkerTypes, MARKER_CLASS_NAMES } from './constants';
+import { MapModule } from './module/MapModule';
+import type {
+  IMarkerPopupClosePayload,
+  IMarkerPopupOpenPayload,
+} from './module/services/EventService';
 
 import MapPopup from './MapPopup';
 
-import type { IMarker, IMarkerState, MarkerData, MarkerKey } from './types';
+import type { IMarker, MarkerKey } from './types';
 import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
-
-import { popupPortalName } from '~/components/map/utils';
-
-import 'leaflet/dist/leaflet.css';
-
-import srcIconSender from '~/assets/icons/map/sender.svg';
-import srcIconReceiver from '~/assets/icons/map/receiver.svg';
-import srcIconCourier from '~/assets/icons/map/courier.svg';
 
 import './Map.scss';
 
@@ -31,297 +26,84 @@ interface IProps {
   showPopupOrderData?: boolean;
 }
 
-const ICONS = {
-  SENDER: L.icon({
-    iconUrl: srcIconSender,
-    iconSize: [42, 42],
-  }),
-  RECEIVER: L.icon({
-    iconUrl: srcIconReceiver,
-    iconSize: [42, 42],
-  }),
-  COURIER: L.icon({
-    iconUrl: srcIconCourier,
-    iconSize: [42, 42],
-  }),
-};
-
 const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) => {
   const { t } = useTranslation();
   const mapRef = useRef<HTMLElement | null>(null);
-  const map = useRef<L.Map | null>(null);
-  const markers = useRef<Record<MarkerKey, IMarker>>({});
-  const markerPopupsActive = useRef<Record<MarkerKey, L.Popup>>({});
-  const markersState = useRef<Record<MarkerKey, IMarkerState>>({});
   const [markerPopups, setMarkerPopups] = useState<Array<MarkerKey>>([]);
   const theme = useTheme();
-  const highlightedOrders = useRef<Set<number>>(new Set());
+  const mapModule = useRef<MapModule>(null);
+  const markersRef = useRef<Record<MarkerKey, IMarker>>({})
+
+  const initMap = useCallback(() => {
+    const mModule = MapModule.createModule();
+    mModule.init(mapRef.current!);
+
+    if (orders) {
+      mModule.updateOrders(orders);
+    }
+
+    if (couriers) {
+      mModule.updateCouriers(couriers);
+    }
+
+    const markerPopupOpenCallback = ({ marker }: IMarkerPopupOpenPayload) => {
+      markersRef.current[marker.key] = marker;
+      setMarkerPopups(v => Array.from(new Set([...v, marker.key])));
+    }
+
+    const markerPopupCloseCallback = ({ marker }: IMarkerPopupClosePayload) => {
+      setMarkerPopups(v => v.filter(key => key !== marker.key));
+    }
+
+    mModule.eventEmitter.on('markerPopupOpen', markerPopupOpenCallback);
+    mModule.eventEmitter.on('markerPopupClose', markerPopupCloseCallback);
+
+    mapModule.current = mModule;
+
+    return () => {
+      mModule.eventEmitter.off('markerPopupOpen', markerPopupOpenCallback);
+      mModule.eventEmitter.off('markerPopupClose', markerPopupCloseCallback);
+
+      mapModule.current = null;
+      mModule?.destroy();
+    }
+  }, []);
+
+  useEffect(() => {
+    return initMap();
+  }, []);
 
   const paperBg = useMemo(() => {
     return (theme.vars || theme).palette.background.paper;
   }, [theme]);
 
-  useEffect(() => {
-    renderMarkers();
-  }, [orders]);
-
-  const getCourierMarkerData = useCallback((courier: ICourier) => {
-    if (!courier?.location) {
-      return null;
-    }
-
-    return {
-      key: `courier_${courier.id}`,
-      location: courier.location,
-      type: EMarkerTypes.COURIER,
-      data: courier,
-    };
-  }, []);
-
-  const getMarkerState = useCallback((key: MarkerKey) => {
-    return markersState.current[key] ?? (markersState.current[key] = {});
-  }, []);
-
-  const getOrderMarkerData = useCallback((order: IOrder) => {
-    const markersData: MarkerData[] = [];
-    const { senderGeoPos, receiverGeoPos, courier } = order;
-
-    if (senderGeoPos && order.sender) {
-      markersData.push({
-        key: `sender_${order.id}`,
-        location: senderGeoPos,
-        type: EMarkerTypes.SENDER,
-        data: order.sender,
-        order,
-      });
-    }
-
-    if (receiverGeoPos && order.receiver) {
-      markersData.push({
-        key: `receiver_${order.id}`,
-        location: receiverGeoPos,
-        type: EMarkerTypes.RECEIVER,
-        data: order.receiver,
-        order,
-      });
-    }
-
-    if (courier?.location) {
-      markersData.push({
-        key: `courier_${courier.id}`,
-        location: courier.location,
-        type: EMarkerTypes.COURIER,
-        data: courier,
-      });
-    }
-
-    return markersData;
-  }, []);
-
-  const createMarker = useCallback((markerData: MarkerData) => {
-    const mrkrs = markers.current;
-    let icon;
-
-    switch (markerData.type) {
-      case EMarkerTypes.SENDER: {
-        icon = ICONS.SENDER;
-        break;
-      }
-      case EMarkerTypes.RECEIVER: {
-        icon = ICONS.RECEIVER;
-        break;
-      }
-      case EMarkerTypes.COURIER: {
-        icon = ICONS.COURIER;
-        break;
-      }
-    }
-
-    const lMarker = L.marker(
-      [markerData.location.lat, markerData.location.lng],
-      { icon },
-    )
-      .addTo(map.current!)
-      .addEventListener('click', () => markerClickHandler(marker));
-
-    const marker = {
-      key: markerData.key,
-      data: markerData,
-      lMarker,
-    };
-
-    mrkrs[markerData.key] = marker;
-  }, []);
-
-  const updateMarker = useCallback((marker: IMarker, markerData: MarkerData) => {
-    marker.lMarker.setLatLng([
-      markerData.location.lat,
-      markerData.location.lng,
-    ]);
-  }, []);
-
-  const renderMarker = useCallback((markerData: MarkerData) => {
-    const mrkrs = markers.current;
-    const marker = mrkrs[markerData.key];
-
-    if (marker) {
-      updateMarker(marker, markerData);
-      return;
-    }
-
-    createMarker(markerData);
-  }, []);
-
-  const changeMarkerState = useCallback((key: MarkerKey, newState: Partial<IMarkerState>) => {
-    const marker = markers.current[key];
-
-    if (!marker) {
-      return;
-    }
-
-    const markerState = getMarkerState(marker.key);
-    Object.assign(markerState, newState);
-
-    renderMarkerState(marker);
-  }, []);
-
-  const renderMarkerState = useCallback((marker: IMarker) => {
-    const markerEl = marker.lMarker.getElement();
-  
-    if (!markerEl) {
-      return;
-    }
-
-    const markerState = getMarkerState(marker.key);
-
-    if (markerState.isHighlighted) {
-      markerEl.classList.add(MARKER_CLASS_NAMES.IS_HIGHLIGHTED);
-    } else {
-      markerEl.classList.remove(MARKER_CLASS_NAMES.IS_HIGHLIGHTED);
-    }
-
-    if (markerState.isDimmed) {
-      markerEl.classList.add(MARKER_CLASS_NAMES.IS_DIMMED);
-    } else {
-      markerEl.classList.remove(MARKER_CLASS_NAMES.IS_DIMMED);
-    }
-  }, []);
-
-  const markerClickHandler = ({ lMarker, key, data: { data, type, order } }: IMarker) => {
-    if (markerPopupsActive.current[key]) {
-      return;
-    }
-
-    changeMarkerState(key, { isHighlighted: true });
-
-    const popup = L
-      .popup({
-        closeOnClick: false,
-        closeOnEscapeKey: false,
-        autoClose: false,
-        minWidth: 300,
-        maxWidth: 1000,
-        className: 'csa-map-popup',
-      });
-
-    popup.setLatLng(lMarker.getLatLng())
-    popup.setContent(`<div id="${popupPortalName(key)}"></div>`)
-    popup.openOn(map.current!)
-    popup.addEventListener('remove', () => {
-      delete markerPopupsActive.current[key];
-      changeMarkerState(key, { isHighlighted: false });
-
-      setMarkerPopups(v => {
-        return v.filter(k => k !== key);
-      });
-    });
-
-    markerPopupsActive.current[key] = popup;
-
-    setMarkerPopups(v => {
-      return Array.from(new Set([...v, key]));
-    });
-  }
-
-  const renderMarkers = () => {
-    if (!map.current) {
-      return;
-    }
-
-    const markersData = orders?.reduce((acc, curr) => {
-      acc.push(...getOrderMarkerData(curr));
-      return acc;
-    }, [] as MarkerData[]);
-
-    markersData?.forEach(markerData => renderMarker(markerData));
-
-    if (couriers) {
-      const orderCouriersSet = new Set(orders?.map(o => o.courierId));
-
-      const courierMarkers = couriers
-        .filter(c => !orderCouriersSet.has(c.id))
-        .map(c => getCourierMarkerData(c))
-
-      courierMarkers
-        .filter(mD => mD)
-        .forEach(markerData => renderMarker(markerData!));
-    }
-  }
-
-  const initMap = () => {
-    if (map.current) {
-      return;
-    }
-
-    map.current = L.map(mapRef.current!).setView([51.505, -0.09], 13);
-
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map.current);
-
-    renderMarkers();
-  }
-
-  const destroyMap = () => {
-    if (!map.current) {
-      return;
-    }
-
-    map.current.remove();
-    map.current = null;
-    markers.current = {};
-  }
-
   const closeAllPopups = () => {
-    markerPopups.map(key => markerPopupsActive.current[key]).forEach(p => p.close());
+    mapModule.current?.closeAllPopups();
   }
 
-  useEffect(() => {
-    initMap();
+  const markerPopupEls = useMemo(() => {
+    return markerPopups.map(key => {
+      const marker = markersRef.current[key];
 
-    return () => destroyMap();
-  }, []);
+      if (!marker) {
+        return null;
+      }
+
+      return (
+        <MapPopup
+          key={marker.key}
+          markerItem={marker}
+          showOrderData={showPopupOrderData}
+        />
+      )
+    }).filter(mP => !!mP);
+  }, [markerPopups]);
 
   return (
     <Box width="100%" height="100%" sx={{ '--leaflet-popup-tip-background': paperBg }}>
-      {markerPopups.map(markerKey => {
-        const markerItem = markers.current[markerKey];
-
-        if (!markerItem) {
-          return null;
-        }
-
-        return (
-          <MapPopup
-            key={markerKey}
-            markerItem={markerItem}
-            showOrderData={showPopupOrderData}
-          />
-        )
-      })}
+      {markerPopupEls}
       <Box width="100%" height="100%" ref={mapRef} />
-      {markerPopups.length && <Tooltip title={t('map.close_all_windows')}>
+      {markerPopups.length ? <Tooltip title={t('map.close_all_windows')}>
         <Fab
           color="info"
           sx={{ position: 'absolute', zIndex: 1300, right: 24, bottom: 24 }}
@@ -329,7 +111,7 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
         >
           <CloseIcon />
         </Fab>
-      </Tooltip>}
+      </Tooltip> : null}
     </Box>
   )
 }

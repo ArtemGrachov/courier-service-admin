@@ -5,13 +5,13 @@ import { EMarkerTypes } from './constants';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Portal from '@mui/material/Portal';
+import Divider from '@mui/material/Divider';
 
 import type { IMarker } from './types';
 import type { IClient } from '~/types/models/client';
 import type { ICourier } from '~/types/models/courier';
 
 import { popupPortalName } from './utils';
-import { Divider } from '@mui/material';
 
 const ClientPreview = lazy(() => import('~/components/clients/ClientPreview'));
 const CourierPreview = lazy(() => import('~/components/couriers/CourierPreview'));
@@ -25,9 +25,9 @@ interface IProps {
 const MapPopup: ComponentType<IProps> = ({ markerItem, showOrderData }) => {
   let el;
 
-  const { key, data: { data, order } } = markerItem;
+  const { key, data: { type, data, order } } = markerItem;
 
-  switch (markerItem.data.type) {
+  switch (type) {
     case EMarkerTypes.SENDER: {
       el = <ClientPreview client={data as IClient} isSender={true} />
       break;
