@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material';
+import Fab from '@mui/material/Fab';
+import Tooltip from '@mui/material/Tooltip';
+import CloseIcon from '@mui/icons-material/Close';
 import L from 'leaflet';
+import { useTranslation } from 'react-i18next';
 
 import { EMarkerTypes } from './constants';
 
@@ -41,10 +45,11 @@ const ICONS = {
 };
 
 const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) => {
+  const { t } = useTranslation();
   const mapRef = useRef<HTMLElement | null>(null);
   const map = useRef<L.Map | null>(null);
   const markers = useRef<Record<MarkerKey, IMarker>>({});
-  const markerPopupsActive = useRef<Record<string, boolean>>({});
+  const markerPopupsActive = useRef<Record<string, L.Popup>>({});
   const [markerPopups, setMarkerPopups] = useState<Array<string>>([]);
   const theme = useTheme();
 
@@ -164,9 +169,7 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
       return;
     }
 
-    markerPopupsActive.current[key] = true;
-
-    L
+    const popup = L
       .popup({
         closeOnClick: false,
         closeOnEscapeKey: false,
@@ -174,17 +177,20 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
         minWidth: 300,
         maxWidth: 1000,
         className: 'csa-map-popup',
-      })
-      .setLatLng(lMarker.getLatLng())
-      .setContent(`<div id="${popupPortalName(key)}"></div>`)
-      .openOn(map.current!)
-      .addEventListener('remove', () => {
-        markerPopupsActive.current[key] = false;
-
-        setMarkerPopups(v => {
-          return v.filter(k => k !== key);
-        });
       });
+
+    popup.setLatLng(lMarker.getLatLng())
+    popup.setContent(`<div id="${popupPortalName(key)}"></div>`)
+    popup.openOn(map.current!)
+    popup.addEventListener('remove', () => {
+      delete markerPopupsActive.current[key];
+
+      setMarkerPopups(v => {
+        return v.filter(k => k !== key);
+      });
+    });
+
+    markerPopupsActive.current[key] = popup;
 
     setMarkerPopups(v => {
       return Array.from(new Set([...v, key]));
@@ -241,6 +247,10 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
     markers.current = {};
   }
 
+  const closeAllPopups = () => {
+    markerPopups.map(key => markerPopupsActive.current[key]).forEach(p => p.close());
+  }
+
   useEffect(() => {
     initMap();
 
@@ -265,6 +275,15 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
         )
       })}
       <Box width="100%" height="100%" ref={mapRef} />
+      {markerPopups.length && <Tooltip title={t('map.close_all_windows')}>
+        <Fab
+          color="info"
+          sx={{ position: 'absolute', zIndex: 1300, right: 24, bottom: 24 }}
+          onClick={closeAllPopups}
+        >
+          <CloseIcon />
+        </Fab>
+      </Tooltip>}
     </Box>
   )
 }
