@@ -21,23 +21,24 @@ export interface IProps {
 const CourierPreview: ComponentType<IProps> = ({ courier }) => {
   const { t } = useTranslation();
   const routePath = useRoutePath();
+  const { id, name, rating, status, currentOrdersCount, phoneNumber, email } = courier;
 
   return (
     <Stack gap={2}>
       <Stack direction="row" gap={2} justifyContent="space-between">
         <Box gap={1}>
           <Typography variant="subtitle1" component="div">
-            {t('courier_card.id')} #{courier.id}
+            {t('courier_card.id')} #{id}
           </Typography>
           <Typography variant="h5" component="div">
-            {courier.name}
+            {name}
           </Typography>
         </Box>
         <Box gap={1}>
           <Typography variant="caption" component="div">
             {t('courier_card.rating')}
           </Typography>
-          <Rating rating={courier.rating} />
+          <Rating rating={rating} />
         </Box>
       </Stack>
       <Stack direction="row" gap={2} justifyContent="space-between">
@@ -46,21 +47,39 @@ const CourierPreview: ComponentType<IProps> = ({ courier }) => {
             {t('courier_card.current_orders_count')}
           </Typography>
           <Typography variant="h5" component="div" color="warning">
-            {courier.currentOrdersCount}
+            {currentOrdersCount}
           </Typography>
         </Box>
         <Box gap={1}>
-          <CourierStatus status={courier.status} />
+          <CourierStatus status={status} />
         </Box>
       </Stack>
       <Box>
         <Link
-          to={routePath(ROUTES.COURIER, { courierId: courier.id })}
+          to={routePath(ROUTES.COURIER, { courierId: id })}
           component={RouterLink}
         >
           {t('courier_card.link')}
         </Link>
       </Box>
+      {phoneNumber && <Box>
+        <Link
+          component="a"
+          href={`tel:${phoneNumber}`}
+          target="_blank"
+        >
+          {phoneNumber}
+        </Link>
+      </Box>}
+      {email && <Box>
+        <Link
+          component="a"
+          href={`mailto:${email}`}
+          target="_blank"
+        >
+          {email}
+        </Link>
+      </Box>}
     </Stack>
   )
 }

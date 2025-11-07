@@ -22,6 +22,7 @@ export interface IProps {
 const ClientPreview: ComponentType<IProps> = ({ client, isReceiver, isSender }) => {
   const { t, i18n } = useTranslation();
   const routePath = useRoutePath();
+  const { id, name, rating, phoneNumber, email } = client;
 
   const idLabel = useMemo(() => {
     if (isReceiver) {
@@ -38,27 +39,45 @@ const ClientPreview: ComponentType<IProps> = ({ client, isReceiver, isSender }) 
       <Stack direction="row" gap={2} justifyContent="space-between">
         <Box gap={1}>
           <Typography variant="subtitle1" component="div">
-            {idLabel} #{client.id}
+            {idLabel} #{id}
           </Typography>
           <Typography variant="h5" component="div">
-            {client.name}
+            {name}
           </Typography>
         </Box>
         <Box gap={1}>
           <Typography variant="caption" component="div">
             {t('client_card.rating')}
           </Typography>
-          <Rating rating={client.rating} />
+          <Rating rating={rating} />
         </Box>
       </Stack>
       <Box>
         <Link
-          to={routePath(ROUTES.CLIENT, { clientId: client.id })}
+          to={routePath(ROUTES.CLIENT, { clientId: id })}
           component={RouterLink}
         >
           {t('client_card.link')}
         </Link>
       </Box>
+      {phoneNumber && <Box>
+        <Link
+          component="a"
+          href={`tel:${phoneNumber}`}
+          target="_blank"
+        >
+          {phoneNumber}
+        </Link>
+      </Box>}
+      {email && <Box>
+        <Link
+          component="a"
+          href={`mailto:${email}`}
+          target="_blank"
+        >
+          {email}
+        </Link>
+      </Box>}
     </Stack>
   )
 }
