@@ -11,33 +11,36 @@ import { Portal } from '@mui/material';
 
 const ClientCard = lazy(() => import('~/components/clients/ClientCard'));
 const CourierCard = lazy(() => import('~/components/couriers/CourierCard'));
+const OrderCard = lazy(() => import('~/components/orders/OrderCard'));
 
 interface IProps {
-  markerItem: IMarker
+  markerItem: IMarker;
+  showOrderData?: boolean;
 }
 
-const MapPopup: ComponentType<IProps> = ({ markerItem }) => {
+const MapPopup: ComponentType<IProps> = ({ markerItem, showOrderData }) => {
   let el;
 
-  const markerKey = markerItem.key;
+  const { key, data: { data, order } } = markerItem;
 
   switch (markerItem.data.type) {
     case EMarkerTypes.SENDER: {
-      el = <ClientCard client={markerItem.data.data as IClient} isSender={true} />
+      el = <ClientCard client={data as IClient} isSender={true} />
       break;
     }
     case EMarkerTypes.RECEIVER: {
-      el = <ClientCard client={markerItem.data.data as IClient} isReceiver={true} />
+      el = <ClientCard client={data as IClient} isReceiver={true} />
       break;
     }
     case EMarkerTypes.COURIER: {
-      el = <CourierCard courier={markerItem.data.data as ICourier} />
+      el = <CourierCard courier={data as ICourier} />
       break;
     }
   }
 
   return (
-    <Portal container={() => document.getElementById(popupPortalName(markerKey))}>
+    <Portal container={() => document.getElementById(popupPortalName(key))}>
+      {showOrderData && order ? <OrderCard order={order} /> : null}
       {el}
     </Portal>
   )

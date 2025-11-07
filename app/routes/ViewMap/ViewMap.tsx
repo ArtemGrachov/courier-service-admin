@@ -24,6 +24,7 @@ const ViewMap: ComponentType = () => {
       <Map
         couriers={couriersStore.data?.data}
         orders={ordersStore.data?.data}
+        showPopupOrderData={true}
       />
     </Box>
   )

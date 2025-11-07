@@ -22,6 +22,7 @@ import srcIconCourier from '~/assets/icons/map/courier.svg';
 interface IProps {
   orders?: IOrder[];
   couriers?: ICourier[];
+  showPopupOrderData?: boolean;
 }
 
 const ICONS = {
@@ -39,7 +40,7 @@ const ICONS = {
   }),
 };
 
-const Map: ComponentType<IProps> = ({ orders, couriers }) => {
+const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) => {
   const mapRef = useRef<HTMLElement | null>(null);
   const map = useRef<L.Map | null>(null);
   const markers = useRef<Record<MarkerKey, IMarker>>({});
@@ -78,6 +79,7 @@ const Map: ComponentType<IProps> = ({ orders, couriers }) => {
         location: senderGeoPos,
         type: EMarkerTypes.SENDER,
         data: order.sender,
+        order,
       });
     }
 
@@ -87,6 +89,7 @@ const Map: ComponentType<IProps> = ({ orders, couriers }) => {
         location: receiverGeoPos,
         type: EMarkerTypes.RECEIVER,
         data: order.receiver,
+        order,
       });
     }
 
@@ -253,7 +256,13 @@ const Map: ComponentType<IProps> = ({ orders, couriers }) => {
           return null;
         }
 
-        return <MapPopup key={markerKey} markerItem={markerItem} />
+        return (
+          <MapPopup
+            key={markerKey}
+            markerItem={markerItem}
+            showOrderData={showPopupOrderData}
+          />
+        )
       })}
       <Box width="100%" height="100%" ref={mapRef} />
     </Box>
