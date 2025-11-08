@@ -1,5 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
+import { EMarkerTypes } from '../constants';
+
 import { Model } from './Model';
 import { View } from './View';
 import {
@@ -28,14 +30,39 @@ export class Controller {
     this.eventService.emitter.off('markerPopupClose', this.markerPopupCloseListener);
   }
 
-  public markerClickHandler({ key }: IMarker) {
+  public markerClickHandler(marker: IMarker) {
+    const { key, data } = marker;
     const popup = this.view.openMarkerPopup(key);
 
     if (!popup) {
       return;
     }
 
-    this.model.upsertMarkerData(key, { isHighlighted: true });
+    switch (data.type) {
+      case EMarkerTypes.SENDER:
+      case EMarkerTypes.RECEIVER: {
+        if (data.order) {
+          this.clientSelectHandler(marker, true);
+        }
+        break;
+      }
+      case EMarkerTypes.COURIER: {
+        this.courierSelectHandler(marker);
+        break;
+      }
+    }
+  }
+
+  private clientSelectHandler(marker: IMarker, isSelected: boolean) {
+    this.model.setOrderActive(
+      marker.data.order!.id,
+      marker.key,
+      isSelected,
+    );
+  }
+
+  private courierSelectHandler(marker: IMarker) {
+    console.log('@todo');
   }
 
   private markerClickListener = ({ marker }: IMarkerClickPayload) => {
@@ -43,6 +70,20 @@ export class Controller {
   }
 
   private markerPopupCloseListener = ({ marker }: IMarkerPopupClosePayload) => {
-    this.model.upsertMarkerData(marker.key, { isHighlighted: false });
+    const { data } = marker;
+
+    switch (data.type) {
+      case EMarkerTypes.SENDER:
+      case EMarkerTypes.RECEIVER: {
+        if (data.order) {
+          this.clientSelectHandler(marker, false);
+        }
+        break;
+      }
+      case EMarkerTypes.COURIER: {
+        this.courierSelectHandler(marker);
+        break;
+      }
+    }
   }
 }
