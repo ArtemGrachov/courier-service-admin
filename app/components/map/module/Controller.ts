@@ -62,7 +62,11 @@ export class Controller {
   }
 
   private courierSelectHandler(marker: IMarker, isSelected: boolean) {
-    this.model.setCourierActive(marker.data.data.id, marker.key, isSelected);
+    this.model.setCourierActive(
+      marker.data.data.id,
+      marker.key,
+      isSelected,
+    );
   }
 
   private markerClickListener = ({ marker }: IMarkerClickPayload) => {
