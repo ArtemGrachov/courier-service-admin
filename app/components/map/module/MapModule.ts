@@ -8,7 +8,7 @@ import { MarkersService } from './services/MarkersService';
 import { MapService } from './services/MapService';
 import { EventService } from './services/EventService';
 
-import type { MarkerData, MarkerKey } from '../types';
+import type { MarkerData } from '../types';
 import type { ICourier } from '~/types/models/courier';
 import type { IOrder } from '~/types/models/order';
 import type { IGeoPos } from '~/types/models/geo-pos';
@@ -79,6 +79,11 @@ export class MapModule {
   public scaleToMarkers() {
     const markersArray = this.view.markerArray;
     const positions = markersArray.map(mrk => mrk.data.location);
+
+    if (positions.length === 0) {
+      return;
+    }
+
     this.mapService.scaleToPoints(positions);
   }
 }
