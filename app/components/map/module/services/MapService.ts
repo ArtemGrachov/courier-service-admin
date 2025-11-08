@@ -7,7 +7,10 @@ import 'leaflet/dist/leaflet.css';
 
 @injectable()
 export class MapService {
+  private static readonly MAP_HOST_CLASSNAME = 'csa-map';
+
   private _map: L.Map | null = null;
+  private _mapRef: HTMLElement | null = null;
 
   public get map() {
     if (!this._map) {
@@ -17,8 +20,15 @@ export class MapService {
     return this._map;
   }
 
+  public get mapRef() {
+    return this._mapRef;
+  }
+
   public init(mapRef: HTMLElement, center?: IGeoPos | null) {
     this._map = L.map(mapRef).setView([center?.lat ?? 0, center?.lng ?? 0], 13);
+    this._mapRef = mapRef;
+
+    mapRef.classList.add(MapService.MAP_HOST_CLASSNAME);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,

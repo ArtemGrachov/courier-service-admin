@@ -35,22 +35,14 @@ export class Model {
   }
 
   public setMarkerActive(key: MarkerKey, isActive: boolean) {
-    const oldSize = this.activeMarkers.size;
-
     if (isActive) {
       this.activeMarkers.add(key);
     } else {
       this.activeMarkers.delete(key);
     }
 
-    const newSize = this.activeMarkers.size;
-    const updateAll = !!oldSize !== !!newSize;
-
-    if (updateAll) {
-      this.markersUpdateHandler();
-    } else {
-      this.highlightPartial(key);
-    }
+    this.highlightByKey(key);
+    this.view.updateHighlight(this.activeMarkers.size > 0);
   }
 
   private highlightMakrers(keys: MarkerKey[]) {
@@ -65,36 +57,14 @@ export class Model {
       }
 
       const isHighlighted = this.activeMarkers.has(markerData.key) || highlighted.has(markerData.key);
-      const isDimmed = !isHighlighted;
-
-      this.upsertMarkerData(markerData.key, { isHighlighted, isDimmed });
+      this.upsertMarkerData(markerData.key, { isHighlighted });
     }
   }
 
-  private highlightPartial(key: MarkerKey) {
+  private highlightByKey(key: MarkerKey) {
     const nodes = this.markersGraph.neighbours(key);
+    nodes.push(key);
     this.highlightMakrers(nodes);
-  }
-
-  private highlightOn() {
-    this.highlightMakrers(Object.keys(this.state));
-  }
-
-  private highlightOff() {
-    const markerArray = this.markerArray;
-
-    for (let i = 0; i < markerArray.length; i++) {
-      const markerData = markerArray[i];
-      this.upsertMarkerData(markerData.key, { isHighlighted: false, isDimmed: false });
-    }
-  }
-
-  private markersUpdateHandler() {
-    if (this.activeMarkers.size) {
-      this.highlightOn();
-    } else {
-      this.highlightOff();
-    }
   }
 
   public upsertMarkerData(key: MarkerKey, newState: Partial<MarkerData>) {

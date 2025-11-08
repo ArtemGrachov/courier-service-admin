@@ -11,7 +11,6 @@ export interface IMarkerData<T> {
   data: T;
   order?: IOrder;
   isHighlighted?: boolean;
-  isDimmed?: boolean;
 }
 
 export interface IMarkerDataSender extends IMarkerData<IClient> { }

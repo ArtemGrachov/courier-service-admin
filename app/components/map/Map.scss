@@ -1,3 +1,7 @@
-.csa-is-dimmed {
-  opacity: 0.4;
+.csa-map {
+  &.csa-has-highlight {
+    .csa-marker:not(.csa-is-highlighted) {
+      opacity: 0.4;
+    }
+  }
 }

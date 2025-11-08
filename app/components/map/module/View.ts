@@ -32,9 +32,11 @@ export class View {
   };
 
   private static readonly MARKER_CLASS_NAMES = {
+    MAIN: 'csa-marker',
     IS_HIGHLIGHTED: 'csa-is-highlighted',
-    IS_DIMMED: 'csa-is-dimmed',
   };
+
+  private static readonly MAP_HIGHLIGHT_CLASS_NAME = 'csa-has-highlight';
 
   private markers: Record<MarkerKey, IMarker> = {};
   private markerPopups: Record<MarkerKey, L.Popup> = {};
@@ -73,6 +75,8 @@ export class View {
       .addTo(this.mapService.map)
       .addEventListener('click', () => this.eventService.emitter.emit('markerClick', { marker }));
 
+    lMarker.getElement()?.classList.add(View.MARKER_CLASS_NAMES.MAIN);
+
     const marker: IMarker = {
       key: markerData.key,
       lMarker,
@@ -104,14 +108,6 @@ export class View {
         markerEl.classList.add(View.MARKER_CLASS_NAMES.IS_HIGHLIGHTED);
       } else {
         markerEl.classList.remove(View.MARKER_CLASS_NAMES.IS_HIGHLIGHTED);
-      }
-    }
-
-    if (newMarkerData.isDimmed !== marker.renderedData?.isDimmed) {
-      if (newMarkerData.isDimmed) {
-        markerEl.classList.add(View.MARKER_CLASS_NAMES.IS_DIMMED);
-      } else {
-        markerEl.classList.remove(View.MARKER_CLASS_NAMES.IS_DIMMED);
       }
     }
 
@@ -171,5 +167,15 @@ export class View {
     Object.entries(this.markerPopups).forEach(([key, lPopup]) => {
       lPopup.close();
     });
+  }
+
+  public updateHighlight(isActive: boolean) {
+    const mapRef = this.mapService.mapRef;
+
+    if (isActive) {
+      mapRef?.classList.add(View.MAP_HIGHLIGHT_CLASS_NAME);
+    } else {
+      mapRef?.classList.remove(View.MAP_HIGHLIGHT_CLASS_NAME);
+    }
   }
 }
