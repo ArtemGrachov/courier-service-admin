@@ -19,14 +19,16 @@ import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
 
 import './Map.scss';
+import type { IGeoPos } from '~/types/models/geo-pos';
 
 interface IProps {
   orders?: IOrder[];
   couriers?: ICourier[];
   showPopupOrderData?: boolean;
+  center?: IGeoPos;
 }
 
-const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) => {
+const Map: ComponentType<IProps> = ({ orders, couriers, center, showPopupOrderData }) => {
   const { t } = useTranslation();
   const mapRef = useRef<HTMLElement | null>(null);
   const [markerPopups, setMarkerPopups] = useState<Array<MarkerKey>>([]);
@@ -36,7 +38,7 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
 
   const initMap = useCallback(() => {
     const mModule = MapModule.createModule();
-    mModule.init(mapRef.current!);
+    mModule.init(mapRef.current!, center);
 
     if (orders) {
       mModule.updateOrders(orders);
@@ -44,6 +46,10 @@ const Map: ComponentType<IProps> = ({ orders, couriers, showPopupOrderData }) =>
 
     if (couriers) {
       mModule.updateCouriers(couriers);
+    }
+
+    if (!center) {
+      mModule.scaleToMarkers();
     }
 
     const markerPopupOpenCallback = ({ marker }: IMarkerPopupOpenPayload) => {

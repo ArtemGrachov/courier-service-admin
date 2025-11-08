@@ -11,6 +11,7 @@ import { EventService } from './services/EventService';
 import type { MarkerData, MarkerKey } from '../types';
 import type { ICourier } from '~/types/models/courier';
 import type { IOrder } from '~/types/models/order';
+import type { IGeoPos } from '~/types/models/geo-pos';
 
 @injectable()
 export class MapModule {
@@ -41,8 +42,8 @@ export class MapModule {
     return this.eventService.emitter;
   }
 
-  public init(mapEl: HTMLElement) {
-    this.mapService.init(mapEl);
+  public init(mapEl: HTMLElement, center?: IGeoPos | null) {
+    this.mapService.init(mapEl, center);
     this.controller.init();
   }
 
@@ -73,5 +74,11 @@ export class MapModule {
 
   public closeAllPopups() {
     this.view.closeAllPopups();
+  }
+
+  public scaleToMarkers() {
+    const markersArray = this.view.markerArray;
+    const positions = markersArray.map(mrk => mrk.data.location);
+    this.mapService.scaleToPoints(positions);
   }
 }

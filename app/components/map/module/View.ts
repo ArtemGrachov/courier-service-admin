@@ -44,6 +44,10 @@ export class View {
     @inject(EventService) private readonly eventService: EventService,
   ) { }
 
+  public get markerArray() {
+    return Object.values(this.markers);
+  }
+
   private createMarker(markerData: MarkerData) {
     let icon;
 
