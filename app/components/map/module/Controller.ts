@@ -31,39 +31,18 @@ export class Controller {
   }
 
   public markerClickHandler(marker: IMarker) {
-    const { key, data } = marker;
+    const { key } = marker;
     const popup = this.view.openMarkerPopup(key);
 
     if (!popup) {
       return;
     }
 
-    switch (data.type) {
-      case EMarkerTypes.SENDER:
-      case EMarkerTypes.RECEIVER: {
-        if (data.order) {
-          this.clientSelectHandler(marker, true);
-        }
-        break;
-      }
-      case EMarkerTypes.COURIER: {
-        this.courierSelectHandler(marker, true);
-        break;
-      }
-    }
+    this.markerSelectHandler(marker, true);
   }
 
-  private clientSelectHandler(marker: IMarker, isSelected: boolean) {
-    this.model.setOrderActive(
-      marker.data.order!.id,
-      marker.key,
-      isSelected,
-    );
-  }
-
-  private courierSelectHandler(marker: IMarker, isSelected: boolean) {
-    this.model.setCourierActive(
-      marker.data.data.id,
+  private markerSelectHandler(marker: IMarker, isSelected: boolean) {
+    this.model.setMarkerActive(
       marker.key,
       isSelected,
     );
@@ -74,20 +53,6 @@ export class Controller {
   }
 
   private markerPopupCloseListener = ({ marker }: IMarkerPopupClosePayload) => {
-    const { data } = marker;
-
-    switch (data.type) {
-      case EMarkerTypes.SENDER:
-      case EMarkerTypes.RECEIVER: {
-        if (data.order) {
-          this.clientSelectHandler(marker, false);
-        }
-        break;
-      }
-      case EMarkerTypes.COURIER: {
-        this.courierSelectHandler(marker, false);
-        break;
-      }
-    }
+    this.markerSelectHandler(marker, false);
   }
 }

@@ -4,12 +4,15 @@ import { View } from './View';
 import { EMarkerTypes } from '../constants';
 
 import type { MarkerData, MarkerKey } from '../types';
+import { Graph } from '~/types/adt/graph';
+
+import { getCourierKey, getReceiverKey, getSenderKey } from '../utils';
 
 @injectable()
 export class Model {
   private state: Record<MarkerKey, MarkerData> = {};
-  private activeOrders: Record<number, Set<MarkerKey>> = {};
-  private ordersByCourier: Record<number, Set<number>> = {};
+  private markersGraph = new Graph<MarkerKey>();
+  private activeMarkers: Set<MarkerKey> = new Set();
 
   constructor(
     @inject(View) private readonly view: View,
@@ -19,66 +22,38 @@ export class Model {
     return Object.values(this.state);
   }
 
-  public setCourierActive(courierId: number, key: MarkerKey, isActive: boolean) {
-    this.handleCourierActive(courierId, key, isActive);
-    this.updateMarkersHighlight();
+  public get highlightedMarkers() {
+    const arr = Array.from(this.activeMarkers).reduce((acc, curr) => {
+      const neighbours = this.markersGraph.neighbours(curr);
+      acc.push(...neighbours);
+      return acc;
+    }, [] as MarkerKey[]);
+
+    const set = new Set(arr);
+
+    return set;
   }
 
-  public setOrderActive(orderId: number, key: MarkerKey, isActive: boolean) {
-    this.handleOrderActive(orderId, key, isActive);
-    this.updateMarkersHighlight();
-  }
-
-  private handleCourierActive(courierId: number, key: MarkerKey, isActive: boolean) {
-    const activeOrderIds = this.ordersByCourier[courierId];
-    activeOrderIds?.forEach(orderId => this.handleOrderActive(orderId, key, isActive));
-  }
-
-  private handleOrderActive(orderId: number, key: MarkerKey, isActive: boolean) {
-    const set = this.activeOrders[orderId] ?? (this.activeOrders[orderId] = new Set());
-
+  public setMarkerActive(key: MarkerKey, isActive: boolean) {
     if (isActive) {
-      set.add(key);
+      this.activeMarkers.add(key);
     } else {
-      set.delete(key);
-
-      if (!set.size) {
-        delete this.activeOrders[orderId];
-      }
+      this.activeMarkers.delete(key);
     }
+
+    this.markersUpdateHandler();
   }
 
-  private updateMarkersHighlight() {
-    const markersArray = this.markerArray;
-    const activeOrderSet = new Set(Object.keys(this.activeOrders).map(k => +k));
-    const hasActiveOrders = activeOrderSet.size > 0;
+  private markersUpdateHandler() {
+    const markerArray = this.markerArray;
+    const highlighted = this.highlightedMarkers;
+    const noActiveMarkers = this.activeMarkers.size === 0;
 
-    for (let i = 0; i < this.markerArray.length; i++) {
-      const markerData = markersArray[i];
-      let isHighlighted = false;
-      let isDimmed = false;
+    for (let i = 0; i < markerArray.length; i++) {
+      const markerData = markerArray[i];
 
-      switch (markerData.type) {
-        case EMarkerTypes.SENDER:
-        case EMarkerTypes.RECEIVER: {
-          const orderId = markerData.order?.id!;
-          const set = this.activeOrders[orderId];
-
-          const isActive = !!set?.size;
-
-          isHighlighted = isActive;
-          isDimmed = hasActiveOrders && !isActive;
-          break;
-        }
-        case EMarkerTypes.COURIER: {
-          const orderIds = Array.from(this.ordersByCourier[markerData.data.id] ?? []);
-          const courierHasActiveOrders = orderIds.some(orderId => activeOrderSet.has(orderId));
-
-          isHighlighted = hasActiveOrders;
-          isDimmed = hasActiveOrders && !courierHasActiveOrders;
-          break;
-        }
-      }
+      const isHighlighted = this.activeMarkers.has(markerData.key) || highlighted.has(markerData.key);
+      const isDimmed = !noActiveMarkers && !isHighlighted;
 
       this.upsertMarkerData(markerData.key, { isHighlighted, isDimmed });
     }
@@ -99,18 +74,52 @@ export class Model {
   }
 
   private readMarkerData(data: Partial<MarkerData>) {
-    if (data.type === EMarkerTypes.SENDER || data.type === EMarkerTypes.RECEIVER) {
-      const order = data.order;
+    switch (data.type) {
+      case EMarkerTypes.SENDER:
+      case EMarkerTypes.RECEIVER: {
+        const order = data.order;
 
-      if (!order) {
-        return;
+        if (!order) {
+          return;
+        }
+
+        const { id, courierId } = order;
+
+        let senderKey;
+        let receiverKey;
+        let courierKey;
+
+        if (id != null) {
+          senderKey = getSenderKey(id);
+          receiverKey = getReceiverKey(id);
+
+          this.markersGraph.addNode(senderKey);
+          this.markersGraph.addNode(receiverKey);
+
+          this.markersGraph.addEdge(senderKey, receiverKey);
+        }
+
+        if (courierId != null && senderKey != null && receiverKey != null) {
+          courierKey = getCourierKey(courierId);
+          this.markersGraph.addNode(courierKey);
+
+          this.markersGraph.addEdge(courierKey, senderKey);
+          this.markersGraph.addEdge(courierKey, receiverKey);
+        }
+
+        break;
       }
+      case EMarkerTypes.COURIER: {
+        const courierId = data.data?.id;
 
-      const courierId = order.courierId;
-      const orderId = order.id;
+        if (!courierId) {
+          return;
+        }
 
-      const set = this.ordersByCourier[courierId] || (this.ordersByCourier[courierId] = new Set<number>());
-      set.add(orderId);
+        const courierKey = getCourierKey(courierId);
+        this.markersGraph.addNode(courierKey);
+        break;
+      }
     }
   }
 }
