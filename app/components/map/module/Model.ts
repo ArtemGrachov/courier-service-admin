@@ -35,27 +35,65 @@ export class Model {
   }
 
   public setMarkerActive(key: MarkerKey, isActive: boolean) {
+    const oldSize = this.activeMarkers.size;
+
     if (isActive) {
       this.activeMarkers.add(key);
     } else {
       this.activeMarkers.delete(key);
     }
 
-    this.markersUpdateHandler();
+    const newSize = this.activeMarkers.size;
+    const updateAll = !!oldSize !== !!newSize;
+
+    if (updateAll) {
+      this.markersUpdateHandler();
+    } else {
+      this.highlightPartial(key);
+    }
   }
 
-  private markersUpdateHandler() {
-    const markerArray = this.markerArray;
+  private highlightMakrers(keys: MarkerKey[]) {
     const highlighted = this.highlightedMarkers;
-    const noActiveMarkers = this.activeMarkers.size === 0;
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const markerData = this.state[key];
+
+      if (!markerData) {
+        continue;
+      }
+
+      const isHighlighted = this.activeMarkers.has(markerData.key) || highlighted.has(markerData.key);
+      const isDimmed = !isHighlighted;
+
+      this.upsertMarkerData(markerData.key, { isHighlighted, isDimmed });
+    }
+  }
+
+  private highlightPartial(key: MarkerKey) {
+    const nodes = this.markersGraph.neighbours(key);
+    this.highlightMakrers(nodes);
+  }
+
+  private highlightOn() {
+    this.highlightMakrers(Object.keys(this.state));
+  }
+
+  private highlightOff() {
+    const markerArray = this.markerArray;
 
     for (let i = 0; i < markerArray.length; i++) {
       const markerData = markerArray[i];
+      this.upsertMarkerData(markerData.key, { isHighlighted: false, isDimmed: false });
+    }
+  }
 
-      const isHighlighted = this.activeMarkers.has(markerData.key) || highlighted.has(markerData.key);
-      const isDimmed = !noActiveMarkers && !isHighlighted;
-
-      this.upsertMarkerData(markerData.key, { isHighlighted, isDimmed });
+  private markersUpdateHandler() {
+    if (this.activeMarkers.size) {
+      this.highlightOn();
+    } else {
+      this.highlightOff();
     }
   }
 
