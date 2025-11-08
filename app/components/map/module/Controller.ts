@@ -47,7 +47,7 @@ export class Controller {
         break;
       }
       case EMarkerTypes.COURIER: {
-        this.courierSelectHandler(marker);
+        this.courierSelectHandler(marker, true);
         break;
       }
     }
@@ -61,8 +61,8 @@ export class Controller {
     );
   }
 
-  private courierSelectHandler(marker: IMarker) {
-    console.log('@todo');
+  private courierSelectHandler(marker: IMarker, isSelected: boolean) {
+    this.model.setCourierActive(marker.data.data.id, marker.key, isSelected);
   }
 
   private markerClickListener = ({ marker }: IMarkerClickPayload) => {
@@ -81,7 +81,7 @@ export class Controller {
         break;
       }
       case EMarkerTypes.COURIER: {
-        this.courierSelectHandler(marker);
+        this.courierSelectHandler(marker, false);
         break;
       }
     }
