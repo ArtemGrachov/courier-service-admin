@@ -181,5 +181,12 @@
   },
   "map": {
     "close_all_windows": "Close all windows"
+  },
+  "map_filters": {
+    "status": "Status",
+    "senders": "Senders",
+    "receivers": "Receivers",
+    "couriers": "Couriers",
+    "options_selected": "Selected {{count}}"
   }
 }

@@ -181,5 +181,12 @@
   },
   "map": {
     "close_all_windows": "Закрити усі вікна"
+  },
+  "map_filters": {
+    "status": "Статус",
+    "senders": "Відправники",
+    "receivers": "Отримувачі",
+    "couriers": "Кур'єри",
+    "options_selected": "Обрано {{count}}"
   }
 }
