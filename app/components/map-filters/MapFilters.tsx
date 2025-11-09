@@ -1,5 +1,6 @@
-import type { ComponentType } from 'react';
+import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Controller, useForm } from 'react-hook-form';
 import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -12,11 +13,13 @@ import { EOrderStatus } from '~/constants/order';
 
 import type { IClient } from '~/types/models/client';
 import type { ICourier } from '~/types/models/courier';
+import type { IFormMapFilters } from '~/types/forms/form-map-filters';
 
 interface IProps {
   couriers?: ICourier[] | null;
   senders?: IClient[] | null;
   receivers?: IClient[] | null;
+  onSubmit?: (formValue: IFormMapFilters) => any;
 }
 
 const STATUS_OPTIONS = [
@@ -24,19 +27,64 @@ const STATUS_OPTIONS = [
   EOrderStatus.PROCESSING,
 ];
 
-const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers }) => {
+const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, onSubmit }) => {
+  const { control, register, getValues } = useForm<IFormMapFilters>({
+    defaultValues: {
+      statuses: [],
+      courierIds: [],
+      sendersIds: [],
+      receiverIds: [],
+    },
+  });
+
+  const couriersMap = useMemo(() => {
+    return couriers?.reduce((acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {} as Record<number, ICourier>) ?? {};
+  }, [couriers]);
+
+  const sendersMap = useMemo(() => {
+    return senders?.reduce((acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {} as Record<number, IClient>) ?? {};
+  }, [senders]);
+
+  const recieversMap = useMemo(() => {
+    return receivers?.reduce((acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {} as Record<number, IClient>) ?? {};
+  }, [receivers]);
+
+  const senderOptions = useMemo(() => {
+    return senders?.map(s => s.id) ?? [];
+  }, [senders]);
+
+  const recieverOptions = useMemo(() => {
+    return receivers?.map(s => s.id) ?? [];
+  }, [receivers]);
+
+  const courierOptions = useMemo(() => {
+    return couriers?.map(s => s.id) ?? [];
+  }, [couriers]);
+
   const { t } = useTranslation();
 
-  const getOptionKey = (item: IClient | ICourier) => {
-    return item.id;
-  }
-
-  const getOptionLabel = (item: IClient | ICourier) => {
-    return item.name;
-  }
-
-  const renderValue = (v: Array<IClient | ICourier>) => {
+  const renderValue = (v: number[]) => {
     return t('map_filters.options_selected', { count: v.length });
+  }
+
+  const fieldStatuses = register('statuses');
+
+  const submitHandler = () => {
+    if (!onSubmit) {
+      return;
+    }
+
+    const formValues = getValues();
+    onSubmit(formValues);
   }
 
   return (
@@ -49,51 +97,79 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers }) => 
           size="small"
           sx={{ width: 200 }}
           label={t('map_filters.status')}
+          multiple={true}
+          defaultValue={[]}
+          {...fieldStatuses}
+          onClose={submitHandler}
         >
           {STATUS_OPTIONS.map(status => (
-            <MenuItem value={status}>
+            <MenuItem value={status} key={status}>
               {t(`order_status.${status}`)}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
       <FormControl>
-        <Autocomplete
-          options={senders ?? []}
-          sx={{ width: 200 }}
-          size="small"
-          multiple={true}
-          getOptionKey={getOptionKey}
-          getOptionLabel={getOptionLabel}
-          disableCloseOnSelect={true}
-          renderValue={renderValue}
-          renderInput={params => <TextField {...params} label={t('map_filters.senders')} />}
+        <Controller
+          control={control}
+          name="sendersIds"
+          render={({ field }) => (
+            <Autocomplete
+              options={senderOptions}
+              sx={{ width: 200 }}
+              size="small"
+              multiple={true}
+              getOptionLabel={v => sendersMap[v]?.name}
+              disableCloseOnSelect={true}
+              renderValue={renderValue}
+              renderInput={params => <TextField {...params} label={t('map_filters.senders')} />}
+              {...field}
+              onChange={(_, v) => field.onChange(v)}
+              onClose={submitHandler}
+            />
+          )}
         />
       </FormControl>
       <FormControl>
-        <Autocomplete
-          options={receivers ?? []}
-          sx={{ width: 200 }}
-          size="small"
-          multiple={true}
-          getOptionKey={getOptionKey}
-          getOptionLabel={getOptionLabel}
-          disableCloseOnSelect={true}
-          renderValue={renderValue}
-          renderInput={params => <TextField {...params} label={t('map_filters.receivers')} />}
+        <Controller
+          control={control}
+          name="receiverIds"
+          render={({ field }) => (
+            <Autocomplete
+              options={recieverOptions}
+              sx={{ width: 200 }}
+              size="small"
+              multiple={true}
+              getOptionLabel={v => recieversMap[v]?.name}
+              disableCloseOnSelect={true}
+              renderValue={renderValue}
+              renderInput={params => <TextField {...params} label={t('map_filters.receivers')} />}
+              {...field}
+              onChange={(_, v) => field.onChange(v)}
+              onClose={submitHandler}
+            />
+          )}
         />
       </FormControl>
       <FormControl>
-        <Autocomplete
-          options={couriers ?? []}
-          sx={{ width: 200 }}
-          size="small"
-          multiple={true}
-          getOptionKey={getOptionKey}
-          getOptionLabel={getOptionLabel}
-          disableCloseOnSelect={true}
-          renderValue={renderValue}
-          renderInput={params => <TextField {...params} label={t('map_filters.couriers')} />}
+        <Controller
+          control={control}
+          name="courierIds"
+          render={({ field }) => (
+            <Autocomplete
+              options={courierOptions}
+              sx={{ width: 200 }}
+              size="small"
+              multiple={true}
+              getOptionLabel={v => couriersMap[v]?.name}
+              disableCloseOnSelect={true}
+              renderValue={renderValue}
+              renderInput={params => <TextField {...params} label={t('map_filters.couriers')} />}
+              {...field}
+              onChange={(_, v) => field.onChange(v)}
+              onClose={submitHandler}
+            />
+          )}
         />
       </FormControl>
     </Stack>

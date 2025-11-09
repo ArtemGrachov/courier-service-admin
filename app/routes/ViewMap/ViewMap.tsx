@@ -1,5 +1,5 @@
 import { Box, Card } from '@mui/material';
-import { useMemo, type ComponentType } from 'react';
+import { type ComponentType } from 'react';
 import { useLoaderData } from 'react-router';
 
 import { EStatus } from '~/constants/status';
@@ -13,16 +13,8 @@ import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import { fetchOrders } from '~/providers/orders/data';
 import type { IOrdersStoreData } from '~/providers/orders/store';
 
+import FilterMediator from './components/FilterMediator';
 import Map from '~/components/map/Map';
-import MapFilters from '~/components/map-filters/MapFilters';
-
-import type { IClient } from '~/types/models/client';
-
-interface IClientsData {
-  senderIds: Set<number>;
-  receiverIds: Set<number>;
-  clientsMap: Record<number, IClient>;
-}
 
 const ViewMap: ComponentType = () => {
   const { store: couriersStore } = useCouriersCtx();
@@ -30,47 +22,10 @@ const ViewMap: ComponentType = () => {
 
   const orders = ordersStore.data?.data;
 
-  const { senders, receivers } = useMemo(() => {
-    if (!orders) {
-      return {
-        senders: [],
-        receivers: [],
-      };
-    }
-
-    const { senderIds, receiverIds, clientsMap } = orders.reduce((acc, curr) => {
-      const sender = curr.sender;
-      const receiver = curr.receiver;
-
-      if (sender) {
-        const id = sender.id;
-        acc.senderIds.add(id);
-        acc.clientsMap[id] = sender;
-      }
-
-      if (receiver) {
-        const id = receiver.id;
-        acc.receiverIds.add(id);
-        acc.clientsMap[id] = receiver;
-      }
-
-      return acc;
-    }, { senderIds: new Set(), receiverIds: new Set(), clientsMap: {} } as IClientsData);
-
-    return {
-      senders: Array.from(senderIds).map(id => clientsMap[id]),
-      receivers: Array.from(receiverIds).map(id => clientsMap[id]),
-    };
-  }, [orders]);
-
   return (
     <Box height="100%" position="relative">
       <Card sx={{ position: 'absolute', top: 8, right: 8, padding: 1, zIndex: 1300 }}>
-        <MapFilters
-          couriers={couriersStore.data?.data}
-          senders={senders}
-          receivers={receivers}
-        />
+        <FilterMediator />
       </Card>
       <Map
         couriers={couriersStore.data?.data}
