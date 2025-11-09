@@ -5,6 +5,8 @@ import { useLoaderData } from 'react-router';
 import { EStatus } from '~/constants/status';
 import { EOrderStatus } from '~/constants/order';
 
+import { MapFiltersProvider } from './providers/map-filters';
+
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { fetchCouriers } from '~/providers/couriers/data';
 import type { ICouriersStoreData } from '~/providers/couriers/store';
@@ -42,7 +44,9 @@ const Wrapper: ComponentType = () => {
   return (
     <OrdersProvider initialData={loaderData.ordersState}>
       <CouriersProvider initialData={loaderData.couriersState}>
-        <ViewMap />
+        <MapFiltersProvider>
+          <ViewMap />
+        </MapFiltersProvider>
       </CouriersProvider>
     </OrdersProvider>
   )

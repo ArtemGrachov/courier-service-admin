@@ -1,4 +1,4 @@
-import { useMemo, type ComponentType } from 'react';
+import { useEffect, useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import FormControl from '@mui/material/FormControl';
@@ -16,6 +16,7 @@ import type { ICourier } from '~/types/models/courier';
 import type { IFormMapFilters } from '~/types/forms/form-map-filters';
 
 interface IProps {
+  formValue?: IFormMapFilters,
   couriers?: ICourier[] | null;
   senders?: IClient[] | null;
   receivers?: IClient[] | null;
@@ -27,9 +28,9 @@ const STATUS_OPTIONS = [
   EOrderStatus.PROCESSING,
 ];
 
-const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, onSubmit }) => {
-  const { control, register, getValues } = useForm<IFormMapFilters>({
-    defaultValues: {
+const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formValue, onSubmit }) => {
+  const { control, register, getValues, reset } = useForm<IFormMapFilters>({
+    defaultValues: formValue ?? {
       statuses: [],
       courierIds: [],
       sendersIds: [],
@@ -86,6 +87,10 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, onSub
     const formValues = getValues();
     onSubmit(formValues);
   }
+
+  useEffect(() => {
+    reset(formValue);
+  }, [formValue]);
 
   return (
     <Stack gap={2} direction="row">

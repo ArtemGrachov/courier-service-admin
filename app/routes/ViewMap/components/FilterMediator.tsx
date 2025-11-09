@@ -1,5 +1,7 @@
 import { useMemo, type ComponentType } from 'react';
+import { observer } from 'mobx-react-lite';
 
+import { useMapFiltersCtx } from '../providers/map-filters';
 import { useCouriersCtx } from '~/providers/couriers';
 import { useOrdersCtx } from '~/providers/orders';
 
@@ -14,9 +16,10 @@ interface IClientsData {
   clientsMap: Record<number, IClient>;
 }
 
-const FilterMediator: ComponentType = () => {
+const FilterMediator: ComponentType = observer(() => {
   const { store: couriersStore } = useCouriersCtx();
   const { store: ordersStore } = useOrdersCtx();
+  const { store: mapFiltersStore, handleUpdate } = useMapFiltersCtx();
 
   const orders = ordersStore.data?.data;
 
@@ -54,17 +57,18 @@ const FilterMediator: ComponentType = () => {
   }, [orders]);
 
   const submitHandler = (formValue: IFormMapFilters) => {
-    console.log(formValue);
+    handleUpdate(formValue);
   }
 
   return (
     <MapFilters
+      formValue={mapFiltersStore.formValue}
       couriers={couriersStore.data?.data}
       senders={senders}
       receivers={receivers}
       onSubmit={submitHandler}
     />
   )
-}
+});
 
 export default FilterMediator;
