@@ -54,8 +54,6 @@ export async function loadOrders({ request }: Route.ClientLoaderArgs) {
     fetchOrdersQuery.courierIds = courierIds;
   }
 
-  console.log(fetchOrdersQuery);
-  
   try {
     const data = await fetchOrders(fetchOrdersQuery);
     ordersState.data = data;

@@ -23,6 +23,10 @@ export class OrdersStore implements IOrdersStoreData {
     makeAutoObservable(this);
   }
 
+  public setData(data: IOrdersStoreData) {
+    Object.assign(this, data);
+  }
+
   public doGetInit() {
     this.getStatus = EStatus.PROCESSING;
   }

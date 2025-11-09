@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { CouriersStore, type ICouriersStoreData } from './store';
 
@@ -23,6 +23,14 @@ export const useCouriersService = (initialData?: ICouriersStoreData) => {
       throw err;
     }
   }
+
+  useEffect(() => {
+    if (!initialData) {
+      return;
+    }
+
+    couriersStore.current.setData(initialData);
+  }, [initialData]);
 
   return {
     store: couriersStore.current,

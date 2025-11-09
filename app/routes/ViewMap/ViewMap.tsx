@@ -1,15 +1,12 @@
 import { Box, Card } from '@mui/material';
 import { type ComponentType } from 'react';
+import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMap';
-
-import { EStatus } from '~/constants/status';
 
 import { MapFiltersProvider } from './providers/map-filters';
 
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
-import { fetchCouriers } from '~/providers/couriers/data';
-import type { ICouriersStoreData } from '~/providers/couriers/store';
 
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 
@@ -17,9 +14,9 @@ import FilterMediator from './components/FilterMediator';
 import Map from '~/components/map/Map';
 
 import { loadOrders } from './loaders/load-orders';
-import { loadCouriers } from '~/routes/ViewMap/loaders/load-couriers';
+import { loadCouriers } from './loaders/load-couriers';
 
-const ViewMap: ComponentType = () => {
+const ViewMap: ComponentType = observer(() => {
   const { store: couriersStore } = useCouriersCtx();
   const { store: ordersStore } = useOrdersCtx();
 
@@ -37,7 +34,7 @@ const ViewMap: ComponentType = () => {
       />
     </Box>
   )
-}
+})
 
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();

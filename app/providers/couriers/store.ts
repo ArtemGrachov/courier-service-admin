@@ -23,6 +23,10 @@ export class CouriersStore implements ICouriersStoreData {
     makeAutoObservable(this);
   }
 
+  public setData(data: ICouriersStoreData) {
+    Object.assign(this, data);
+  }
+
   public doGetInit() {
     this.getStatus = EStatus.PROCESSING;
   }
