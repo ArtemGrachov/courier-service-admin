@@ -7,6 +7,8 @@ export interface IGetOrdersQuery {
   itemsPerPage?: number | null;
   clientIds?: number[];
   courierIds?: number[];
+  senderIds?: number[];
+  receiverIds?: number[];
   statuses?: EOrderStatus[];
 }
 

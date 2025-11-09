@@ -24,11 +24,15 @@ export const useMapFiltersService = () => {
     }
 
     if (formValue.sendersIds) {
-      params.sendersIds = formValue.sendersIds.map(id => id.toString());
+      params.senders = formValue.sendersIds.map(id => id.toString());
     }
 
     if (formValue.receiverIds) {
-      params.receiverIds = formValue.receiverIds.map(id => id.toString());
+      params.receivers = formValue.receiverIds.map(id => id.toString());
+    }
+
+    if (formValue.courierIds) {
+      params.couriers = formValue.courierIds.map(id => id.toString());
     }
 
     return createSearchParams(params);
@@ -39,15 +43,15 @@ export const useMapFiltersService = () => {
       .getAll('statuses')
       .filter(s => ORDER_STATUSES.includes(s as EOrderStatus)) as EOrderStatus[];
     const courierIds = newSearchParams
-      .getAll('courierIds')
+      .getAll('couriers')
       .map(rawId => +rawId)
       .filter(id => !isNaN(id));
     const sendersIds = newSearchParams
-      .getAll('sendersIds')
+      .getAll('senders')
       .map(rawId => +rawId)
       .filter(id => !isNaN(id));
     const receiverIds = newSearchParams
-      .getAll('receiverIds')
+      .getAll('receivers')
       .map(rawId => +rawId)
       .filter(id => !isNaN(id));
 

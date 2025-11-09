@@ -1,9 +1,9 @@
 import { Box, Card } from '@mui/material';
 import { type ComponentType } from 'react';
 import { useLoaderData } from 'react-router';
+import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMap';
 
 import { EStatus } from '~/constants/status';
-import { EOrderStatus } from '~/constants/order';
 
 import { MapFiltersProvider } from './providers/map-filters';
 
@@ -12,11 +12,12 @@ import { fetchCouriers } from '~/providers/couriers/data';
 import type { ICouriersStoreData } from '~/providers/couriers/store';
 
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
-import { fetchOrders } from '~/providers/orders/data';
-import type { IOrdersStoreData } from '~/providers/orders/store';
 
 import FilterMediator from './components/FilterMediator';
 import Map from '~/components/map/Map';
+
+import { loadOrders } from './loaders/load-orders';
+import { loadCouriers } from '~/routes/ViewMap/loaders/load-couriers';
 
 const ViewMap: ComponentType = () => {
   const { store: couriersStore } = useCouriersCtx();
@@ -54,38 +55,10 @@ const Wrapper: ComponentType = () => {
 
 export default Wrapper;
 
-export async function clientLoader() {
-  const ordersState: IOrdersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  const couriersState: ICouriersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  await Promise.all([
-    fetchCouriers()
-      .then(data => {
-        couriersState.data = data;
-        couriersState.getStatus = EStatus.SUCCESS;
-      })
-      .catch(err => {
-        couriersState.getError = err;
-        couriersState.getStatus = EStatus.ERROR;
-      }),
-    fetchOrders({ statuses: [EOrderStatus.ORDERED, EOrderStatus.PROCESSING] })
-      .then(data => {
-        ordersState.data = data;
-        ordersState.getStatus = EStatus.SUCCESS;
-      })
-      .catch(err => {
-        ordersState.getError = err;
-        ordersState.getStatus = EStatus.ERROR;
-      }),
+export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
+  const [ordersState, couriersState] = await Promise.all([
+    loadOrders(loaderArgs),
+    loadCouriers(loaderArgs),
   ]);
 
   return {

@@ -4,6 +4,7 @@ import type { IPagination } from '~/types/other/pagination';
 export interface IGetCouriersQuery {
   page?: number | null;
   itemsPerPage?: number | null;
+  courierIds?: number[];
 }
 
 export interface IGetCouriersResponse {

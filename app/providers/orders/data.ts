@@ -21,6 +21,16 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     orders = orders.filter(o => set.has(o.senderId) || set.has(o.receiverId));
   }
 
+  if (query?.senderIds) {
+    const set = new Set(query.senderIds);
+    orders = orders.filter(o => set.has(o.senderId));
+  }
+
+  if (query?.receiverIds) {
+    const set = new Set(query.receiverIds);
+    orders = orders.filter(o => set.has(o.receiverId));
+  }
+
   if (query?.courierIds) {
     const set = new Set(query.courierIds);
     orders = orders.filter(o => set.has(o.courierId));
