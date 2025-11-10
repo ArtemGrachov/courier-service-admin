@@ -1,11 +1,14 @@
-import { useEffect, useMemo, type ComponentType, type SyntheticEvent } from 'react';
+import { useEffect, useMemo, useRef, type ComponentType, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, type ControllerRenderProps } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
+import { useDebouncedCallback } from 'use-debounce';
 import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
-import { type AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
+import {
+  type AutocompleteChangeDetails,
+  type AutocompleteChangeReason,
+} from '@mui/material/Autocomplete';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -107,12 +110,25 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     onSubmit(formValues);
   }
 
-  const inputChangeHandler = (event: SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => {
-    if (reason === 'clear') {
-      setTimeout(() => {
-        submitHandler();
-      });
+  const submitDebounce = useDebouncedCallback(() => {
+    submitHandler();
+  }, 300);
+
+  const changeHandler = (
+    field: ControllerRenderProps,
+    _event: SyntheticEvent<Element, Event>,
+    value: any,
+    reason: AutocompleteChangeReason,
+    _details?: AutocompleteChangeDetails<any> | undefined,
+  ) => {
+    field.onChange(value);
+
+    if (reason === 'blur' || reason === 'clear') {
+      submitHandler();
+      return;
     }
+
+    submitDebounce();
   }
 
   useEffect(() => {
@@ -147,7 +163,6 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
           name="sendersIds"
           render={({ field }) => (
             <AutocompleteExternal
-              loadStatus={sendersStore.getStatus}
               options={senderOptions}
               sx={{ width: 200 }}
               size="small"
@@ -157,9 +172,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               renderValue={renderValue}
               label={t('map_filters.senders')}
               {...field}
-              onChange={(_, v) => field.onChange(v)}
-              // onClose={submitHandler}
-              onInputChange={inputChangeHandler}
+              onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchSenders(SEARCH_QUERY)}
             />
@@ -172,7 +185,6 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
           name="receiverIds"
           render={({ field }) => (
             <AutocompleteExternal
-              loadStatus={receiversStore.getStatus}
               options={recieverOptions}
               sx={{ width: 200 }}
               size="small"
@@ -182,9 +194,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               renderValue={renderValue}
               label={t('map_filters.receivers')}
               {...field}
-              onChange={(_, v) => field.onChange(v)}
-              // onClose={submitHandler}
-              onInputChange={inputChangeHandler}
+              onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchReceivers(SEARCH_QUERY)}
             />
@@ -197,7 +207,6 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
           name="courierIds"
           render={({ field }) => (
             <AutocompleteExternal
-              loadStatus={couriersStore.getStatus}
               options={courierOptions}
               sx={{ width: 200 }}
               size="small"
@@ -207,9 +216,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               renderValue={renderValue}
               label={t('map_filters.couriers')}
               {...field}
-              onChange={(_, v) => field.onChange(v)}
-              // onClose={submitHandler}
-              onInputChange={inputChangeHandler}
+              onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchCouriers(SEARCH_QUERY)}
             />

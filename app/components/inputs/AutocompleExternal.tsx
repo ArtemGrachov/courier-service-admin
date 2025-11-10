@@ -1,4 +1,5 @@
 import { useRef, useState, type ReactNode, type SyntheticEvent } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import Autocomplete, {
@@ -21,7 +22,6 @@ type AutocompleExternalProps = Omit<AutocompleteProps<any, any, any, any>, 'rend
 const DEFAULT_SEARCH_TIMEOUT_MS = 300;
 
 const AutocompleteExternal = ({
-  loadStatus,
   label,
   searchTimeoutMs,
   onSearchLoad,
@@ -33,20 +33,17 @@ const AutocompleteExternal = ({
 }: AutocompleExternalProps & IProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const inputValueRef = useRef<string>('');
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const searchLoadDebounce = useDebouncedCallback(async () => {
+    if (onSearchLoad) {
+      setIsProcessing(true);
+      await onSearchLoad(inputValueRef.current);
+      setIsProcessing(false);
+    }
+  }, searchTimeoutMs ?? DEFAULT_SEARCH_TIMEOUT_MS);
 
   const timeoutHandler = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    setTimeout(async () => {
-      if (onSearchLoad) {
-        setIsProcessing(true);
-        await onSearchLoad(inputValueRef.current);
-        setIsProcessing(false);
-      }
-    }, searchTimeoutMs ?? DEFAULT_SEARCH_TIMEOUT_MS);
+    searchLoadDebounce();
   }
 
   renderInput = renderInput ?? (params => (
@@ -56,18 +53,13 @@ const AutocompleteExternal = ({
       slotProps={{
         input: {
           ...params.InputProps,
-          endAdornment: (
-            <>
-              {isProcessing ? <CircularProgress color="inherit" size={20} /> : null}
-            </>
-          ),
+          endAdornment: isProcessing ? <CircularProgress color="inherit" size={20} /> : params.InputProps.endAdornment,
         }
       }}
     />
   ));
 
   const openHandler = async (event: SyntheticEvent<Element, Event>) => {
-
     if (onOpen) {
       onOpen(event);
     }
