@@ -11,6 +11,8 @@ import Select from '@mui/material/Select';
 
 import { EOrderStatus } from '~/constants/order';
 
+import { useOrderFilterCtx } from '~/providers/order-filters';
+
 import type { IClient } from '~/types/models/client';
 import type { ICourier } from '~/types/models/courier';
 import type { IFormMapFilters } from '~/types/forms/form-map-filters';
@@ -29,6 +31,8 @@ const STATUS_OPTIONS = [
 ];
 
 const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formValue, onSubmit }) => {
+  const {} = useOrderFilterCtx();
+
   const { control, register, getValues, reset } = useForm<IFormMapFilters>({
     defaultValues: formValue ?? {
       statuses: [],
