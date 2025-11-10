@@ -29,7 +29,7 @@ export const useOrderFiltersService = () => {
   const fetchCouriers = async (query?: IGetCouriersQuery) => {
     try {
       couriersStore.current.doGetInit();
-      const data = await apiFetchCouriers(query)
+      const data = await apiFetchCouriers(query);
       couriersStore.current.doGetSuccess(data);
     } catch (err) {
       couriersStore.current.doGetError(err);
@@ -40,10 +40,8 @@ export const useOrderFiltersService = () => {
   const fetchSenders = async (query?: IGetClientsQuery) => {
     try {
       sendersStore.current.doGetInit();
-      const data = await fetchClients(query)
+      const data = await fetchClients(query);
       sendersStore.current.doGetSuccess(data);
-      console.log('fetch senders', data.data);
-      
     } catch (err) {
       sendersStore.current.doGetError(err);
       throw err;
@@ -53,7 +51,7 @@ export const useOrderFiltersService = () => {
   const fetchReceivers = async (query?: IGetClientsQuery) => {
     try {
       receiversStore.current.doGetInit();
-      const data = await fetchClients(query)
+      const data = await fetchClients(query);
       receiversStore.current.doGetSuccess(data);
     } catch (err) {
       receiversStore.current.doGetError(err);

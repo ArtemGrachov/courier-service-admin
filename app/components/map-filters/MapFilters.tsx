@@ -57,9 +57,6 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
   const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
   const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
 
-  console.log('senders1', senders);
-  console.log('senders2', sendersStore.data?.data);
-
   const couriersMap = useMemo(() => {
     return couriers?.reduce((acc, curr) => {
       acc[curr.id] = curr;
@@ -82,7 +79,6 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
   }, [receivers]);
 
   const senderOptions = useMemo(() => {
-    console.log('senderOptions', senders?.map(s => s.id) ?? []);
     return senders?.map(s => s.id) ?? [];
   }, [senders]);
 
@@ -151,20 +147,21 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
           name="sendersIds"
           render={({ field }) => (
             <AutocompleteExternal
+              loadStatus={sendersStore.getStatus}
               options={senderOptions}
               sx={{ width: 200 }}
               size="small"
               multiple={true}
-              getOptionLabel={v => sendersMap[v]?.name}
+              getOptionLabel={v => sendersMap[v]?.name ?? '-'}
               disableCloseOnSelect={true}
               renderValue={renderValue}
-              renderInput={params => <TextField {...params} label={t('map_filters.senders')} />}
+              label={t('map_filters.senders')}
               {...field}
               onChange={(_, v) => field.onChange(v)}
-              onClose={submitHandler}
+              // onClose={submitHandler}
               onInputChange={inputChangeHandler}
               onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
-              onOpen={() => fetchSenders(SEARCH_QUERY)}
+              onOpenLoad={() => fetchSenders(SEARCH_QUERY)}
             />
           )}
         />
@@ -175,20 +172,21 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
           name="receiverIds"
           render={({ field }) => (
             <AutocompleteExternal
+              loadStatus={receiversStore.getStatus}
               options={recieverOptions}
               sx={{ width: 200 }}
               size="small"
               multiple={true}
-              getOptionLabel={v => recieversMap[v]?.name}
+              getOptionLabel={v => recieversMap[v]?.name ?? '-'}
               disableCloseOnSelect={true}
               renderValue={renderValue}
-              renderInput={params => <TextField {...params} label={t('map_filters.receivers')} />}
+              label={t('map_filters.receivers')}
               {...field}
               onChange={(_, v) => field.onChange(v)}
-              onClose={submitHandler}
+              // onClose={submitHandler}
               onInputChange={inputChangeHandler}
               onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
-              onOpen={() => fetchReceivers(SEARCH_QUERY)}
+              onOpenLoad={() => fetchReceivers(SEARCH_QUERY)}
             />
           )}
         />
@@ -199,20 +197,21 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
           name="courierIds"
           render={({ field }) => (
             <AutocompleteExternal
+              loadStatus={couriersStore.getStatus}
               options={courierOptions}
               sx={{ width: 200 }}
               size="small"
               multiple={true}
-              getOptionLabel={v => couriersMap[v]?.name}
+              getOptionLabel={v => couriersMap[v]?.name ?? '-'}
               disableCloseOnSelect={true}
               renderValue={renderValue}
-              renderInput={params => <TextField {...params} label={t('map_filters.couriers')} />}
+              label={t('map_filters.couriers')}
               {...field}
               onChange={(_, v) => field.onChange(v)}
-              onClose={submitHandler}
+              // onClose={submitHandler}
               onInputChange={inputChangeHandler}
               onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}
-              onOpen={() => fetchCouriers(SEARCH_QUERY)}
+              onOpenLoad={() => fetchCouriers(SEARCH_QUERY)}
             />
           )}
         />
