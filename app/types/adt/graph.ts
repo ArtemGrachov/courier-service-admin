@@ -35,6 +35,12 @@ export class Graph<T> {
     nodeY.delete(x);
   }
 
+  public removeNode(x: T) {
+    const neighbours = this.neighbours(x);
+    neighbours.forEach(y => this.removeEdge(x, y));
+    this.adjacency.delete(x);
+  }
+
   public neighbours(x: T) {
     return Array.from(this.getNode(x));
   }

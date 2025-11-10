@@ -50,6 +50,23 @@ export class View {
     return Object.values(this.markers);
   }
 
+  public deleteMarker(key: MarkerKey) {
+    const lMarker = this.markers[key]?.lMarker;
+    const lPopup = this.markerPopups[key];
+
+    if (lMarker) {
+      lMarker.remove();
+    }
+
+    if (lPopup) {
+      lPopup.close();
+      lPopup.remove();
+    }
+
+    delete this.markers[key];
+    delete this.markerPopups[key];
+  }
+
   private createMarker(markerData: MarkerData) {
     let icon;
 

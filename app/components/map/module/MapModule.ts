@@ -1,5 +1,7 @@
 import { container, inject, injectable } from 'tsyringe';
 
+import { EMarkerTypes } from '../constants';
+
 import { Controller } from './Controller';
 import { Model } from './Model';
 import { View } from './View';
@@ -58,18 +60,19 @@ export class MapModule {
   }
 
   public updateOrders(orders: IOrder[]) {
-    const markers = orders.reduce((acc, curr) => {
+    const markersData = orders.reduce((acc, curr) => {
       acc.push(...this.markersService.getOrderMarkersData(curr));
       return acc;
     }, [] as MarkerData[]);
 
-    markers.forEach(m => this.model.upsertMarkerData(m.key, m));
+    this.model.updateMarkers(markersData, [EMarkerTypes.SENDER, EMarkerTypes.RECEIVER]);
   }
 
   public updateCouriers(couriers: ICourier[]) {
     const markers = couriers.map(c => this.markersService.getCourierMarkerData(c));
 
-    markers.filter(m => !!m).forEach(m => this.model.upsertMarkerData(m.key, m));
+    const markersData = markers.filter(m => !!m);
+    this.model.updateMarkers(markersData, [EMarkerTypes.COURIER]);
   }
 
   public closeAllPopups() {

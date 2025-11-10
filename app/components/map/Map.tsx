@@ -17,9 +17,9 @@ import MapPopup from './MapPopup';
 import type { IMarker, MarkerKey } from './types';
 import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
+import type { IGeoPos } from '~/types/models/geo-pos';
 
 import './Map.scss';
-import type { IGeoPos } from '~/types/models/geo-pos';
 
 interface IProps {
   orders?: IOrder[];
@@ -34,7 +34,7 @@ const Map: ComponentType<IProps> = ({ orders, couriers, center, showPopupOrderDa
   const [markerPopups, setMarkerPopups] = useState<Array<MarkerKey>>([]);
   const theme = useTheme();
   const mapModule = useRef<MapModule>(null);
-  const markersRef = useRef<Record<MarkerKey, IMarker>>({})
+  const markersRef = useRef<Record<MarkerKey, IMarker>>({});
 
   const initMap = useCallback(() => {
     const mModule = MapModule.createModule();
@@ -78,6 +78,18 @@ const Map: ComponentType<IProps> = ({ orders, couriers, center, showPopupOrderDa
   useEffect(() => {
     return initMap();
   }, []);
+
+  useEffect(() => {
+    if (orders) {
+      mapModule.current?.updateOrders(orders);
+    }
+  }, [orders]);
+
+  useEffect(() => {
+    if (couriers) {
+      mapModule.current?.updateCouriers(couriers);
+    }
+  }, [couriers]);
 
   const paperBg = useMemo(() => {
     return (theme.vars || theme).palette.background.paper;

@@ -67,6 +67,28 @@ export class Model {
     this.highlightMakrers(nodes);
   }
 
+  public updateMarkers(markerData: MarkerData[], byTypes?: EMarkerTypes[]) {
+    let markersToUpdate = this.markerArray;
+
+    if (byTypes) {
+      const set = new Set(byTypes);
+      markersToUpdate = markersToUpdate.filter(m => set.has(m.type));
+    }
+
+    const removeKeys = new Set<MarkerKey>(markersToUpdate.map(m => m.key));
+
+    markerData.forEach(marker => {
+      this.upsertMarkerData(marker.key, marker);
+      removeKeys.delete(marker.key);
+    });
+
+    removeKeys.forEach(key => {
+      this.view.deleteMarker(key);
+      this.markersGraph.removeNode(key);
+      delete this.state[key];
+    });
+  }
+
   public upsertMarkerData(key: MarkerKey, newState: Partial<MarkerData>) {
     const curentState = this.state[key];
     let renderData;
