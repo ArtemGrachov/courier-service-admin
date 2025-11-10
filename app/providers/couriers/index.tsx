@@ -2,7 +2,7 @@ import { createContext, useContext, type ComponentType, type PropsWithChildren }
 
 import { useCouriersService } from './service';
 
-import type { ICouriersStoreData } from '~/providers/couriers/store';
+import type { ICouriersStoreData } from '~/store/couriers.store';
 
 export const CouriersContext = createContext<ReturnType<typeof useCouriersService>>(null as any);
 

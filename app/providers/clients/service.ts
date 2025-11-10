@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 
-import { ClientsStore, type IClientsStoreData } from './store';
+import { ClientsStore, type IClientsStoreData } from '~/store/clients.store';
 
 import type { IGetClientsQuery } from '~/types/api/clients';
 
-import { fetchClients } from './data';
+import { fetchClients } from '../../data/fetch-clients';
 
 export const useClientsService = (initialData?: IClientsStoreData) => {
   const clientsStore = useRef<ClientsStore>(null as unknown as ClientsStore);

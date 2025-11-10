@@ -2,8 +2,8 @@ import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMa
 
 import { EStatus } from '~/constants/status';
 
-import { fetchCouriers } from '~/providers/couriers/data';
-import type { ICouriersStoreData } from '~/providers/couriers/store';
+import { fetchCouriers } from '~/data/fetch-couriers';
+import type { ICouriersStoreData } from '~/store/couriers.store';
 
 import type { IGetCouriersQuery } from '~/types/api/couriers';
 

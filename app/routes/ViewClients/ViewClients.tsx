@@ -6,8 +6,8 @@ import { useLoaderData } from 'react-router';
 import { EStatus } from '~/constants/status';
 
 import { ClientsProvider, useClientsCtx } from '~/providers/clients';
-import { fetchClients } from '~/providers/clients/data';
-import type { IClientsStoreData } from '~/providers/clients/store';
+import { fetchClients } from '~/data/fetch-clients';
+import type { IClientsStoreData } from '~/store/clients.store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
