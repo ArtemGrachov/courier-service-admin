@@ -14,6 +14,18 @@ export const useOrderFiltersService = () => {
   const sendersStore = useRef<ClientsStore>(null as unknown as ClientsStore);
   const receiversStore = useRef<ClientsStore>(null as unknown as ClientsStore);
 
+  if (!couriersStore.current) {
+    couriersStore.current = new CouriersStore();
+  }
+
+  if (!sendersStore.current) {
+    sendersStore.current = new ClientsStore();
+  }
+
+  if (!receiversStore.current) {
+    receiversStore.current = new ClientsStore();
+  }
+
   const fetchCouriers = async (query?: IGetCouriersQuery) => {
     try {
       couriersStore.current.doGetInit();
@@ -30,6 +42,8 @@ export const useOrderFiltersService = () => {
       sendersStore.current.doGetInit();
       const data = await fetchClients(query)
       sendersStore.current.doGetSuccess(data);
+      console.log('fetch senders', data.data);
+      
     } catch (err) {
       sendersStore.current.doGetError(err);
       throw err;
@@ -48,9 +62,9 @@ export const useOrderFiltersService = () => {
   }
 
   return {
-    couriersStore,
-    sendersStore,
-    receiversStore,
+    couriersStore: couriersStore.current,
+    sendersStore: sendersStore.current,
+    receiversStore: receiversStore.current,
     fetchCouriers,
     fetchSenders,
     fetchReceivers,

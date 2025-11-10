@@ -1,9 +1,10 @@
 import { useEffect, useMemo, type ComponentType, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
+import { observer } from 'mobx-react-lite';
 import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
-import Autocomplete, { type AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
+import { type AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,15 +14,14 @@ import { EOrderStatus } from '~/constants/order';
 
 import { useOrderFilterCtx } from '~/providers/order-filters';
 
+import AutocompleteExternal from '~/components/inputs/AutocompleExternal';
+
 import type { IClient } from '~/types/models/client';
 import type { ICourier } from '~/types/models/courier';
 import type { IFormMapFilters } from '~/types/forms/form-map-filters';
 
 interface IProps {
   formValue?: IFormMapFilters,
-  couriers?: ICourier[] | null;
-  senders?: IClient[] | null;
-  receivers?: IClient[] | null;
   onSubmit?: (formValue: IFormMapFilters) => any;
 }
 
@@ -30,8 +30,19 @@ const STATUS_OPTIONS = [
   EOrderStatus.PROCESSING,
 ];
 
-const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formValue, onSubmit }) => {
-  const {} = useOrderFilterCtx();
+const SEARCH_QUERY = {
+  itemsPerPage: 5,
+};
+
+const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => {
+  const {
+    sendersStore,
+    receiversStore,
+    couriersStore,
+    fetchSenders,
+    fetchReceivers,
+    fetchCouriers,
+  } = useOrderFilterCtx();
 
   const { control, register, getValues, reset } = useForm<IFormMapFilters>({
     defaultValues: formValue ?? {
@@ -41,6 +52,13 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
       receiverIds: [],
     },
   });
+
+  const senders = useMemo(() => sendersStore.data?.data, [sendersStore.data]);
+  const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
+  const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
+
+  console.log('senders1', senders);
+  console.log('senders2', sendersStore.data?.data);
 
   const couriersMap = useMemo(() => {
     return couriers?.reduce((acc, curr) => {
@@ -64,6 +82,7 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
   }, [receivers]);
 
   const senderOptions = useMemo(() => {
+    console.log('senderOptions', senders?.map(s => s.id) ?? []);
     return senders?.map(s => s.id) ?? [];
   }, [senders]);
 
@@ -131,7 +150,7 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
           control={control}
           name="sendersIds"
           render={({ field }) => (
-            <Autocomplete
+            <AutocompleteExternal
               options={senderOptions}
               sx={{ width: 200 }}
               size="small"
@@ -144,6 +163,8 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
               onChange={(_, v) => field.onChange(v)}
               onClose={submitHandler}
               onInputChange={inputChangeHandler}
+              onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
+              onOpen={() => fetchSenders(SEARCH_QUERY)}
             />
           )}
         />
@@ -153,7 +174,7 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
           control={control}
           name="receiverIds"
           render={({ field }) => (
-            <Autocomplete
+            <AutocompleteExternal
               options={recieverOptions}
               sx={{ width: 200 }}
               size="small"
@@ -166,6 +187,8 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
               onChange={(_, v) => field.onChange(v)}
               onClose={submitHandler}
               onInputChange={inputChangeHandler}
+              onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
+              onOpen={() => fetchReceivers(SEARCH_QUERY)}
             />
           )}
         />
@@ -175,7 +198,7 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
           control={control}
           name="courierIds"
           render={({ field }) => (
-            <Autocomplete
+            <AutocompleteExternal
               options={courierOptions}
               sx={{ width: 200 }}
               size="small"
@@ -188,12 +211,14 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
               onChange={(_, v) => field.onChange(v)}
               onClose={submitHandler}
               onInputChange={inputChangeHandler}
+              onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}
+              onOpen={() => fetchCouriers(SEARCH_QUERY)}
             />
           )}
         />
       </FormControl>
     </Stack>
   )
-}
+});
 
 export default MapFilters;
