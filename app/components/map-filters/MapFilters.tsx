@@ -1,9 +1,9 @@
-import { useEffect, useMemo, type ComponentType } from 'react';
+import { useEffect, useMemo, type ComponentType, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, { type AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -88,6 +88,14 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
     onSubmit(formValues);
   }
 
+  const inputChangeHandler = (event: SyntheticEvent, value: string, reason: AutocompleteInputChangeReason) => {
+    if (reason === 'clear') {
+      setTimeout(() => {
+        submitHandler();
+      });
+    }
+  }
+
   useEffect(() => {
     reset(formValue);
   }, [formValue]);
@@ -131,6 +139,7 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
               {...field}
               onChange={(_, v) => field.onChange(v)}
               onClose={submitHandler}
+              onInputChange={inputChangeHandler}
             />
           )}
         />
@@ -152,6 +161,7 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
               {...field}
               onChange={(_, v) => field.onChange(v)}
               onClose={submitHandler}
+              onInputChange={inputChangeHandler}
             />
           )}
         />
@@ -173,6 +183,7 @@ const MapFilters: ComponentType<IProps> = ({ couriers, senders, receivers, formV
               {...field}
               onChange={(_, v) => field.onChange(v)}
               onClose={submitHandler}
+              onInputChange={inputChangeHandler}
             />
           )}
         />
