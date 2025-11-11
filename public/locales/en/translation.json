@@ -102,7 +102,9 @@
   },
   "view_upsert_courier": {
     "create_success": "Courier was reigstered successfully",
-    "edit_success": "Courier data was updated successfully"
+    "edit_success": "Courier data was updated successfully",
+    "title_create": "Add courier",
+    "title_edit": "Update courier ID {{id}} {{name}} data"
   },
   "page_error": {
     "title": "Page data loading error",
@@ -186,6 +188,27 @@
   },
   "common_meta": {
     "title_template": "{{title}} | Courier Service"
+  },
+  "view_client": {
+    "title": "Client ID {{id}} {{name}}"
+  },
+  "view_clients": {
+    "title": "Clients"
+  },
+  "view_courier": {
+    "title": "Courier ID {{id}} {{name}}"
+  },
+  "view_couriers": {
+    "title": "Couriers"
+  },
+  "view_map": {
+    "title": "Map"
+  },
+  "view_order": {
+    "title": "Order ID {{id}}"
+  },
+  "view_orders": {
+    "title": "Orders"
   }
 }
 

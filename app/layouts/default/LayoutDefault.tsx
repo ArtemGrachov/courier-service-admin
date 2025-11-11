@@ -1,5 +1,5 @@
+import { useRef, type ComponentType } from 'react';
 import { Box, Toolbar } from '@mui/material';
-import type { ComponentType } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { observer } from 'mobx-react-lite';
 
@@ -7,6 +7,7 @@ import { ROUTES } from '~/router/routes';
 
 import { useAuthCtx } from '~/providers/auth/hooks/use-auth-ctx';
 import { RouteKeyProvider, useRouteKeyCtx } from '~/providers/route-key';
+import { TitlePortalProvider } from '~/providers/title-portal';
 
 import { useRoutePath } from '~/hooks/routing/use-route-path';
 import Header from './components/Header';
@@ -16,6 +17,7 @@ const LayoutDefault: ComponentType = observer(() => {
   const { store } = useAuthCtx();
   const routePath = useRoutePath();
   const { routeKey } = useRouteKeyCtx()!;
+  const titleRef = useRef<HTMLDivElement | null>(null);
 
   if (!store.isAuthorized) {
     return <Navigate to={routePath(ROUTES.LOGIN)} />
@@ -27,7 +29,7 @@ const LayoutDefault: ComponentType = observer(() => {
       boxSizing="border-box"
       minHeight="100%"
     >
-      <Header />
+      <Header title={<div ref={titleRef} />} />
       <Sidebar />
       <Box
         component="main"
@@ -39,7 +41,9 @@ const LayoutDefault: ComponentType = observer(() => {
         boxSizing="border-box"
       >
         <Toolbar />
-        <Outlet key={routeKey} />
+        <TitlePortalProvider ref={titleRef}>
+          <Outlet key={routeKey} />
+        </TitlePortalProvider>
       </Box>
     </Box>
   )

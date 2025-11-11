@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import Portal from '@mui/material/Portal';
 import { useMemo, type ComponentType } from 'react';
 import { useLoaderData, useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,7 @@ import { CourierProvider, useCourierCtx } from '~/providers/courier';
 import { fetchCourier } from '~/providers/courier/data';
 import type { ICourierStoreData } from '~/providers/courier/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
+import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import { useSuccessSnackbar } from '~/hooks/other/use-success-snackbar';
@@ -31,6 +33,9 @@ const ViewUpsertCourier: ComponentType = observer(() => {
   const navigate = useNavigate();
   const { courierId } = useParams();
   const isEdit = !!courierId;
+  const titlePortalRef = useTitlePortalCtx();
+
+  const courier = courierStore.data;
 
   const showForm = useMemo(() => {
     if (!isEdit) {
@@ -71,10 +76,13 @@ const ViewUpsertCourier: ComponentType = observer(() => {
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Portal container={() => titlePortalRef?.current ?? null}>
+        {t('view_upsert_courier.title', { id: courier?.id, name: courier?.name })}
+      </Portal>
       <Box padding={3}>
         <Box maxWidth={500} margin="auto">
           {showForm && <FormCourier
-            initialValue={courierStore.data!}
+            initialValue={courier!}
             submitStatus={upsertCourierStore.submitStatus}
             submitError={upsertCourierStore.submitError}
             onSubmit={submitHandler}

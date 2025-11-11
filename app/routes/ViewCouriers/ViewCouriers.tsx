@@ -1,8 +1,10 @@
 import { useEffect, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
+import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewCouriers/+types/ViewCouriers';
+import { useTranslation } from 'react-i18next';
 
 import { EStatus } from '~/constants/status';
 
@@ -11,6 +13,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { fetchCouriers } from '~/data/fetch-couriers';
 import type { ICouriersStoreData } from '~/store/couriers.store';
+import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import CouriersHeader from './components/CouriersHeader';
@@ -18,8 +21,10 @@ import CouriersTable from '~/components/couriers/CouriersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 const ViewCouriers: ComponentType = observer(() => {
+  const { t } = useTranslation();
   const { store: couriersStore, setProcessing } = useCouriersCtx();
   const errorSnackbar = useErrorSnackbar();
+  const titlePortalRef = useTitlePortalCtx();
 
   const reloadPageData = () => {
     setProcessing();
@@ -35,6 +40,9 @@ const ViewCouriers: ComponentType = observer(() => {
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Portal container={() => titlePortalRef?.current ?? null}>
+        {t('view_couriers.title')}
+      </Portal>
       <Box
         flexDirection="column"
         display="flex"

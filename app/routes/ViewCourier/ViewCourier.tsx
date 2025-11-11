@@ -3,7 +3,9 @@ import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewCourier/+types/ViewCourier';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
 
 import { EStatus } from '~/constants/status';
 import { EOrderStatus } from '~/constants/order';
@@ -19,6 +21,7 @@ import { fetchOrders } from '~/providers/orders/data';
 import { ActiveOrdersProvider, useActiveOrdersCtx } from './providers/active-orders';
 
 import { ReloadPageProvider } from '~/providers/reload-page';
+import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import OrdersTable from '~/components/orders/OrdersTable';
 import CourierDetails from '~/components/couriers/CourierDetails';
@@ -26,6 +29,8 @@ import Map from '~/components/map/Map';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 const ViewCourier: ComponentType = observer(() => {
+  const { t } = useTranslation();
+
   const {
     store: courierStore,
     setProcessing: setCourierProcessing,
@@ -38,6 +43,8 @@ const ViewCourier: ComponentType = observer(() => {
     store: activeOrdersStore,
     setProcessing: setActiveOrdersProcessing,
   } = useActiveOrdersCtx();
+
+  const titlePortalRef = useTitlePortalCtx();
 
   const courier = courierStore.data;
 
@@ -57,6 +64,9 @@ const ViewCourier: ComponentType = observer(() => {
       boxSizing="border-box"
       flexGrow={1}
     >
+      <Portal container={() => titlePortalRef?.current ?? null}>
+        {t('view_courier.title', { id: courier?.id, name: courier?.name })}
+      </Portal>
       <ReloadPageProvider reloadFunction={reloadPageData}>
         <Grid container spacing={2}>
           <Grid size={5}>

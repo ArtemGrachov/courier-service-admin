@@ -1,7 +1,9 @@
 import { useEffect, type ComponentType } from 'react';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
+import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import type { Route } from '.react-router/types/app/routes/ViewOrders/+types/ViewOrders';
 
 import { EStatus } from '~/constants/status';
@@ -11,6 +13,7 @@ import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import { fetchOrders } from '~/providers/orders/data';
 import type { IOrdersStoreData } from '~/providers/orders/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
+import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import OrdersHeader from './components/OrdersHeader';
@@ -18,8 +21,10 @@ import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 const ViewOrders: ComponentType = observer(() => {
+  const { t } = useTranslation();
   const { store: ordersStore, setProcessing } = useOrdersCtx();
   const errorSnackbar = useErrorSnackbar();
+  const titlePortalRef = useTitlePortalCtx();
 
   const reloadPageData = () => {
     setProcessing();
@@ -35,6 +40,9 @@ const ViewOrders: ComponentType = observer(() => {
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Portal container={() => titlePortalRef?.current ?? null}>
+        {t('view_orders.title')}
+      </Portal>
       <Box
         flexDirection="column"
         display="flex"
