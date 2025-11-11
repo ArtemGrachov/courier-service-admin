@@ -26,30 +26,30 @@ const ViewCouriers: ComponentType = observer(() => {
   }
 
   return (
-    <Box
-      flexDirection="column"
-      display="flex"
-      gap={2}
-      padding={3}
-      width="100%"
-      boxSizing="border-box"
-    >
-      <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Box
+        flexDirection="column"
+        display="flex"
+        gap={2}
+        padding={3}
+        width="100%"
+        boxSizing="border-box"
+      >
         {showPageError && (
           <PageError
             isProcessing={couriersStore.isProcessing}
             error={couriersStore.getError}
           />
         )}
-      </ReloadPageProvider>
-      {!showPageError && (<>
-        <CouriersHeader />
-        <CouriersTable
-          isProcessing={couriersStore.isProcessing}
-          items={couriersStore.data?.data}
-        />
-      </>)}
-    </Box>
+        {!showPageError && (<>
+          <CouriersHeader />
+          <CouriersTable
+            isProcessing={couriersStore.isProcessing}
+            items={couriersStore.data?.data}
+          />
+        </>)}
+      </Box>
+    </ReloadPageProvider>
   )
 })
 
