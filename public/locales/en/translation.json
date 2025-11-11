@@ -98,7 +98,8 @@
   "view_couriers": {
     "couriers_header": {
       "add_courier": "Add courier"
-    }
+    },
+    "title": "Couriers"
   },
   "form_courier": {
     "password_hint": "Leave this field empty to generate the password automatically. The password will be sent to the courier's email"
@@ -200,9 +201,6 @@
   },
   "view_courier": {
     "title": "Courier ID {{id}} {{name}}"
-  },
-  "view_couriers": {
-    "title": "Couriers"
   },
   "view_map": {
     "title": "Map"
