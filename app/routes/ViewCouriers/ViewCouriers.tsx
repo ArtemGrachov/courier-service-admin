@@ -1,4 +1,4 @@
-import { useMemo, type ComponentType } from 'react';
+import { useEffect, useRef, useState, type ComponentType } from 'react';
 import { Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData, useNavigate } from 'react-router';
@@ -10,6 +10,7 @@ import { fetchCouriers } from '~/data/fetch-couriers';
 import type { ICouriersStoreData } from '~/store/couriers.store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import CouriersHeader from './components/CouriersHeader';
 import CouriersTable from '~/components/couriers/CouriersTable';
 import PageError from '~/components/other/PageError';
@@ -17,15 +18,32 @@ import PageError from '~/components/other/PageError';
 const ViewCouriers: ComponentType = observer(() => {
   const { store: couriersStore, setProcessing } = useCouriersCtx();
   const navigate = useNavigate();
+  const errorSnackbar = useErrorSnackbar();
+  const [showPageError, setShowPageError] = useState(couriersStore.isError);
 
-  const showPageError = useMemo(() => {
-    return couriersStore.isError || couriersStore.getError;
-  }, [couriersStore.isError, couriersStore.getError]);
+  const isRefreshing = useRef(false);
 
-  const reloadPageData = () => {
+  const reloadPageData = async () => {
+    isRefreshing.current = true;
     setProcessing();
-    navigate('.', { replace: true });
+
+    await navigate('.', { replace: true });
   }
+
+  useEffect(() => {
+    if (couriersStore.isProcessing) {
+      return;
+    }
+
+    if (couriersStore.isError) {
+      setShowPageError(true);
+      errorSnackbar(couriersStore.getError);
+    } else {
+      setShowPageError(false);
+    }
+
+    isRefreshing.current = false;
+  }, [couriersStore.isProcessing]);
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
