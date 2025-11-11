@@ -18,13 +18,13 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import { useSuccessSnackbar } from '~/hooks/other/use-success-snackbar';
 import FormCourier from '~/components/forms/FormCourier';
-import PageError from '~/components/other/PageError';
+import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 import type { IFormCourier } from '~/types/forms/form-courier';
 
 const ViewUpsertCourier: ComponentType = observer(() => {
   const { store: upsertCourierStore, submitCreate: submit } = useUpsertCourierCtx();
-  const { store: courierStore, fetch } = useCourierCtx();
+  const { store: courierStore, setProcessing } = useCourierCtx();
   const { t } = useTranslation();
   const errorSnackbar = useErrorSnackbar();
   const successSnackbar = useSuccessSnackbar();
@@ -38,7 +38,11 @@ const ViewUpsertCourier: ComponentType = observer(() => {
     }
 
     return courierStore.isSuccess;
-  }, [isEdit, courierStore.isSuccess])
+  }, [isEdit, courierStore.isSuccess]);
+
+  const reloadPageData = () => {
+    setProcessing();
+  }
 
   const submitHandler = async (formValue: IFormCourier) => {
     try {
@@ -65,29 +69,19 @@ const ViewUpsertCourier: ComponentType = observer(() => {
     await navigate(ROUTES.COURIERS);
   }
 
-  const reloadPageData = () => {
-    fetch(+courierId!)
-  }
-
   return (
-    <Box padding={3}>
-      <ReloadPageProvider reloadFunction={reloadPageData}>
-        {(courierStore.isError || courierStore.getError) && (
-          <PageError
-            isProcessing={courierStore.isProcessing}
-            error={courierStore.getError}
-          />
-        )}
-      </ReloadPageProvider>
-      <Box maxWidth={500} margin="auto">
-        {showForm && <FormCourier
-          initialValue={courierStore.data!}
-          submitStatus={upsertCourierStore.submitStatus}
-          submitError={upsertCourierStore.submitError}
-          onSubmit={submitHandler}
-        />}
+    <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Box padding={3}>
+        <Box maxWidth={500} margin="auto">
+          {showForm && <FormCourier
+            initialValue={courierStore.data!}
+            submitStatus={upsertCourierStore.submitStatus}
+            submitError={upsertCourierStore.submitError}
+            onSubmit={submitHandler}
+          />}
+        </Box>
       </Box>
-    </Box>
+    </ReloadPageProvider>
   )
 })
 
@@ -115,17 +109,15 @@ export async function clientLoader({
   };
 
   if (params.courierId) {
-    try {
-      const data = await fetchCourier(+params.courierId!);
-      courierState.data = data;
-      courierState.getStatus = EStatus.SUCCESS;
-    } catch (err) {
-      courierState.getError = err;
-      courierState.getStatus = EStatus.ERROR;
-    }
+    const data = await fetchCourier(+params.courierId!);
+    courierState.data = data;
+    courierState.getStatus = EStatus.SUCCESS;
   }
 
   return {
     courierData: courierState,
   };
 }
+
+export { ErrorBoundary };
+
