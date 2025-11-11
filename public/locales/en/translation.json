@@ -82,6 +82,8 @@
   "couriers_table": {
     "id": "ID",
     "name": "Name",
+    "phone": "Phone number",
+    "email": "Email",
     "status": "Status",
     "current_orders_count": "Active orders",
     "total_orders_count": "Total orders",

@@ -5,6 +5,7 @@ import { DataGrid, GridCell, type GridColDef, type GridSingleSelectColDef } from
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
+import Link from '@mui/material/Link';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
 
@@ -26,6 +27,8 @@ const EMPTY = 'EMPTY';
 const enum EColumns {
   ID = 'id',
   NAME = 'name',
+  PHONE = 'phone',
+  EMAIL = 'email',
   STATUS = 'status',
   CURRENT_ORDERS_COUNT = 'currentOrdersCount',
   TOTAL_ORDERS_COUNT = 'totalOrdersCount',
@@ -44,6 +47,35 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     type: 'string',
     headerName: 'couriers_table.name',
     flex: 1,
+  },
+  [EColumns.PHONE]: {
+    field: 'phoneNumber',
+    type: 'string',
+    headerName: 'couriers_table.phone',
+    flex: 1,
+    renderCell: params => params.value ? (
+      <Link
+        component="a"
+        href={`tel:${params.value}`}
+      >
+        {params.value}
+      </Link>
+    ) : '-',
+  },
+  [EColumns.EMAIL]: {
+    field: 'email',
+    type: 'string',
+    headerName: 'couriers_table.email',
+    flex: 1,
+    renderCell: params => params.value ? (
+      <Link
+        component="a"
+        href={`mailto:${params.value}`}
+        target="_blank"
+      >
+        {params.value}
+      </Link>
+    ) : '-',
   },
   [EColumns.STATUS]: {
     field: 'status',
@@ -116,6 +148,8 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
     return [
       BASE_COLUMNS[EColumns.ID],
       BASE_COLUMNS[EColumns.NAME],
+      BASE_COLUMNS[EColumns.EMAIL],
+      BASE_COLUMNS[EColumns.PHONE],
       {
         ...statusCol,
         valueOptions: (statusCol.valueOptions as ECourierStatus[]).map(status => ({
