@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { ClientsStore, type IClientsStoreData } from '~/store/clients.store';
 
@@ -14,6 +14,14 @@ export const useClientsService = (initialData?: IClientsStoreData) => {
   const setProcessing = () => {
     clientsStore.current.doGetInit();
   }
+
+  useEffect(() => {
+    if (!initialData) {
+      return;
+    }
+
+    clientsStore.current.setData(initialData);
+  }, [initialData]);
 
   return {
     store: clientsStore.current,
