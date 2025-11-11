@@ -24,8 +24,13 @@ export const useClientService = (initialData?: IClientStoreData) => {
     }
   }
 
+  const setProcessing = () => {
+    clientStore.current.doGetInit();
+  }
+
   return {
     store: clientStore.current,
     fetch,
+    setProcessing,
   };
 }
