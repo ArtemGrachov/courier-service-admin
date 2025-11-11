@@ -41,7 +41,8 @@
   },
   "common_errors": {
     "generic": "An error occured",
-    "alert_title": "Error"
+    "alert_title": "Error",
+    "page_title": "Error"
   },
   "common_modals": {
     "close": "Close",

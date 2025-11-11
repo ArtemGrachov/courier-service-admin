@@ -41,7 +41,8 @@
   },
   "common_errors": {
     "generic": "Сталася помилка",
-    "alert_title": "Помилка"
+    "alert_title": "Помилка",
+    "page_title": "Помилка"
   },
   "common_modals": {
     "close": "Закрити",
