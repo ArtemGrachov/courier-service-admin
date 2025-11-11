@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
 } from 'react-router';
 import 'reflect-metadata';
+import { useTranslation } from 'react-i18next';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -91,3 +92,13 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     </main>
   );
 }
+
+export function meta() {
+  const { t } = useTranslation();
+
+  return [
+    { title: t('common_meta.title_template', { title: t('meta.title') }) },
+    { name: 'description', content: t('meta.description') },
+  ];
+}
+

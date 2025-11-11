@@ -188,5 +188,13 @@
     "receivers": "Отримувачі",
     "couriers": "Кур'єри",
     "options_selected": "Обрано {{count}}"
+  },
+  "meta": {
+    "title": "Адміністративна панель",
+    "description": "Адміністративна панель демо-проєкту кур'єрського сервісу"
+  },
+  "common_meta": {
+    "title_template": "{{title}} | Кур'єрський сервіс"
   }
 }
+

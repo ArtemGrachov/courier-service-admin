@@ -188,5 +188,13 @@
     "receivers": "Receivers",
     "couriers": "Couriers",
     "options_selected": "Selected {{count}}"
+  },
+  "meta": {
+    "title": "Admin panel",
+    "description": "Courier Service demo app admin panel"
+  },
+  "common_meta": {
+    "title_template": "{{title}} | Courier Service"
   }
 }
+
