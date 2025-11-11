@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import { useEffect, type ComponentType } from 'react';
 import { useRouteError } from 'react-router';
 import Box from '@mui/material/Box';
 
@@ -6,6 +6,10 @@ import PageError from '~/components/other/PageError';
 
 const ErrorBoundary: ComponentType = () => {
   const error = useRouteError();
+
+  useEffect(() => {
+    console.error(error);
+  }, []);
 
   return (
     <Box

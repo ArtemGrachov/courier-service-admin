@@ -17,12 +17,12 @@ import ErrorBoundary from '~/components/other/ErrorBoundary';
 const ViewCouriers: ComponentType = observer(() => {
   const { store: couriersStore, setProcessing } = useCouriersCtx();
 
-  const reloadFunction = () => {
+  const reloadPageData = () => {
     setProcessing();
   }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadFunction}>
+    <ReloadPageProvider reloadFunction={reloadPageData}>
       <Box
         flexDirection="column"
         display="flex"

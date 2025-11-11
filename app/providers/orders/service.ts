@@ -24,6 +24,10 @@ export const useOrdersService = (initialData?: IOrdersStoreData) => {
     }
   }
 
+  const setProcessing = () => {
+    ordersStore.current.doGetInit();
+  }
+
   useEffect(() => {
     if (!initialData) {
       return;
@@ -35,5 +39,6 @@ export const useOrdersService = (initialData?: IOrdersStoreData) => {
   return {
     store: ordersStore.current,
     fetch,
+    setProcessing,
   };
 }
