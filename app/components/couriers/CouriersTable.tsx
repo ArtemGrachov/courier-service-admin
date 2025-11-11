@@ -6,8 +6,10 @@ import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from '@mui/material/Link';
+import type { GridPaginationModel } from '@mui/x-data-grid';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
+import { ROUTE_PATHS } from '~/router/routes';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import { useRoutePath } from '~/hooks/routing/use-route-path';
@@ -15,11 +17,18 @@ import CourierStatus from '~/components/couriers/CourierStatus';
 import Rating from '~/components/other/Rating';
 
 import type { ICourier } from '~/types/models/courier';
-import { ROUTE_PATHS } from '~/router/routes';
+import type { IPagination } from '~/types/other/pagination';
+
+export interface ICouriersTableUpdatePayload {
+  page?: number;
+  itemsPerPage?: number;
+}
 
 interface IProps {
   isProcessing?: boolean;
   items?: ICourier[];
+  pagination?: IPagination;
+  onUpdate?: (payload: ICouriersTableUpdatePayload) => any;
 }
 
 const EMPTY = 'EMPTY';
@@ -138,7 +147,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   },
 };
 
-const CouriersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
+const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, onUpdate }) => {
   const { t, i18n } = useTranslation();
   const localeText = useDataGridLabels();
 
@@ -167,6 +176,20 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
     }));
   }, [i18n.language]);
 
+  const paginationChangeHandler = (model: GridPaginationModel) => {
+    if (!onUpdate) {
+      return;
+    }
+
+    const payload = { page: model.page + 1, itemsPerPage: model.pageSize };
+
+    if (model.pageSize !== pagination?.itemsPerPage) {
+      payload.page = 1;
+    }
+
+    onUpdate(payload);
+  }
+
   return (
     <DataGrid
       sx={{ width: '100%', boxSizing: 'border-box' }}
@@ -182,12 +205,19 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
       initialState={{
         pagination: {
           paginationModel: {
-            pageSize: 5,
+            page: (pagination?.currentPage ?? 1) - 1,
+            pageSize: pagination?.itemsPerPage ?? 5,
           }
         }
       }}
+      rowCount={pagination?.totalItems ?? 0}
+      paginationMode="server"
+      sortingMode="server"
+      filterMode="server"
+      onPaginationModelChange={paginationChangeHandler}
     />
   )
 }
 
 export default CouriersTable;
+
