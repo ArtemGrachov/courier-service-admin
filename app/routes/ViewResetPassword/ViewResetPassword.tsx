@@ -8,6 +8,8 @@ import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router';
 import { observer } from 'mobx-react-lite';
 
+import i18n from '~/i18n/config';
+
 import { EStatus } from '~/constants/status';
 import { ROUTES } from '~/router/routes';
 
@@ -71,3 +73,12 @@ const Wrapper = () => {
 }
 
 export default Wrapper;
+
+export function meta() {
+  const { t } = i18n;
+
+  return [
+    { title: t('common_meta.title_template', { title: t('view_reset_password.title') }) },
+  ];
+}
+

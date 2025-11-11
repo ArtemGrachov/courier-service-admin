@@ -41,7 +41,8 @@
   },
   "common_errors": {
     "generic": "An error occured",
-    "alert_title": "Error"
+    "alert_title": "Error",
+    "page_title": "Error"
   },
   "common_modals": {
     "close": "Close",
@@ -102,7 +103,9 @@
   },
   "view_upsert_courier": {
     "create_success": "Courier was reigstered successfully",
-    "edit_success": "Courier data was updated successfully"
+    "edit_success": "Courier data was updated successfully",
+    "title_create": "Add courier",
+    "title_edit": "Update courier ID {{id}} {{name}} data"
   },
   "page_error": {
     "title": "Page data loading error",
@@ -161,10 +164,6 @@
     "phone": "Phone number",
     "email": "Email"
   },
-  "view_client": {
-    "error_client_data": "Client data loading error",
-    "error_orders_data": "Orders data loading error"
-  },
   "courier_details": {
     "id": "Courier ID",
     "rating": "Rating",
@@ -173,11 +172,6 @@
     "total_orders_count": "Total orders",
     "phone": "Phone number",
     "email": "Email"
-  },
-  "view_courier": {
-    "error_courier_data": "Courier data loading error",
-    "error_active_orders_data": "Map data loading error",
-    "error_orders_data": "Orders data loading error"
   },
   "map": {
     "close_all_windows": "Close all windows"
@@ -188,5 +182,34 @@
     "receivers": "Receivers",
     "couriers": "Couriers",
     "options_selected": "Selected {{count}}"
+  },
+  "meta": {
+    "title": "Admin panel",
+    "description": "Courier Service demo app admin panel"
+  },
+  "common_meta": {
+    "title_template": "{{title}} | Courier Service"
+  },
+  "view_client": {
+    "title": "Client ID {{id}} {{name}}"
+  },
+  "view_clients": {
+    "title": "Clients"
+  },
+  "view_courier": {
+    "title": "Courier ID {{id}} {{name}}"
+  },
+  "view_couriers": {
+    "title": "Couriers"
+  },
+  "view_map": {
+    "title": "Map"
+  },
+  "view_order": {
+    "title": "Order ID {{id}}"
+  },
+  "view_orders": {
+    "title": "Orders"
   }
 }
+

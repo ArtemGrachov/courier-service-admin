@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
 } from 'react-router';
 import 'reflect-metadata';
+import { useTranslation } from 'react-i18next';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -20,7 +21,7 @@ import { ModalsProvider } from '~/providers/modals';
 import ModalRoot from '~/components/modals/ModalRoot';
 import PageLoader from '~/components/other/PageLoader';
 
-import '~/i18n/config';
+import i18n from '~/i18n/config';
 import './app.scss';
 
 const darkTheme = createTheme({
@@ -91,3 +92,13 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     </main>
   );
 }
+
+export function meta() {
+  const { t } = i18n;
+
+  return [
+    { title: t('common_meta.title_template', { title: t('meta.title') }) },
+    { name: 'description', content: t('meta.description') },
+  ];
+}
+

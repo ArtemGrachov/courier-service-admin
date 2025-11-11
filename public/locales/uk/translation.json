@@ -41,7 +41,8 @@
   },
   "common_errors": {
     "generic": "Сталася помилка",
-    "alert_title": "Помилка"
+    "alert_title": "Помилка",
+    "page_title": "Помилка"
   },
   "common_modals": {
     "close": "Закрити",
@@ -102,7 +103,9 @@
   },
   "view_upsert_courier": {
     "create_success": "Кур'єра було успішно зареєстровано",
-    "edit_success": "Дані кур'єра було успішно оновлено"
+    "edit_success": "Дані кур'єра було успішно оновлено",
+    "title_create": "Додати кур'єра",
+    "title_edit": "Оновити дані кур'єра ID {{id}} {{name}}"
   },
   "page_error": {
     "title": "Помилка завантаження даних сторінки",
@@ -161,10 +164,6 @@
     "phone": "Номер телефону",
     "email": "Email"
   },
-  "view_client": {
-    "error_client_data": "Помилка завантаження даних клієнта",
-    "error_orders_data": "Помилка завантаження замовлень"
-  },
   "courier_details": {
     "id": "Кур'єр ID",
     "rating": "Рейтинг",
@@ -173,11 +172,6 @@
     "total_orders_count": "Замовлень загалом",
     "phone": "Номер телефону",
     "email": "Email"
-  },
-  "view_courier": {
-    "error_courier_data": "Помилка завантаження даних кур'єра",
-    "error_active_orders_data": "Помилка завантаження даних карти",
-    "error_orders_data": "Помилка завантаження замовлень"
   },
   "map": {
     "close_all_windows": "Закрити усі вікна"
@@ -188,5 +182,34 @@
     "receivers": "Отримувачі",
     "couriers": "Кур'єри",
     "options_selected": "Обрано {{count}}"
+  },
+  "meta": {
+    "title": "Адміністративна панель",
+    "description": "Адміністративна панель демо-проєкту кур'єрського сервісу"
+  },
+  "common_meta": {
+    "title_template": "{{title}} | Кур'єрський сервіс"
+  },
+  "view_client": {
+    "title": "Клієнт ID {{id}} {{name}}"
+  },
+  "view_clients": {
+    "title": "Клієнти"
+  },
+  "view_courier": {
+    "title": "Кур'єр' ID {{id}} {{name}}"
+  },
+  "view_couriers": {
+    "title": "Кур'єри"
+  },
+  "view_map": {
+    "title": "Карта"
+  },
+  "view_order": {
+    "title": "Замовлення ID {{id}}"
+  },
+  "view_orders": {
+    "title": "Замовлення"
   }
 }
+

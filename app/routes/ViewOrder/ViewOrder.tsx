@@ -4,7 +4,11 @@ import type { Route } from '.react-router/types/app/routes/ViewOrder/+types/View
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
+import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
+
+import i18n from '~/i18n/config';
 
 import { EStatus } from '~/constants/status';
 
@@ -12,6 +16,7 @@ import { OrderProvider, useOrderCtx } from '~/providers/order';
 import type { IOrderStoreData } from '~/providers/order/store';
 import { fetchOrder } from '~/providers/order/data';
 import { ReloadPageProvider } from '~/providers/reload-page';
+import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import OrderCard from '~/components/orders/OrderCard';
 import ClientCard from '~/components/clients/ClientCard';
@@ -20,7 +25,9 @@ import Map from '~/components/map/Map';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 const ViewOrder: ComponentType = observer(() => {
+  const { t } = useTranslation();
   const { store: orderStore, setProcessing } = useOrderCtx();
+  const titlePortalRef = useTitlePortalCtx();
 
   const order = orderStore.data;
 
@@ -30,6 +37,9 @@ const ViewOrder: ComponentType = observer(() => {
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Portal container={() => titlePortalRef?.current ?? null}>
+        {t('view_order.title', { id: order?.id })}
+      </Portal>
       <Box
         flexDirection="column"
         display="flex"
@@ -94,4 +104,13 @@ export async function clientLoader({
 }
 
 export { ErrorBoundary };
+
+export function meta({ loaderData }: Route.MetaArgs) {
+  const { t } = i18n;
+  const order = loaderData.orderState.data;
+
+  return [
+    { title: t('common_meta.title_template', { title: t('view_order.title', { id: order?.id }) }) },
+  ];
+}
 
