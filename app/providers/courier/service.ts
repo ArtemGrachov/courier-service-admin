@@ -24,8 +24,13 @@ export const useCourierService = (initialData?: ICourierStoreData) => {
     }
   }
 
+  const setProcessing = () => {
+    courierStore.current.doGetInit();
+  }
+
   return {
     store: courierStore.current,
     fetch,
+    setProcessing,
   };
 }

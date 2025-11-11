@@ -1,55 +1,43 @@
-import { useMemo, type ComponentType } from 'react';
-import { Box } from '@mui/material';
+import { type ComponentType } from 'react';
+import Box from '@mui/material/Box';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
 
 import { EStatus } from '~/constants/status';
 
+import { ReloadPageProvider } from '~/providers/reload-page';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { fetchCouriers } from '~/data/fetch-couriers';
 import type { ICouriersStoreData } from '~/store/couriers.store';
-import { ReloadPageProvider } from '~/providers/reload-page';
 
 import CouriersHeader from './components/CouriersHeader';
 import CouriersTable from '~/components/couriers/CouriersTable';
-import PageError from '~/components/other/PageError';
+import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 const ViewCouriers: ComponentType = observer(() => {
-  const { store: couriersStore, fetch } = useCouriersCtx();
-
-  const showPageError = useMemo(() => {
-    return couriersStore.isError || couriersStore.getError;
-  }, [couriersStore.isError, couriersStore.getError]);
+  const { store: couriersStore, setProcessing } = useCouriersCtx();
 
   const reloadPageData = () => {
-    fetch()
+    setProcessing();
   }
 
   return (
-    <Box
-      flexDirection="column"
-      display="flex"
-      gap={2}
-      padding={3}
-      width="100%"
-      boxSizing="border-box"
-    >
-      <ReloadPageProvider reloadFunction={reloadPageData}>
-        {showPageError && (
-          <PageError
-            isProcessing={couriersStore.isProcessing}
-            error={couriersStore.getError}
-          />
-        )}
-      </ReloadPageProvider>
-      {!showPageError && (<>
+    <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Box
+        flexDirection="column"
+        display="flex"
+        gap={2}
+        padding={3}
+        width="100%"
+        boxSizing="border-box"
+      >
         <CouriersHeader />
         <CouriersTable
           isProcessing={couriersStore.isProcessing}
           items={couriersStore.data?.data}
         />
-      </>)}
-    </Box>
+      </Box>
+    </ReloadPageProvider>
   )
 })
 
@@ -72,16 +60,14 @@ export async function clientLoader() {
     data: null,
   };
 
-  try {
-    const data = await fetchCouriers();
-    couriersState.data = data;
-    couriersState.getStatus = EStatus.SUCCESS;
-  } catch (err) {
-    couriersState.getError = err;
-    couriersState.getStatus = EStatus.ERROR;
-  }
+  const data = await fetchCouriers();
+  couriersState.data = data;
+  couriersState.getStatus = EStatus.SUCCESS;
 
   return {
     couriersState,
   };
 }
+
+export { ErrorBoundary };
+

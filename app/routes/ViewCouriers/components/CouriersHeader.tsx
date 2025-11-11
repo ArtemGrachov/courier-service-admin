@@ -9,16 +9,30 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 
 import { ROUTES } from '~/router/routes';
 
+import { useReloadPageCtx } from '~/providers/reload-page';
+
 import { useRoutePath } from '~/hooks/routing/use-route-path';
+import { useCouriersCtx } from '~/providers/couriers';
 
 const CouriersHeader: ComponentType = () => {
+  const { store: couriersStore } = useCouriersCtx();
+
   const { t } = useTranslation();
   const routePath = useRoutePath();
+  const reloadPage = useReloadPageCtx();
+
+  const refreshHandler = async () => {
+    reloadPage!();
+  }
 
   return (
     <Stack direction="row" justifyContent="space-between" gap={4}>
       <Stack direction="row" gap={2}>
-        <IconButton color="info">
+        <IconButton
+          color="info"
+          loading={couriersStore.isProcessing}
+          onClick={refreshHandler}
+        >
           <RefreshIcon />
         </IconButton>
         <Button
