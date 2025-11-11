@@ -22,8 +22,13 @@ export const useOrderService = (initialData?: IOrderStoreData) => {
     }
   }
 
+  const setProcessing = () => {
+    orderStore.current.doGetInit();
+  }
+
   return {
     store: orderStore.current,
     fetch,
+    setProcessing,
   };
 }
