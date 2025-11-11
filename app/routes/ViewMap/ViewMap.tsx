@@ -7,6 +7,8 @@ import { useLoaderData } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMap';
 
+import i18n from '~/i18n/config';
+
 import { MapFiltersProvider } from './providers/map-filters';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
@@ -74,3 +76,12 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
     couriersState,
   };
 }
+
+export function meta() {
+  const { t } = i18n;
+
+  return [
+    { title: t('common_meta.title_template', { title: t('view_map.title') }) },
+  ];
+}
+

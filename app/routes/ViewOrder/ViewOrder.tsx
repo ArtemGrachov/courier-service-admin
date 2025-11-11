@@ -8,6 +8,8 @@ import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
+import i18n from '~/i18n/config';
+
 import { EStatus } from '~/constants/status';
 
 import { OrderProvider, useOrderCtx } from '~/providers/order';
@@ -36,7 +38,7 @@ const ViewOrder: ComponentType = observer(() => {
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
       <Portal container={() => titlePortalRef?.current ?? null}>
-        {t('view_order.title', { id: order.id })}
+        {t('view_order.title', { id: order?.id })}
       </Portal>
       <Box
         flexDirection="column"
@@ -102,4 +104,12 @@ export async function clientLoader({
 }
 
 export { ErrorBoundary };
+
+export function meta() {
+  const { t } = i18n;
+
+  return [
+    { title: t('common_meta.title_template', { title: t('view_order.title') }) },
+  ];
+}
 

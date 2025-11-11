@@ -7,6 +7,8 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 
+import i18n from '~/i18n/config';
+
 import { EStatus } from '~/constants/status';
 
 import { ForgotPasswordProvider, useForgotPasswordCtx } from './providers/forgot-password';
@@ -64,3 +66,12 @@ const Wrapper = () => {
 }
 
 export default Wrapper;
+
+export function meta() {
+  const { t } = i18n;
+
+  return [
+    { title: t('common_meta.title_template', { title: t('view_forgot_password.title') }) },
+  ];
+}
+

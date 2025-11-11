@@ -21,7 +21,7 @@ import { ModalsProvider } from '~/providers/modals';
 import ModalRoot from '~/components/modals/ModalRoot';
 import PageLoader from '~/components/other/PageLoader';
 
-import '~/i18n/config';
+import i18n from '~/i18n/config';
 import './app.scss';
 
 const darkTheme = createTheme({
@@ -94,7 +94,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 }
 
 export function meta() {
-  const { t } = useTranslation();
+  const { t } = i18n;
 
   return [
     { title: t('common_meta.title_template', { title: t('meta.title') }) },

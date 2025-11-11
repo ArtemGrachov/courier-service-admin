@@ -7,6 +7,8 @@ import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
+import i18n from '~/i18n/config';
+
 import { EStatus } from '~/constants/status';
 import { EOrderStatus } from '~/constants/order';
 
@@ -160,4 +162,12 @@ export async function clientLoader({
 }
 
 export { ErrorBoundary };
+
+export function meta() {
+  const { t } = i18n;
+
+  return [
+    { title: t('common_meta.title_template', { title: t('view_courier.title') }) },
+  ];
+}
 
