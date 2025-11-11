@@ -23,7 +23,11 @@ export class CouriersStore implements ICouriersStoreData {
     makeAutoObservable(this);
   }
 
-  public setData(data: ICouriersStoreData) {
+  public setData(data: Partial<ICouriersStoreData>) {
+    if (data.getStatus === EStatus.ERROR) {
+      delete data.data;
+    }
+
     Object.assign(this, data);
   }
 

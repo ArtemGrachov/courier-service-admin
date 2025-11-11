@@ -1,24 +1,30 @@
-import { createContext } from 'react-router';
+import { comparePaths } from '~/utils/path';
 
-export const PrevRouteContext = createContext<string | null>(null);
+export class PrevRoute {
+  private static _instance: PrevRoute;
 
-export const prevRoute = (context: any, value: string) => {
-  const check = () => {
-    const prevValue = context.get(PrevRouteContext);
-    console.log(prevValue, value)
-    const isSame = prevValue === value;
+  private _path: string | null = null;
 
-    return isSame;
+  private constructor() {}
+
+  public static get instance(): PrevRoute {
+    if (!PrevRoute._instance) {
+      PrevRoute._instance = new PrevRoute();
+    }
+
+    return PrevRoute._instance;
   }
 
-  const update = () => {
-    console.log('set!', context)
-    context.set(PrevRouteContext, value);
+  public updatePath(path: string) {
+    this._path = path;
   }
 
-  return {
-    check,
-    update,
-  };
+  public comparePath(path: string) {
+    if (this._path == null) {
+      return false;
+    }
+
+    return comparePaths(path, this._path);
+  }
 }
 
