@@ -23,12 +23,7 @@ const PageError: ComponentType<IProps> = ({ title, error, isProcessing }) => {
       setIsLoading(true);
     }
 
-    if (reloadFunction) {
-      reloadFunction();
-      return;
-    }
-
-    window.location.reload();
+    reloadFunction();
   }
 
   return (
