@@ -82,6 +82,8 @@
   "couriers_table": {
     "id": "ID",
     "name": "Ім'я",
+    "phone": "Номер телефону",
+    "email": "Email",
     "status": "Статус",
     "current_orders_count": "Активних замовлень",
     "total_orders_count": "Замовлень загалом",
