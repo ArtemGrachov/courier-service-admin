@@ -21,6 +21,7 @@ import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import { useSuccessSnackbar } from '~/hooks/other/use-success-snackbar';
+import { useRoutePath } from '~/hooks/routing/use-route-path';
 import FormCourier from '~/components/forms/FormCourier';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
@@ -36,6 +37,7 @@ const ViewUpsertCourier: ComponentType = observer(() => {
   const { courierId } = useParams();
   const isEdit = !!courierId;
   const titlePortalRef = useTitlePortalCtx();
+  const routePath = useRoutePath();
 
   const courier = courierStore.data;
 
@@ -67,13 +69,13 @@ const ViewUpsertCourier: ComponentType = observer(() => {
   const submitCreate = async (formValue: IFormCourier) => {
     await submit(formValue);
     successSnackbar(t('view_upsert_courier.create_success'));
-    await navigate(ROUTES.COURIERS);
+    await navigate(routePath(ROUTES.COURIERS));
   }
 
   const submitUpdate = async (formValue: IFormCourier) => {
     await submit(formValue);
     successSnackbar(t('view_upsert_courier.edit_success'));
-    await navigate(ROUTES.COURIERS);
+    await navigate(routePath(ROUTES.COURIER, { courierId: courierId ?? 1 }));
   }
 
   return (
