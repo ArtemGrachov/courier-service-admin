@@ -105,11 +105,12 @@ export async function clientLoader({
 
 export { ErrorBoundary };
 
-export function meta() {
+export function meta({ loaderData }: Route.MetaArgs) {
   const { t } = i18n;
+  const order = loaderData.orderState.data;
 
   return [
-    { title: t('common_meta.title_template', { title: t('view_order.title') }) },
+    { title: t('common_meta.title_template', { title: t('view_order.title', { id: order?.id }) }) },
   ];
 }
 

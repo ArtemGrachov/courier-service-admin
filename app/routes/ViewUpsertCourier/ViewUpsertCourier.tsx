@@ -99,7 +99,7 @@ const Wrapper = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
   return (
-    <CourierProvider initialData={loaderData.courierData}>
+    <CourierProvider initialData={loaderData.courierState}>
       <UpsertCourierProvider>
         <ViewUpsertCourier />
       </UpsertCourierProvider>
@@ -125,17 +125,18 @@ export async function clientLoader({
   }
 
   return {
-    courierData: courierState,
+    courierState,
   };
 }
 
 export { ErrorBoundary };
 
-export function meta() {
+export function meta({ loaderData }: Route.MetaArgs) {
   const { t } = i18n;
+  const courier = loaderData.courierState.data;
 
   return [
-    { title: t('common_meta.title_template', { title: t('view_upsert_courier.title') }) },
+    { title: t('common_meta.title_template', { title: t('view_upsert_courier.title', { id: courier?.id, name: courier?.name }) }) },
   ];
 }
 

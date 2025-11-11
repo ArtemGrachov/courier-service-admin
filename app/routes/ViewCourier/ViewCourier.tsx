@@ -163,11 +163,12 @@ export async function clientLoader({
 
 export { ErrorBoundary };
 
-export function meta() {
+export function meta({ loaderData }: Route.MetaArgs) {
   const { t } = i18n;
+  const courier = loaderData.courierState.data;
 
   return [
-    { title: t('common_meta.title_template', { title: t('view_courier.title') }) },
+    { title: t('common_meta.title_template', { title: t('view_courier.title', { id: courier?.id, name: courier?.name }) }) },
   ];
 }
 
