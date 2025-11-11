@@ -178,5 +178,15 @@
     "error_courier_data": "Courier data loading error",
     "error_active_orders_data": "Map data loading error",
     "error_orders_data": "Orders data loading error"
+  },
+  "map": {
+    "close_all_windows": "Close all windows"
+  },
+  "map_filters": {
+    "status": "Status",
+    "senders": "Senders",
+    "receivers": "Receivers",
+    "couriers": "Couriers",
+    "options_selected": "Selected {{count}}"
   }
 }

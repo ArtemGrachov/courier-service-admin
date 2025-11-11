@@ -4,7 +4,7 @@ import { ROUTE_PATHS } from './router/routes';
 export default [
   layout('./layouts/default/LayoutDefault.tsx', [
     index('routes/home.tsx'),
-    route(ROUTE_PATHS.MAP, './routes/EmptyPlaceholder.tsx', { id: ROUTE_PATHS.MAP }),
+    route(ROUTE_PATHS.MAP, './routes/ViewMap/ViewMap.tsx', { id: ROUTE_PATHS.MAP }),
     route(ROUTE_PATHS.COURIERS, './routes/ViewCouriers/ViewCouriers.tsx', { id: ROUTE_PATHS.COURIERS }),
     route(ROUTE_PATHS.COURIER_ADD, './routes/ViewUpsertCourier/ViewUpsertCourier.tsx', { id: ROUTE_PATHS.COURIER_ADD }),
     route(ROUTE_PATHS.COURIER_EDIT, './routes/ViewUpsertCourier/ViewUpsertCourier.tsx', { id: ROUTE_PATHS.COURIER_EDIT }),

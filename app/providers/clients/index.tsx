@@ -2,7 +2,7 @@ import { createContext, useContext, type ComponentType, type PropsWithChildren }
 
 import { useClientsService } from './service';
 
-import type { IClientsStoreData } from './store';
+import type { IClientsStoreData } from '../../store/clients.store';
 
 export const ClientsContext = createContext<ReturnType<typeof useClientsService>>(null as any);
 

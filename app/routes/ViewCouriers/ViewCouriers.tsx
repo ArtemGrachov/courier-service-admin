@@ -6,8 +6,8 @@ import { useLoaderData } from 'react-router';
 import { EStatus } from '~/constants/status';
 
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
-import { fetchCouriers } from '~/providers/couriers/data';
-import type { ICouriersStoreData } from '~/providers/couriers/store';
+import { fetchCouriers } from '~/data/fetch-couriers';
+import type { ICouriersStoreData } from '~/store/couriers.store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import CouriersHeader from './components/CouriersHeader';

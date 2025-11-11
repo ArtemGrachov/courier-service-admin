@@ -154,7 +154,11 @@ const ViewCourier: ComponentType<IProps> = observer(({ courierLoadingError, orde
               />
             )}
             {!showActiveOrdersError && courier && (
-              <Map orders={activeOrdersStore.data?.data} />
+              <Map
+                orders={activeOrdersStore.data?.data}
+                couriers={[courier]}
+                showPopupOrderData={true}
+              />
             )}
           </Grid>
         </Grid>

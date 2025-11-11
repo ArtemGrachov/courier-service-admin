@@ -1,10 +1,10 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-import { CouriersStore, type ICouriersStoreData } from './store';
+import { CouriersStore, type ICouriersStoreData } from '../../store/couriers.store';
 
 import type { IGetCouriersQuery } from '~/types/api/couriers';
 
-import { fetchCouriers } from '~/providers/couriers/data';
+import { fetchCouriers } from '~/data/fetch-couriers';
 
 export const useCouriersService = (initialData?: ICouriersStoreData) => {
   const couriersStore = useRef<CouriersStore>(null as unknown as CouriersStore);
@@ -23,6 +23,14 @@ export const useCouriersService = (initialData?: ICouriersStoreData) => {
       throw err;
     }
   }
+
+  useEffect(() => {
+    if (!initialData) {
+      return;
+    }
+
+    couriersStore.current.setData(initialData);
+  }, [initialData]);
 
   return {
     store: couriersStore.current,

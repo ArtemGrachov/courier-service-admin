@@ -178,5 +178,15 @@
     "error_courier_data": "Помилка завантаження даних кур'єра",
     "error_active_orders_data": "Помилка завантаження даних карти",
     "error_orders_data": "Помилка завантаження замовлень"
+  },
+  "map": {
+    "close_all_windows": "Закрити усі вікна"
+  },
+  "map_filters": {
+    "status": "Статус",
+    "senders": "Відправники",
+    "receivers": "Отримувачі",
+    "couriers": "Кур'єри",
+    "options_selected": "Обрано {{count}}"
   }
 }

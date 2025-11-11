@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { OrdersStore, type IOrdersStoreData } from './store';
 
@@ -23,6 +23,14 @@ export const useOrdersService = (initialData?: IOrdersStoreData) => {
       throw err;
     }
   }
+
+  useEffect(() => {
+    if (!initialData) {
+      return;
+    }
+
+    ordersStore.current.setData(initialData);
+  }, [initialData]);
 
   return {
     store: ordersStore.current,
