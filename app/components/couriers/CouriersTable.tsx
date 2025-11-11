@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type ComponentType } from 'react';
+import { useMemo, useRef, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router';
 import { DataGrid, GridCell, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
@@ -178,6 +178,14 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
       }}
       showToolbar={true}
       localeText={localeText}
+      pageSizeOptions={[5, 10, 25]}
+      initialState={{
+        pagination: {
+          paginationModel: {
+            pageSize: 5,
+          }
+        }
+      }}
     />
   )
 }
