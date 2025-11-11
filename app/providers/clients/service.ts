@@ -1,10 +1,8 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { ClientsStore, type IClientsStoreData } from '~/store/clients.store';
 
 import type { IGetClientsQuery } from '~/types/api/clients';
-
-import { fetchClients } from '../../data/fetch-clients';
 
 export const useClientsService = (initialData?: IClientsStoreData) => {
   const clientsStore = useRef<ClientsStore>(null as unknown as ClientsStore);
@@ -13,24 +11,20 @@ export const useClientsService = (initialData?: IClientsStoreData) => {
     clientsStore.current = new ClientsStore(initialData);
   }
 
-  const fetch = async (query?: IGetClientsQuery) => {
-    try {
-      clientsStore.current.doGetInit();
-      const data = await fetchClients(query)
-      clientsStore.current.doGetSuccess(data);
-    } catch (err) {
-      clientsStore.current.doGetError(err);
-      throw err;
-    }
-  }
-
   const setProcessing = () => {
     clientsStore.current.doGetInit();
   }
 
+  useEffect(() => {
+    if (!initialData) {
+      return;
+    }
+
+    clientsStore.current.setData(initialData);
+  }, [initialData]);
+
   return {
     store: clientsStore.current,
-    fetch,
     setProcessing,
   };
 }

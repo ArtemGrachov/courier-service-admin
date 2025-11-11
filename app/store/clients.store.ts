@@ -23,6 +23,14 @@ export class ClientsStore implements IClientsStoreData {
     makeAutoObservable(this);
   }
 
+  public setData(data: Partial<IClientsStoreData>) {
+    if (data.getStatus === EStatus.ERROR) {
+      delete data.data;
+    }
+
+    Object.assign(this, data);
+  }
+
   public doGetInit() {
     this.getStatus = EStatus.PROCESSING;
   }

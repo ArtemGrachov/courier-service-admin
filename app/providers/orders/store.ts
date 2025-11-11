@@ -23,7 +23,11 @@ export class OrdersStore implements IOrdersStoreData {
     makeAutoObservable(this);
   }
 
-  public setData(data: IOrdersStoreData) {
+  public setData(data: Partial<IOrdersStoreData>) {
+    if (data.getStatus === EStatus.ERROR) {
+      delete data.data;
+    }
+
     Object.assign(this, data);
   }
 
