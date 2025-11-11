@@ -1,11 +1,19 @@
 import { type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, Link } from '@mui/material';
+import { Link as RouterLink } from 'react-router';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+
+import { ROUTE_PATHS } from '~/router/routes';
+
+import { useRoutePath } from '~/hooks/routing/use-route-path';
 
 import Rating from '~/components/other/Rating';
 import CourierStatus from '~/components/couriers/CourierStatus';
@@ -19,6 +27,7 @@ interface IProps {
 const CourierDetails: ComponentType<IProps> = ({ courier }) => {
   const { phoneNumber, email } = courier;
   const { t } = useTranslation();
+  const routePath = useRoutePath();
 
   return (
     <Card>
@@ -26,13 +35,21 @@ const CourierDetails: ComponentType<IProps> = ({ courier }) => {
         <Stack gap={2}>
           <Grid container spacing={2}>
             <Grid size={6} gap={2}>
-              <Box gap={1}>
-                <Typography variant="subtitle1" component="div">
-                  {t('courier_details.id')} #{courier.id}
-                </Typography>
-                <Typography variant="h5" component="div">
-                  {courier.name}
-                </Typography>
+              <Box gap={1} display="flex" flexDirection="row" alignItems="center">
+                <IconButton
+                  component={RouterLink}
+                  to={routePath(ROUTE_PATHS.COURIER_EDIT, { courierId: courier.id })}
+                >
+                  <EditIcon />
+                </IconButton>
+                <Box gap={1}>
+                  <Typography variant="subtitle1" component="div">
+                    {t('courier_details.id')} #{courier.id}
+                  </Typography>
+                  <Typography variant="h5" component="div">
+                    {courier.name}
+                  </Typography>
+                </Box>
               </Box>
             </Grid>
             <Grid size={6} gap={2}>
