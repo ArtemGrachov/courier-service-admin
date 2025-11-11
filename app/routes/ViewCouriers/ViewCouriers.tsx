@@ -1,7 +1,7 @@
 import { useMemo, type ComponentType } from 'react';
 import { Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 
 import { EStatus } from '~/constants/status';
 
@@ -15,14 +15,16 @@ import CouriersTable from '~/components/couriers/CouriersTable';
 import PageError from '~/components/other/PageError';
 
 const ViewCouriers: ComponentType = observer(() => {
-  const { store: couriersStore, fetch } = useCouriersCtx();
+  const { store: couriersStore, setProcessing } = useCouriersCtx();
+  const navigate = useNavigate();
 
   const showPageError = useMemo(() => {
     return couriersStore.isError || couriersStore.getError;
   }, [couriersStore.isError, couriersStore.getError]);
 
   const reloadPageData = () => {
-    fetch()
+    setProcessing();
+    navigate('.', { replace: true });
   }
 
   return (

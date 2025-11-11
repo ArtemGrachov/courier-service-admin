@@ -22,7 +22,6 @@ const CouriersHeader: ComponentType = () => {
   const reloadPage = useReloadPageCtx();
 
   const refreshHandler = async () => {
-    console.log('check')
     reloadPage!();
   }
 

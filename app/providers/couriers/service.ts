@@ -1,10 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { CouriersStore, type ICouriersStoreData } from '../../store/couriers.store';
-
-import type { IGetCouriersQuery } from '~/types/api/couriers';
-
-import { fetchCouriers } from '~/data/fetch-couriers';
+import { CouriersStore, type ICouriersStoreData } from '~/store/couriers.store';
 
 export const useCouriersService = (initialData?: ICouriersStoreData) => {
   const couriersStore = useRef<CouriersStore>(null as unknown as CouriersStore);
@@ -13,15 +9,8 @@ export const useCouriersService = (initialData?: ICouriersStoreData) => {
     couriersStore.current = new CouriersStore(initialData);
   }
 
-  const fetch = async (query?: IGetCouriersQuery) => {
-    try {
-      couriersStore.current.doGetInit();
-      const data = await fetchCouriers(query)
-      couriersStore.current.doGetSuccess(data);
-    } catch (err) {
-      couriersStore.current.doGetError(err);
-      throw err;
-    }
+  const setProcessing = () => {
+    couriersStore.current.doGetInit();
   }
 
   useEffect(() => {
@@ -34,6 +23,6 @@ export const useCouriersService = (initialData?: ICouriersStoreData) => {
 
   return {
     store: couriersStore.current,
-    fetch,
+    setProcessing,
   };
 }
