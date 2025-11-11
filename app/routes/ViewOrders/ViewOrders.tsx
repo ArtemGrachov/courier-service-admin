@@ -1,4 +1,4 @@
-import { useMemo, type ComponentType } from 'react';
+import { type ComponentType } from 'react';
 import { Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
@@ -12,44 +12,32 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 
 import OrdersHeader from './components/OrdersHeader';
 import OrdersTable from '~/components/orders/OrdersTable';
-import PageError from '~/components/other/PageError';
+import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 const ViewOrders: ComponentType = observer(() => {
-  const { store: ordersStore, fetch } = useOrdersCtx();
-
-  const showPageError = useMemo(() => {
-    return ordersStore.isError || ordersStore.getError;
-  }, [ordersStore.isError, ordersStore.getError]);
+  const { store: ordersStore, setProcessing } = useOrdersCtx();
 
   const reloadPageData = () => {
-    fetch()
+    setProcessing();
   }
 
   return (
-    <Box
-      flexDirection="column"
-      display="flex"
-      gap={2}
-      padding={3}
-      width="100%"
-      boxSizing="border-box"
-    >
-      <ReloadPageProvider reloadFunction={reloadPageData}>
-        {showPageError && (
-          <PageError
-            isProcessing={ordersStore.isProcessing}
-            error={ordersStore.getError}
-          />
-        )}
-      </ReloadPageProvider>
-      {!showPageError && (<>
+    <ReloadPageProvider reloadFunction={reloadPageData}>
+      <Box
+        flexDirection="column"
+        display="flex"
+        gap={2}
+        padding={3}
+        width="100%"
+        boxSizing="border-box"
+      >
         <OrdersHeader />
         <OrdersTable
           isProcessing={ordersStore.isProcessing}
           items={ordersStore.data?.data}
         />
-      </>)}
-    </Box>
+      </Box>
+    </ReloadPageProvider>
   )
 })
 
@@ -72,16 +60,14 @@ export async function clientLoader() {
     data: null,
   };
 
-  try {
-    const data = await fetchOrders();
-    ordersState.data = data;
-    ordersState.getStatus = EStatus.SUCCESS;
-  } catch (err) {
-    ordersState.getError = err;
-    ordersState.getStatus = EStatus.ERROR;
-  }
+  const data = await fetchOrders();
+  ordersState.data = data;
+  ordersState.getStatus = EStatus.SUCCESS;
 
   return {
     ordersState,
   };
 }
+
+export { ErrorBoundary };
+
