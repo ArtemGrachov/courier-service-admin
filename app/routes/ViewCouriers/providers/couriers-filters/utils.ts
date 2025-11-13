@@ -15,6 +15,18 @@ export const formValueToRouteQuery = (formValue: IFormCouriersFilter) => {
     params.itemsPerPage = formValue.itemsPerPage.toString();
   }
 
+  if (formValue.nameSearch) {
+    params.nameSearch = formValue.nameSearch;
+  }
+
+  if (formValue.phoneSearch) {
+    params.phoneSearch = formValue.phoneSearch;
+  }
+
+  if (formValue.emailSearch) {
+    params.emailSearch = formValue.emailSearch;
+  }
+
   return createSearchParams(params);
 }
 
@@ -24,6 +36,9 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
 
   const rawPage = newSearchParams.get('page');
   const rawItemsPerPage = newSearchParams.get('itemsPerPage');
+  const nameSearch = newSearchParams.get('nameSearch');
+  const emailSearch = newSearchParams.get('emailSearch');
+  const phoneSearch = newSearchParams.get('phoneSearch');
 
   if (rawPage != null) {
     const numPage = +rawPage;
@@ -44,6 +59,9 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   const newFormValue: IFormCouriersFilter = {
     page,
     itemsPerPage,
+    nameSearch,
+    emailSearch,
+    phoneSearch,
   };
 
   return newFormValue;
