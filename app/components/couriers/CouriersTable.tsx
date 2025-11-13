@@ -1,12 +1,16 @@
 import { useMemo, useRef, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router';
-import { DataGrid, GridCell, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
+import { useDebouncedCallback } from 'use-debounce';
+import { DataGrid, GridCell, type GridCallbackDetails, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from '@mui/material/Link';
-import type { GridPaginationModel } from '@mui/x-data-grid';
+import {
+  type GridPaginationModel,
+  type GridFilterModel,
+} from '@mui/x-data-grid';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
 import { ROUTE_PATHS } from '~/router/routes';
@@ -22,6 +26,9 @@ import type { IPagination } from '~/types/other/pagination';
 export interface ICouriersTableUpdatePayload {
   page?: number;
   itemsPerPage?: number;
+  nameSearch?: string;
+  emailSearch?: string;
+  phoneSearch?: string;
 }
 
 interface IProps {
@@ -50,12 +57,16 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     field: 'id',
     headerName: 'couriers_table.id',
     width: 70,
+    filterable: false,
+    sortable: false,
   },
   [EColumns.NAME]: {
     field: 'name',
     type: 'string',
     headerName: 'couriers_table.name',
     flex: 1,
+    sortable: true,
+    filterable: true,
   },
   [EColumns.PHONE]: {
     field: 'phoneNumber',
@@ -70,6 +81,8 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
         {params.value}
       </Link>
     ) : '-',
+    sortable: false,
+    filterable: true,
   },
   [EColumns.EMAIL]: {
     field: 'email',
@@ -85,6 +98,8 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
         {params.value}
       </Link>
     ) : '-',
+    sortable: false,
+    filterable: true,
   },
   [EColumns.STATUS]: {
     field: 'status',
@@ -93,25 +108,33 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     flex: 1,
     renderCell: params => <CourierStatus status={params.value} />,
     valueOptions: COURIER_STATUSES,
+    sortable: false,
+    filterable: true,
   } as GridSingleSelectColDef,
   [EColumns.CURRENT_ORDERS_COUNT]: {
     field: 'currentOrdersCount',
     type: 'number',
     headerName: 'couriers_table.current_orders_count',
     flex: 1,
+    sortable: true,
+    filterable: false,
   },
   [EColumns.TOTAL_ORDERS_COUNT]: {
     field: 'totalOrdersCount',
     type: 'number',
     headerName: 'couriers_table.total_orders_count',
     flex: 1,
+    sortable: true,
+    filterable: false,
   },
   [EColumns.RATING]: {
     field: 'rating',
     type: 'number',
     headerName: 'couriers_table.rating',
     width: 100,
-    renderCell: params => <Rating rating={params.value} />
+    renderCell: params => <Rating rating={params.value} />,
+    sortable: true,
+    filterable: false,
   },
   [EColumns.ACTIONS]: {
     field: 'actions',
@@ -150,6 +173,8 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
 const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, onUpdate }) => {
   const { t, i18n } = useTranslation();
   const localeText = useDataGridLabels();
+  const paginationModel = useRef<GridPaginationModel | null>(null);
+  const filtersModel = useRef<GridFilterModel | null>(null);
 
   const outputColumns = useMemo((): GridColDef[] => {
     const statusCol = BASE_COLUMNS[EColumns.STATUS] as GridSingleSelectColDef;
@@ -176,18 +201,80 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
     }));
   }, [i18n.language]);
 
-  const paginationChangeHandler = (model: GridPaginationModel) => {
+  const handleUpdate = () => {
     if (!onUpdate) {
       return;
     }
 
-    const payload = { page: model.page + 1, itemsPerPage: model.pageSize };
+    const payload: ICouriersTableUpdatePayload = {
+      page: 1,
+      itemsPerPage: 5,
+    };
 
-    if (model.pageSize !== pagination?.itemsPerPage) {
-      payload.page = 1;
+    const pgMdl = paginationModel.current;
+
+    if (pgMdl) {
+      payload.page = (pgMdl.page ?? 0) + 1,
+      payload.itemsPerPage = pgMdl.pageSize;
+    }
+
+    const fltrMdl = filtersModel.current;
+
+    if (fltrMdl) {
+      let nameSearch;
+      let emailSearch;
+      let phoneSearch;
+
+      for (let i = 0; i < fltrMdl.items.length; i++) {
+        const item = fltrMdl.items[i];
+
+        if (item.operator !== 'contains') {
+          continue;
+        }
+
+        switch (item.field) {
+          case 'name': {
+            nameSearch = item.value;
+            break;
+          }
+          case 'email': {
+            emailSearch = item.value;
+            break;
+          }
+          case 'phoneNumber': {
+            phoneSearch = item.value;
+            break;
+          }
+        }
+      }
+
+      payload.nameSearch = nameSearch;
+      payload.emailSearch = emailSearch;
+      payload.phoneSearch = phoneSearch;
     }
 
     onUpdate(payload);
+  }
+
+  const updateDebounce = useDebouncedCallback(handleUpdate, 300);
+
+  const paginationChangeHandler = (model: GridPaginationModel) => {
+    paginationModel.current = model;
+    handleUpdate();
+  }
+
+  const filtersModelChangeHandler = (model: GridFilterModel, details: GridCallbackDetails<'filter'>) => {
+    if (!details.reason) {
+      return;
+    }
+
+    filtersModel.current = model;
+
+    if (paginationModel.current) {
+      paginationModel.current.page = 1;
+    }
+
+    updateDebounce();
   }
 
   return (
@@ -215,6 +302,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       sortingMode="server"
       filterMode="server"
       onPaginationModelChange={paginationChangeHandler}
+      onFilterModelChange={filtersModelChangeHandler}
     />
   )
 }
