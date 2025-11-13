@@ -2,15 +2,19 @@ import { useMemo, useRef, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router';
 import { useDebouncedCallback } from 'use-debounce';
-import { DataGrid, GridCell, type GridCallbackDetails, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridCell,
+  type GridCallbackDetails,
+  type GridColDef,
+  type GridSingleSelectColDef,
+  type GridPaginationModel,
+  type GridFilterModel,
+} from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from '@mui/material/Link';
-import {
-  type GridPaginationModel,
-  type GridFilterModel,
-} from '@mui/x-data-grid';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
 import { ROUTE_PATHS } from '~/router/routes';
@@ -22,6 +26,8 @@ import Rating from '~/components/other/Rating';
 
 import type { ICourier } from '~/types/models/courier';
 import type { IPagination } from '~/types/other/pagination';
+import type { GridSortModel } from '@mui/x-data-grid';
+import type { ESortDirection } from '~/constants/sort';
 
 export interface ICouriersTableUpdatePayload {
   page?: number;
@@ -29,6 +35,10 @@ export interface ICouriersTableUpdatePayload {
   nameSearch?: string;
   emailSearch?: string;
   phoneSearch?: string;
+  nameSort?: ESortDirection | null;
+  currentOrdersCountSort?: ESortDirection | null;
+  totalOrdersCountSort?: ESortDirection | null;
+  ratingSort?: ESortDirection | null;
 }
 
 interface IProps {
@@ -175,6 +185,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
   const localeText = useDataGridLabels();
   const paginationModel = useRef<GridPaginationModel | null>(null);
   const filtersModel = useRef<GridFilterModel | null>(null);
+  const sortModel = useRef<GridSortModel | null>(null);
 
   const outputColumns = useMemo((): GridColDef[] => {
     const statusCol = BASE_COLUMNS[EColumns.STATUS] as GridSingleSelectColDef;
@@ -253,6 +264,29 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       payload.phoneSearch = phoneSearch;
     }
 
+    const sortBy = sortModel.current?.[0];
+
+    if (sortBy?.sort) {
+      switch (sortBy.field) {
+        case 'name': {
+          payload.nameSort = sortBy.sort as ESortDirection;
+          break;
+        }
+        case 'currentOrdersCount': {
+          payload.currentOrdersCountSort = sortBy.sort as ESortDirection;
+          break;
+        }
+        case 'totalOrdersCount': {
+          payload.totalOrdersCountSort = sortBy.sort as ESortDirection;
+          break;
+        }
+        case 'rating': {
+          payload.ratingSort = sortBy.sort as ESortDirection;
+          break;
+        }
+      }
+    }
+
     onUpdate(payload);
   }
 
@@ -274,6 +308,11 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       paginationModel.current.page = 1;
     }
 
+    updateDebounce();
+  }
+
+  const sortModelChangeHandler = (model: GridSortModel) => {
+    sortModel.current = model;
     updateDebounce();
   }
 
@@ -303,6 +342,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       filterMode="server"
       onPaginationModelChange={paginationChangeHandler}
       onFilterModelChange={filtersModelChangeHandler}
+      onSortModelChange={sortModelChangeHandler}
     />
   )
 }

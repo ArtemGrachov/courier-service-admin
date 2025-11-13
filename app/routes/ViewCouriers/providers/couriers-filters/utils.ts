@@ -4,6 +4,8 @@ import { DEFAULT_COURIER_FILTERS } from '../../constants/couriers-filters';
 
 import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
 
+import { validateSort } from '~/utils/validate-sort';
+
 export const formValueToRouteQuery = (formValue: IFormCouriersFilter) => {
   const params: URLSearchParamsInit = {};
 
@@ -27,6 +29,22 @@ export const formValueToRouteQuery = (formValue: IFormCouriersFilter) => {
     params.emailSearch = formValue.emailSearch;
   }
 
+  if (formValue.nameSort) {
+    params.nameSort = formValue.nameSort;
+  }
+
+  if (formValue.ratingSort) {
+    params.ratingSort = formValue.ratingSort;
+  }
+
+  if (formValue.currentOrdersCountSort) {
+    params.currentOrdersCountSort = formValue.currentOrdersCountSort;
+  }
+
+  if (formValue.totalOrdersCountSort) {
+    params.totalOrdersCountSort = formValue.totalOrdersCountSort;
+  }
+
   return createSearchParams(params);
 }
 
@@ -39,6 +57,10 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   const nameSearch = newSearchParams.get('nameSearch');
   const emailSearch = newSearchParams.get('emailSearch');
   const phoneSearch = newSearchParams.get('phoneSearch');
+  const nameSort = validateSort(newSearchParams.get('nameSort'));
+  const currentOrdersCountSort = validateSort(newSearchParams.get('currentOrdersCountSort'));
+  const totalOrdersCountSort = validateSort(newSearchParams.get('totalOrdersCountSort'));
+  const ratingSort = validateSort(newSearchParams.get('ratingSort'));
 
   if (rawPage != null) {
     const numPage = +rawPage;
@@ -62,6 +84,10 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
     nameSearch,
     emailSearch,
     phoneSearch,
+    nameSort,
+    currentOrdersCountSort,
+    totalOrdersCountSort,
+    ratingSort,
   };
 
   return newFormValue;
