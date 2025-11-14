@@ -8,7 +8,7 @@ export interface IFormOrdersFilter {
   courierIds?: number[];
   sendersIds?: number[];
   receiverIds?: number[];
-  dateTimeOrderedSort?: ESortDirection;
-  dateTimeCompletedSort?: ESortDirection;
+  dateTimeOrderedSort?: ESortDirection | null;
+  dateTimeClosedSort?: ESortDirection | null;
 }
 

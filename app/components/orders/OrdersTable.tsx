@@ -212,12 +212,12 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
 
     if (sortBy?.sort) {
       switch (sortBy.field) {
-        case 'dateTimeOrderedSort': {
+        case 'dateTimeOrdered': {
           payload.dateTimeOrderedSort = sortBy.sort as ESortDirection;
           break;
         }
-        case 'dateTimeCompleted': {
-          payload.dateTimeCompletedSort = sortBy.sort as ESortDirection;
+        case 'dateTimeClosed': {
+          payload.dateTimeClosedSort = sortBy.sort as ESortDirection;
           break;
         }
       }
@@ -293,10 +293,10 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
       });
     }
 
-    if (formValue?.dateTimeOrderedSort) {
+    if (formValue?.dateTimeClosedSort) {
       sortModel.push({
-        field: 'dateTimeOrdered',
-        sort: formValue.dateTimeOrderedSort,
+        field: 'dateTimeClosed',
+        sort: formValue.dateTimeClosedSort,
       });
     }
 
