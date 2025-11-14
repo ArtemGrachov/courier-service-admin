@@ -24,13 +24,7 @@ export async function loadCouriers({ request }: Route.ClientLoaderArgs) {
 
   const fetchCouriersQuery: IGetCouriersQuery = DEFAULT_COURIER_QUERY;
 
-  if (formValue.page != null) {
-    fetchCouriersQuery.page = formValue.page;
-  }
-
-  if (fetchCouriersQuery.itemsPerPage != null) {
-    fetchCouriersQuery.itemsPerPage = formValue.itemsPerPage;
-  }
+  Object.assign(fetchCouriersQuery, formValue);
 
   try {
     const data = await fetchCouriers(fetchCouriersQuery);
