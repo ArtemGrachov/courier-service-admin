@@ -5,17 +5,19 @@ import { useDebouncedCallback } from 'use-debounce';
 import {
   DataGrid,
   GridCell,
+  getGridStringOperators,
+  getGridSingleSelectOperators,
   type GridCallbackDetails,
   type GridColDef,
   type GridSingleSelectColDef,
   type GridPaginationModel,
   type GridFilterModel,
+  type GridSortModel,
 } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from '@mui/material/Link';
-import type { GridSortModel } from '@mui/x-data-grid';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
 import type { ESortDirection } from '~/constants/sort';
@@ -29,8 +31,6 @@ import Rating from '~/components/other/Rating';
 import type { ICourier } from '~/types/models/courier';
 import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
 import type { IPagination } from '~/types/other/pagination';
-import { getGridStringOperators } from '@mui/x-data-grid';
-import { getGridSingleSelectOperators } from '@mui/x-data-grid';
 
 interface IProps {
   isProcessing?: boolean;
