@@ -16,7 +16,7 @@ import { fetchClient } from '~/providers/client/data';
 
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import type { IOrdersStoreData } from '~/providers/orders/store';
-import { fetchOrders } from '~/providers/orders/data';
+import { fetchOrders } from '~/data/fetch-orders';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 

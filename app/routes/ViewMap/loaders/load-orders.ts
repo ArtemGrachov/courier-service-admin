@@ -3,7 +3,7 @@ import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMa
 import { EOrderStatus } from '~/constants/order';
 import { EStatus } from '~/constants/status';
 
-import { fetchOrders } from '~/providers/orders/data';
+import { fetchOrders } from '~/data/fetch-orders';
 import type { IOrdersStoreData } from '~/providers/orders/store';
 
 import type { IGetOrdersQuery } from '~/types/api/orders';

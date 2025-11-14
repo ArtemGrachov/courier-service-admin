@@ -14,8 +14,6 @@ import { PrevRoute } from '~/router/prev-route';
 import { OrdersFilterProvider } from './providers/orders-filter';
 import { useOrdersFilterCtx } from './providers/orders-filter';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
-import { fetchOrders } from '~/providers/orders/data';
-import type { IOrdersStoreData } from '~/providers/orders/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
@@ -25,6 +23,8 @@ import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
+
+import { loadOrders } from './loaders/load-orders';
 
 const ViewOrders: ComponentType = observer(() => {
   const { t } = useTranslation();
@@ -95,26 +95,13 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
 
-  const ordersState: IOrdersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  try {
-    const data = await fetchOrders();
-    ordersState.data = data;
-    ordersState.getStatus = EStatus.SUCCESS;
-  } catch (err) {
-    if (isSamePath) {
-      ordersState.getError = err;
-      ordersState.getStatus = EStatus.ERROR;
-    } else {
-      throw err;
-    }
-  }
+  const ordersState = await loadOrders(loaderArgs);
 
   prevRoute.updatePath(url);
+
+  if (!isSamePath && ordersState.getStatus === EStatus.ERROR) {
+    throw ordersState.getError;
+  }
 
   return {
     ordersState,
