@@ -15,8 +15,10 @@ import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from '@mui/material/Link';
+import type { GridSortModel } from '@mui/x-data-grid';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
+import type { ESortDirection } from '~/constants/sort';
 import { ROUTE_PATHS } from '~/router/routes';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
@@ -25,27 +27,15 @@ import CourierStatus from '~/components/couriers/CourierStatus';
 import Rating from '~/components/other/Rating';
 
 import type { ICourier } from '~/types/models/courier';
+import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
 import type { IPagination } from '~/types/other/pagination';
-import type { GridSortModel } from '@mui/x-data-grid';
-import type { ESortDirection } from '~/constants/sort';
-
-export interface ICouriersTableUpdatePayload {
-  page?: number;
-  itemsPerPage?: number;
-  nameSearch?: string;
-  emailSearch?: string;
-  phoneSearch?: string;
-  nameSort?: ESortDirection | null;
-  currentOrdersCountSort?: ESortDirection | null;
-  totalOrdersCountSort?: ESortDirection | null;
-  ratingSort?: ESortDirection | null;
-}
 
 interface IProps {
   isProcessing?: boolean;
   items?: ICourier[];
   pagination?: IPagination;
-  onUpdate?: (payload: ICouriersTableUpdatePayload) => any;
+  formValue?: IFormCouriersFilter;
+  onUpdate?: (formValue: IFormCouriersFilter) => any;
 }
 
 const EMPTY = 'EMPTY';
@@ -180,12 +170,9 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   },
 };
 
-const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, onUpdate }) => {
+const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, formValue, onUpdate }) => {
   const { t, i18n } = useTranslation();
   const localeText = useDataGridLabels();
-  const paginationModel = useRef<GridPaginationModel | null>(null);
-  const filtersModel = useRef<GridFilterModel | null>(null);
-  const sortModel = useRef<GridSortModel | null>(null);
 
   const outputColumns = useMemo((): GridColDef[] => {
     const statusCol = BASE_COLUMNS[EColumns.STATUS] as GridSingleSelectColDef;
@@ -217,7 +204,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       return;
     }
 
-    const payload: ICouriersTableUpdatePayload = {
+    const payload: IFormCouriersFilter = {
       page: 1,
       itemsPerPage: 5,
     };
@@ -305,7 +292,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
     filtersModel.current = model;
 
     if (paginationModel.current) {
-      paginationModel.current.page = 1;
+      paginationModel.current.page = 0;
     }
 
     updateDebounce();
@@ -315,6 +302,99 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
     sortModel.current = model;
     updateDebounce();
   }
+
+  const inputPaginationModel = useMemo(() => {
+    return {
+      paginationModel: {
+        page: (formValue?.page ?? pagination?.currentPage ?? 1) - 1,
+        pageSize: formValue?.itemsPerPage ?? pagination?.itemsPerPage ?? 5,
+      },
+    };
+  }, [pagination])
+
+  const inputFilter = useMemo(() => {
+    if (!formValue) {
+      return undefined;
+    }
+
+    const items = [];
+
+    if (formValue.nameSearch) {
+      items.push({
+        field: 'name',
+        operator: 'contains',
+        value: formValue.nameSearch,
+      });
+    }
+
+    if (formValue.emailSearch) {
+      items.push({
+        field: 'email',
+        operator: 'contains',
+        value: formValue.emailSearch,
+      });
+    }
+
+    if (formValue.phoneSearch) {
+      items.push({
+        field: 'phone',
+        operator: 'contains',
+        value: formValue.phoneSearch,
+      });
+    }
+
+    return {
+      filterModel: {
+        items,
+      },
+    };
+  }, [formValue]);
+
+  const inputSorting = useMemo(() => {
+    const sortModel = [];
+
+    if (formValue?.nameSort) {
+      sortModel.push({
+        field: 'name',
+        sort: formValue.nameSort,
+      });
+    }
+
+    if (formValue?.currentOrdersCountSort) {
+      sortModel.push({
+        field: 'currentOrdersCount',
+        sort: formValue.currentOrdersCountSort,
+      });
+    }
+
+    if (formValue?.totalOrdersCountSort) {
+      sortModel.push({
+        field: 'totalOrdersCount',
+        sort: formValue.totalOrdersCountSort,
+      });
+    }
+
+    if (formValue?.ratingSort) {
+      sortModel.push({
+        field: 'rating',
+        sort: formValue.ratingSort,
+      });
+    }
+
+    return { sortModel };
+  }, [formValue]);
+
+  const initialState = useMemo(() => {
+    return {
+      pagination: inputPaginationModel,
+      filter: inputFilter,
+      sorting: inputSorting,
+    };
+  }, [inputPaginationModel, inputFilter, inputSorting]);
+
+  const paginationModel = useRef<GridPaginationModel | null>(inputPaginationModel.paginationModel);
+  const filtersModel = useRef<GridFilterModel | null>(inputFilter?.filterModel);
+  const sortModel = useRef<GridSortModel | null>(inputSorting?.sortModel);
 
   return (
     <DataGrid
@@ -328,14 +408,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       showToolbar={true}
       localeText={localeText}
       pageSizeOptions={[5, 10, 25]}
-      initialState={{
-        pagination: {
-          paginationModel: {
-            page: (pagination?.currentPage ?? 1) - 1,
-            pageSize: pagination?.itemsPerPage ?? 5,
-          }
-        }
-      }}
+      initialState={initialState}
       rowCount={pagination?.totalItems ?? 0}
       paginationMode="server"
       sortingMode="server"

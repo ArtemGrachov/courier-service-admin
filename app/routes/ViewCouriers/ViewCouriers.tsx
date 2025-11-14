@@ -17,8 +17,10 @@ import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import CouriersHeader from './components/CouriersHeader';
-import CouriersTable, { type ICouriersTableUpdatePayload } from '~/components/couriers/CouriersTable';
+import CouriersTable from '~/components/couriers/CouriersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
+
+import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
 
 import { loadCouriers } from './loaders/load-couriers';
 
@@ -27,7 +29,7 @@ const ViewCouriers: ComponentType = observer(() => {
   const { store: couriersStore, setProcessing } = useCouriersCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
-  const { handleUpdate } = useCouriersFiltersCtx();
+  const { store: couriersFiltersStore, handleUpdate } = useCouriersFiltersCtx();
 
   const reloadPageData = () => {
     setProcessing();
@@ -41,7 +43,7 @@ const ViewCouriers: ComponentType = observer(() => {
     errorSnackbar(couriersStore.getError);
   }, [couriersStore.isError]);
 
-  const tableUpdateHandler = (payload: ICouriersTableUpdatePayload) => {
+  const tableUpdateHandler = (payload: IFormCouriersFilter) => {
     handleUpdate(payload);
   }
 
@@ -63,6 +65,7 @@ const ViewCouriers: ComponentType = observer(() => {
           isProcessing={couriersStore.isProcessing}
           items={couriersStore.data?.data}
           pagination={couriersStore.data?.pagination}
+          formValue={couriersFiltersStore.formValue}
           onUpdate={tableUpdateHandler}
         />
       </Box>
