@@ -1,6 +1,7 @@
 import { useMemo, useRef, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  getGridSingleSelectOperators,
   DataGrid,
   type GridColDef,
   type GridSingleSelectColDef,
@@ -8,6 +9,7 @@ import {
   type GridPaginationModel,
   type GridCallbackDetails,
   type GridSortModel,
+  type GridFilterOperator,
 } from '@mui/x-data-grid';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -25,13 +27,13 @@ import OrdersActionCell from '~/components/orders/OrdersActionCell'
 import OrdersCourierLink from '~/components/orders/OrdersCourierLink';
 import OrderReceiverCell from '~/components/orders/OrderReceiverCell';
 import OrderSenderCell from '~/components/orders/OrderSenderCell';
+import OrdersCouriersOperator from '~/components/orders/OrdersCouriersOperator';
 
 import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
 import type { IClient } from '~/types/models/client';
 import type { IPagination } from '~/types/other/pagination';
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
-import { getGridSingleSelectOperators } from '@mui/x-data-grid';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -59,6 +61,23 @@ const enum EColumns {
 
 const SELECT_OPERATORS = [
   getGridSingleSelectOperators().find(o => o.value === 'isAnyOf')!,
+];
+
+const COURIERS_OPERATORS: GridFilterOperator<any, number[]>[] = [
+  {
+    label: 'Any of',
+    value: 'isAnyOf',
+    getApplyFilterFn: (filterItem) => {
+      if (!filterItem.field || !filterItem.value || !filterItem.operator) {
+        return null;
+      }
+      return (value) => {
+        return Number(value) >= Number(filterItem.value);
+      };
+    },
+    InputComponent: OrdersCouriersOperator,
+    getValueAsString: (value: number) => `${value} Stars`,
+  }
 ];
 
 const BASE_COLUMNS: Record<EColumns, GridColDef> = {
@@ -97,6 +116,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     headerName: 'orders_table.courier',
     flex: 1,
     valueFormatter: (v: ICourier | undefined) => v?.name ?? '-',
+    filterOperators: COURIERS_OPERATORS,
     renderCell: (params) => useMemo(() => <OrdersCourierLink params={params} />, [params.row?.client?.id]),
     sortable: false,
     filterable: true,

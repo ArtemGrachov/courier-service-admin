@@ -21,6 +21,7 @@ import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import OrdersHeader from './components/OrdersHeader';
 import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
+import OrderFilterProvider from '~/providers/order-filters';
 
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
 
@@ -81,7 +82,9 @@ const Wrapper: ComponentType = () => {
   return (
     <OrdersProvider initialData={loaderData.ordersState}>
       <OrdersFilterProvider>
-        <ViewOrders />
+        <OrderFilterProvider>
+          <ViewOrders />
+        </OrderFilterProvider>
       </OrdersFilterProvider>
     </OrdersProvider>
   )
