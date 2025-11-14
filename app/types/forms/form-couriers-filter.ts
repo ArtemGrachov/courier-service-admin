@@ -1,12 +1,9 @@
 import type { ECourierStatus } from '~/constants/couriers';
 import type { ESortDirection } from '~/constants/sort';
-import type { ICourier } from '~/types/models/courier';
-import type { IPagination } from '~/types/other/pagination';
 
-export interface IGetCouriersQuery {
-  page?: number | null;
-  itemsPerPage?: number | null;
-  courierIds?: number[];
+export interface IFormCouriersFilter {
+  page?: number;
+  itemsPerPage?: number;
   nameSearch?: string | null;
   emailSearch?: string | null;
   phoneSearch?: string | null;
@@ -17,9 +14,3 @@ export interface IGetCouriersQuery {
   status?: ECourierStatus;
 }
 
-export interface IGetCouriersResponse {
-  data: ICourier[];
-  pagination: IPagination;
-}
-
-export interface IGetCourierResponse extends ICourier { }

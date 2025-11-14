@@ -6,15 +6,13 @@ import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewCouriers/+types/ViewCouriers';
 import { useTranslation } from 'react-i18next';
 
+import { EStatus } from '~/constants/status';
 import i18n from '~/i18n/config';
 
-import { EStatus } from '~/constants/status';
-
 import { PrevRoute } from '~/router/prev-route';
+import { CouriersFiltersProvider, useCouriersFiltersCtx } from './providers/couriers-filters';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
-import { fetchCouriers } from '~/data/fetch-couriers';
-import type { ICouriersStoreData } from '~/store/couriers.store';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
@@ -22,11 +20,16 @@ import CouriersHeader from './components/CouriersHeader';
 import CouriersTable from '~/components/couriers/CouriersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
+import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
+
+import { loadCouriers } from './loaders/load-couriers';
+
 const ViewCouriers: ComponentType = observer(() => {
   const { t } = useTranslation();
   const { store: couriersStore, setProcessing } = useCouriersCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
+  const { store: couriersFiltersStore, handleUpdate } = useCouriersFiltersCtx();
 
   const reloadPageData = () => {
     setProcessing();
@@ -39,6 +42,10 @@ const ViewCouriers: ComponentType = observer(() => {
 
     errorSnackbar(couriersStore.getError);
   }, [couriersStore.isError]);
+
+  const tableUpdateHandler = (payload: IFormCouriersFilter) => {
+    handleUpdate(payload);
+  }
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
@@ -57,6 +64,9 @@ const ViewCouriers: ComponentType = observer(() => {
         <CouriersTable
           isProcessing={couriersStore.isProcessing}
           items={couriersStore.data?.data}
+          pagination={couriersStore.data?.pagination}
+          formValue={couriersFiltersStore.formValue}
+          onUpdate={tableUpdateHandler}
         />
       </Box>
     </ReloadPageProvider>
@@ -68,7 +78,9 @@ const Wrapper: ComponentType = () => {
 
   return (
     <CouriersProvider initialData={loaderData.couriersState}>
-      <ViewCouriers />
+      <CouriersFiltersProvider>
+        <ViewCouriers />
+      </CouriersFiltersProvider>
     </CouriersProvider>
   )
 }
@@ -81,26 +93,13 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
 
-  const couriersState: ICouriersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  try {
-    const data = await fetchCouriers();
-    couriersState.data = data;
-    couriersState.getStatus = EStatus.SUCCESS;
-  } catch (err) {
-    if (isSamePath) {
-      couriersState.getError = err;
-      couriersState.getStatus = EStatus.ERROR;
-    } else {
-      throw err;
-    }
-  }
+  const couriersState = await loadCouriers(loaderArgs);
 
   prevRoute.updatePath(url);
+
+  if (!isSamePath && couriersState.getStatus === EStatus.ERROR) {
+    throw couriersState.getError;
+  }
 
   return {
     couriersState,

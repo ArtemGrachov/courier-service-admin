@@ -98,7 +98,8 @@
   "view_couriers": {
     "couriers_header": {
       "add_courier": "Додати кур'єра"
-    }
+    },
+    "title": "Кур'єри"
   },
   "form_courier": {
     "password_hint": "Залишіть це поле пустим, щоб пароль було згенеровано автоматично. Пароль буде надіслано на пошту кур'єра"
@@ -200,9 +201,6 @@
   },
   "view_courier": {
     "title": "Кур'єр' ID {{id}} {{name}}"
-  },
-  "view_couriers": {
-    "title": "Кур'єри"
   },
   "view_map": {
     "title": "Карта"
