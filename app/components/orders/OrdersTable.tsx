@@ -1,10 +1,6 @@
 import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink } from 'react-router';
 import { DataGrid, GridCell, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
-import IconButton from '@mui/material/IconButton';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Link } from '@mui/material';
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -12,12 +8,13 @@ import timezone from 'dayjs/plugin/timezone';
 
 import { EOrderStatus, ORDER_STATUSES } from '~/constants/order';
 import { DATE_TIME_FORMAT } from '~/constants/datetime';
-import { ROUTE_PATHS, ROUTES } from '~/router/routes';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
-import { useRoutePath } from '~/hooks/routing/use-route-path';
 import OrderStatus from '~/components/orders/OrderStatus';
-import OrderClient from '~/components/orders/OrderClient';
+import OrdersActionCell from '~/components/orders/OrdersActionCell'
+import OrdersCourierLink from '~/components/orders/OrdersCourierLink';
+import OrderReceiverCell from '~/components/orders/OrderReceiverCell';
+import OrderSenderCell from '~/components/orders/OrderSenderCell';
 
 import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
@@ -56,15 +53,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     headerName: 'orders_table.sender',
     flex: 1,
     valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
-    renderCell: (params) => {
-      const client = (params.row as IOrder).sender;
-
-      if (!client) {
-        return '-';
-      }
-
-      return <OrderClient client={client} />
-    },
+    renderCell: (params) => useMemo(() => <OrderSenderCell params={params} />, [params.row?.sender?.id]),
     valueGetter: (v: IClient | undefined) => v?.name ?? '-',
   },
   [EColumns.RECEIVER]: {
@@ -73,15 +62,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     headerName: 'orders_table.receiver',
     flex: 1,
     valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
-    renderCell: (params) => {
-      const client = (params.row as IOrder).receiver;
-
-      if (!client) {
-        return '-';
-      }
-
-      return <OrderClient client={client} />
-    },
+    renderCell: (params) => useMemo(() => <OrderReceiverCell params={params} />, [params.row?.receiver?.id]),
     valueGetter: (v: IClient | undefined) => v?.name ?? '-',
   },
   [EColumns.COURIER]: {
@@ -90,31 +71,14 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     headerName: 'orders_table.courier',
     flex: 1,
     valueFormatter: (v: ICourier | undefined) => v?.name ?? '-',
-    renderCell: (params) => {
-      const courier = (params.row as IOrder).courier;
-      const routePath = useRoutePath();
-
-      if (!courier) {
-        return '-';
-      }
-
-      return (
-        <Link
-          to={routePath(ROUTES.COURIER, { courierId: courier.id })}
-          component={RouterLink}
-        >
-          {courier.name}
-        </Link>
-      )
-    },
-    valueGetter: (v: IClient | undefined) => v?.name ?? '-',
+    renderCell: (params) => useMemo(() => <OrdersCourierLink params={params} />, [params.row?.client?.id]),
   },
   [EColumns.STATUS]: {
     field: 'status',
     type: 'singleSelect',
     headerName: 'orders_table.status',
     flex: 1,
-    renderCell: params => <OrderStatus status={params.value} />,
+    renderCell: params => useMemo(() => <OrderStatus status={params.value} />, [params.value]),
     valueOptions: ORDER_STATUSES,
   } as GridSingleSelectColDef,
   [EColumns.ORDERED_AT]: {
@@ -122,37 +86,23 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     type: 'dateTime',
     headerName: 'orders_table.ordered_at',
     flex: 1,
-    valueGetter: v => v ? new Date(v) : null,
-    valueFormatter: v => v ? dayjs(v).format(DATE_TIME_FORMAT) : '-',
+    valueGetter: v => useMemo(() => v ? new Date(v) : null, [v]),
+    valueFormatter: v => useMemo(() => v ? dayjs(v).format(DATE_TIME_FORMAT) : '-', [v]),
   },
   [EColumns.CLOSED_AT]: {
     field: 'dateTimeClosed',
     type: 'dateTime',
     headerName: 'orders_table.closed_at',
     flex: 1,
-    valueGetter: v => v ? new Date(v) : null,
-    valueFormatter: v => v ? dayjs(v).format(DATE_TIME_FORMAT) : '-',
+    valueGetter: v => useMemo(() => v ? new Date(v) : null, [v]),
+    valueFormatter: v => useMemo(() => v ? dayjs(v).format(DATE_TIME_FORMAT) : '-', [v]),
   },
   [EColumns.ACTIONS]: {
     field: 'actions',
     type: 'custom',
     headerName: EMPTY,
     width: 60,
-    renderCell: (params) => {
-      const { t } = useTranslation();
-      const order = params.row as IOrder;
-      const routePath = useRoutePath();
-
-      return (
-        <IconButton
-          component={RouterLink}
-          to={routePath(ROUTE_PATHS.ORDER, { orderId: order.id })}
-          aria-label={t('orders_table.details')}
-        >
-          <RemoveRedEyeIcon />
-        </IconButton>
-      )
-    },
+    renderCell: (params) => useMemo(() => <OrdersActionCell params={params} />, [params.id]),
     filterable: false,
     sortable: false,
     hideable: false,
@@ -193,11 +143,9 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
       columns={outputColumns}
       rows={items}
       loading={isProcessing}
-      slots={{
-        cell: props => (<GridCell {...props}></GridCell>),
-      }}
       showToolbar={true}
       localeText={localeText}
+      pageSizeOptions={[5, 10, 25]}
     />
   )
 }
