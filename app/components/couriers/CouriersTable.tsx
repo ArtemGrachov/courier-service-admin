@@ -29,6 +29,7 @@ import Rating from '~/components/other/Rating';
 import type { ICourier } from '~/types/models/courier';
 import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
 import type { IPagination } from '~/types/other/pagination';
+import { getGridStringOperators } from '@mui/x-data-grid';
 
 interface IProps {
   isProcessing?: boolean;
@@ -52,6 +53,10 @@ const enum EColumns {
   ACTIONS = 'actions',
 }
 
+const STRING_OPERATORS = [
+  getGridStringOperators().find(o => o.value === 'contains')!,
+];
+
 const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   [EColumns.ID]: {
     field: 'id',
@@ -67,6 +72,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     flex: 1,
     sortable: true,
     filterable: true,
+    filterOperators: STRING_OPERATORS,
   },
   [EColumns.PHONE]: {
     field: 'phoneNumber',
@@ -83,6 +89,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     ) : '-',
     sortable: false,
     filterable: true,
+    filterOperators: STRING_OPERATORS,
   },
   [EColumns.EMAIL]: {
     field: 'email',
@@ -100,6 +107,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     ) : '-',
     sortable: false,
     filterable: true,
+    filterOperators: STRING_OPERATORS,
   },
   [EColumns.STATUS]: {
     field: 'status',
