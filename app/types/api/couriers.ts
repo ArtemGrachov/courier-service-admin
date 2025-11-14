@@ -1,3 +1,4 @@
+import type { ECourierStatus } from '~/constants/couriers';
 import type { ESortDirection } from '~/constants/sort';
 import type { ICourier } from '~/types/models/courier';
 import type { IPagination } from '~/types/other/pagination';
@@ -13,6 +14,7 @@ export interface IGetCouriersQuery {
   currentOrdersCountSort?: ESortDirection | null;
   totalOrdersCountSort?: ESortDirection | null;
   ratingSort?: ESortDirection | null;
+  status?: ECourierStatus;
 }
 
 export interface IGetCouriersResponse {

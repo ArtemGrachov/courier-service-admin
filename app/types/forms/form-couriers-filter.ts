@@ -1,3 +1,4 @@
+import type { ECourierStatus } from '~/constants/couriers';
 import type { ESortDirection } from '~/constants/sort';
 
 export interface IFormCouriersFilter {
@@ -10,5 +11,6 @@ export interface IFormCouriersFilter {
   currentOrdersCountSort?: ESortDirection | null;
   totalOrdersCountSort?: ESortDirection | null;
   ratingSort?: ESortDirection | null;
+  status?: ECourierStatus;
 }
 

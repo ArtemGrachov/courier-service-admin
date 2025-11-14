@@ -5,6 +5,7 @@ import { DEFAULT_COURIER_FILTERS } from '../../constants/couriers-filters';
 import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
 
 import { validateSort } from '~/utils/validate-sort';
+import { COURIER_STATUSES } from '~/constants/couriers';
 
 export const formValueToRouteQuery = (formValue: IFormCouriersFilter) => {
   const params: URLSearchParamsInit = {};
@@ -45,6 +46,10 @@ export const formValueToRouteQuery = (formValue: IFormCouriersFilter) => {
     params.totalOrdersCountSort = formValue.totalOrdersCountSort;
   }
 
+  if (formValue.status) {
+    params.status = formValue.status;
+  }
+
   return createSearchParams(params);
 }
 
@@ -61,6 +66,7 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   const currentOrdersCountSort = validateSort(newSearchParams.get('currentOrdersCountSort'));
   const totalOrdersCountSort = validateSort(newSearchParams.get('totalOrdersCountSort'));
   const ratingSort = validateSort(newSearchParams.get('ratingSort'));
+  const status = COURIER_STATUSES.find(s => s === newSearchParams.get('status'));
 
   if (rawPage != null) {
     const numPage = +rawPage;
@@ -84,6 +90,7 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
     nameSearch,
     emailSearch,
     phoneSearch,
+    status,
     nameSort,
     currentOrdersCountSort,
     totalOrdersCountSort,

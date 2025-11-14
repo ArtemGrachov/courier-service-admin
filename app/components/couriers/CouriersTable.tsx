@@ -30,6 +30,7 @@ import type { ICourier } from '~/types/models/courier';
 import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
 import type { IPagination } from '~/types/other/pagination';
 import { getGridStringOperators } from '@mui/x-data-grid';
+import { getGridSingleSelectOperators } from '@mui/x-data-grid';
 
 interface IProps {
   isProcessing?: boolean;
@@ -55,6 +56,10 @@ const enum EColumns {
 
 const STRING_OPERATORS = [
   getGridStringOperators().find(o => o.value === 'contains')!,
+];
+
+const SELECT_OPERATORS = [
+  getGridSingleSelectOperators().find(o => o.value === 'is')!,
 ];
 
 const BASE_COLUMNS: Record<EColumns, GridColDef> = {
@@ -118,6 +123,9 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     valueOptions: COURIER_STATUSES,
     sortable: false,
     filterable: true,
+    filterOperators: SELECT_OPERATORS,
+    getOptionLabel: o => (o as unknown as any)?.label,
+    getOptionValue: o => (o as unknown as any)?.value,
   } as GridSingleSelectColDef,
   [EColumns.CURRENT_ORDERS_COUNT]: {
     field: 'currentOrdersCount',
@@ -230,13 +238,10 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       let nameSearch;
       let emailSearch;
       let phoneSearch;
+      let status;
 
       for (let i = 0; i < fltrMdl.items.length; i++) {
         const item = fltrMdl.items[i];
-
-        if (item.operator !== 'contains') {
-          continue;
-        }
 
         switch (item.field) {
           case 'name': {
@@ -251,12 +256,17 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
             phoneSearch = item.value;
             break;
           }
+          case 'status': {
+            status = item.value;
+            break;
+          }
         }
       }
 
       payload.nameSearch = nameSearch;
       payload.emailSearch = emailSearch;
       payload.phoneSearch = phoneSearch;
+      payload.status = status;
     }
 
     const sortBy = sortModel.current?.[0];
@@ -348,6 +358,14 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
         field: 'phone',
         operator: 'contains',
         value: formValue.phoneSearch,
+      });
+    }
+
+    if (formValue.status) {
+      items.push({
+        field: 'status',
+        operator: 'is',
+        value: formValue.status,
       });
     }
 

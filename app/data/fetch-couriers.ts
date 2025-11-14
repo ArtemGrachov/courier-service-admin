@@ -1,8 +1,9 @@
-import { mockPaginationRequest } from '~/utils/mock-request';
+import { ESortDirection } from '~/constants/sort';
 
 import type { IGetCouriersQuery, IGetCouriersResponse } from '~/types/api/couriers';
 import type { ICourier } from '~/types/models/courier';
-import { ESortDirection } from '~/constants/sort';
+
+import { mockPaginationRequest } from '~/utils/mock-request';
 
 export const fetchCouriers = async (query?: IGetCouriersQuery) => {
   let couriers = await import('~/mock-data/couriers.json').then(m => m.default as ICourier[]);
@@ -25,6 +26,10 @@ export const fetchCouriers = async (query?: IGetCouriersQuery) => {
   if (query?.courierIds) {
     const set = new Set(query.courierIds);
     couriers = couriers.filter(c => set.has(c.id));
+  }
+
+  if (query?.status) {
+    couriers = couriers.filter(c => c.status === query.status);
   }
 
   if (query?.nameSort) {
