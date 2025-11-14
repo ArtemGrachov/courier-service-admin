@@ -1,10 +1,8 @@
 import { useMemo, useRef, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink } from 'react-router';
 import { useDebouncedCallback } from 'use-debounce';
 import {
   DataGrid,
-  GridCell,
   getGridStringOperators,
   getGridSingleSelectOperators,
   type GridCallbackDetails,
@@ -14,18 +12,15 @@ import {
   type GridFilterModel,
   type GridSortModel,
 } from '@mui/x-data-grid';
-import IconButton from '@mui/material/IconButton';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import EditIcon from '@mui/icons-material/Edit';
-import Link from '@mui/material/Link';
 
 import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
 import type { ESortDirection } from '~/constants/sort';
-import { ROUTE_PATHS } from '~/router/routes';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
-import { useRoutePath } from '~/hooks/routing/use-route-path';
 import CourierStatus from '~/components/couriers/CourierStatus';
+import CouriersActionCell from '~/components/couriers/CouriersActionCell';
+import PhoneCell from '~/components/tables/PhoneCell';
+import EmailCell from '~/components/tables/EmailCell';
 import Rating from '~/components/other/Rating';
 
 import type { ICourier } from '~/types/models/courier';
@@ -84,14 +79,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     type: 'string',
     headerName: 'couriers_table.phone',
     flex: 1,
-    renderCell: params => params.value ? (
-      <Link
-        component="a"
-        href={`tel:${params.value}`}
-      >
-        {params.value}
-      </Link>
-    ) : '-',
+    renderCell: params => useMemo(() => <PhoneCell params={params} />, [params.id]),
     sortable: false,
     filterable: true,
     filterOperators: STRING_OPERATORS,
@@ -101,15 +89,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     type: 'string',
     headerName: 'couriers_table.email',
     flex: 1,
-    renderCell: params => params.value ? (
-      <Link
-        component="a"
-        href={`mailto:${params.value}`}
-        target="_blank"
-      >
-        {params.value}
-      </Link>
-    ) : '-',
+    renderCell: params => useMemo(() => <EmailCell params={params} />, [params.id]),
     sortable: false,
     filterable: true,
     filterOperators: STRING_OPERATORS,
@@ -157,29 +137,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     type: 'custom',
     headerName: EMPTY,
     width: 110,
-    renderCell: (params) => {
-      const { t } = useTranslation();
-      const courier = params.row as ICourier;
-      const routePath = useRoutePath();
-
-      return (
-        <>
-          <IconButton
-            component={RouterLink}
-            to={routePath(ROUTE_PATHS.COURIER_EDIT, { courierId: courier.id })}
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            component={RouterLink}
-            to={routePath(ROUTE_PATHS.COURIER, { courierId: courier.id })}
-            aria-label={t('couriers_table.details')}
-          >
-            <RemoveRedEyeIcon />
-          </IconButton>
-        </>
-      )
-    },
+    renderCell: params => useMemo(() => <CouriersActionCell params={params} />, [params.id]),
     filterable: false,
     sortable: false,
     hideable: false,
@@ -428,9 +386,6 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       columns={outputColumns}
       rows={items}
       loading={isProcessing}
-      slots={{
-        cell: props => (<GridCell {...props}></GridCell>),
-      }}
       showToolbar={true}
       localeText={localeText}
       pageSizeOptions={[5, 10, 25]}
