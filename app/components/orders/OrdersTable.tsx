@@ -1,6 +1,15 @@
-import { useMemo, type ComponentType } from 'react';
+import { useMemo, useRef, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DataGrid, GridCell, type GridColDef, type GridSingleSelectColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  type GridColDef,
+  type GridSingleSelectColDef,
+  type GridFilterModel,
+  type GridPaginationModel,
+  type GridCallbackDetails,
+  type GridSortModel,
+} from '@mui/x-data-grid';
+import { useDebouncedCallback } from 'use-debounce';
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -8,6 +17,7 @@ import timezone from 'dayjs/plugin/timezone';
 
 import { EOrderStatus, ORDER_STATUSES } from '~/constants/order';
 import { DATE_TIME_FORMAT } from '~/constants/datetime';
+import type { ESortDirection } from '~/constants/sort';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import OrderStatus from '~/components/orders/OrderStatus';
@@ -19,6 +29,9 @@ import OrderSenderCell from '~/components/orders/OrderSenderCell';
 import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
 import type { IClient } from '~/types/models/client';
+import type { IPagination } from '~/types/other/pagination';
+import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
+import { getGridSingleSelectOperators } from '@mui/x-data-grid';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -26,6 +39,9 @@ dayjs.extend(timezone);
 interface IProps {
   isProcessing?: boolean;
   items?: IOrder[];
+  pagination?: IPagination;
+  formValue?: IFormOrdersFilter;
+  onUpdate?: (formValue: IFormOrdersFilter) => any;
 }
 
 const EMPTY = 'EMPTY';
@@ -41,11 +57,17 @@ const enum EColumns {
   ACTIONS = 'actions',
 }
 
+const SELECT_OPERATORS = [
+  getGridSingleSelectOperators().find(o => o.value === 'isAnyOf')!,
+];
+
 const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   [EColumns.ID]: {
     field: 'id',
     headerName: 'orders_table.id',
     width: 70,
+    sortable: false,
+    filterable: false,
   },
   [EColumns.SENDER]: {
     field: 'sender',
@@ -55,6 +77,8 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
     renderCell: (params) => useMemo(() => <OrderSenderCell params={params} />, [params.row?.sender?.id]),
     valueGetter: (v: IClient | undefined) => v?.name ?? '-',
+    sortable: false,
+    filterable: true,
   },
   [EColumns.RECEIVER]: {
     field: 'receiver',
@@ -64,6 +88,8 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
     renderCell: (params) => useMemo(() => <OrderReceiverCell params={params} />, [params.row?.receiver?.id]),
     valueGetter: (v: IClient | undefined) => v?.name ?? '-',
+    sortable: false,
+    filterable: true,
   },
   [EColumns.COURIER]: {
     field: 'courier',
@@ -72,6 +98,8 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     flex: 1,
     valueFormatter: (v: ICourier | undefined) => v?.name ?? '-',
     renderCell: (params) => useMemo(() => <OrdersCourierLink params={params} />, [params.row?.client?.id]),
+    sortable: false,
+    filterable: true,
   },
   [EColumns.STATUS]: {
     field: 'status',
@@ -80,22 +108,29 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     flex: 1,
     renderCell: params => useMemo(() => <OrderStatus status={params.value} />, [params.value]),
     valueOptions: ORDER_STATUSES,
+    filterOperators: SELECT_OPERATORS,
+    sortable: false,
+    filterable: true,
   } as GridSingleSelectColDef,
   [EColumns.ORDERED_AT]: {
     field: 'dateTimeOrdered',
     type: 'dateTime',
     headerName: 'orders_table.ordered_at',
     flex: 1,
-    valueGetter: v => useMemo(() => v ? new Date(v) : null, [v]),
-    valueFormatter: v => useMemo(() => v ? dayjs(v).format(DATE_TIME_FORMAT) : '-', [v]),
+    valueGetter: v => v ? new Date(v) : null,
+    valueFormatter: v => v ? dayjs(v).format(DATE_TIME_FORMAT) : '-',
+    sortable: true,
+    filterable: false,
   },
   [EColumns.CLOSED_AT]: {
     field: 'dateTimeClosed',
     type: 'dateTime',
     headerName: 'orders_table.closed_at',
     flex: 1,
-    valueGetter: v => useMemo(() => v ? new Date(v) : null, [v]),
-    valueFormatter: v => useMemo(() => v ? dayjs(v).format(DATE_TIME_FORMAT) : '-', [v]),
+    valueGetter: v => v ? new Date(v) : null,
+    valueFormatter: v => v ? dayjs(v).format(DATE_TIME_FORMAT) : '-',
+    sortable: true,
+    filterable: false,
   },
   [EColumns.ACTIONS]: {
     field: 'actions',
@@ -109,7 +144,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   },
 };
 
-const OrdersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
+const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, formValue, onUpdate }) => {
   const { t, i18n } = useTranslation();
   const localeText = useDataGridLabels();
 
@@ -137,6 +172,149 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
     }));
   }, [i18n.language]);
 
+  const handleUpdate = () => {
+    if (!onUpdate) {
+      return;
+    }
+
+    const payload: IFormOrdersFilter = {
+      page: 1,
+      itemsPerPage: 5,
+    };
+
+    const pgMdl = paginationModel.current;
+
+    if (pgMdl) {
+      payload.page = (pgMdl.page ?? 0) + 1,
+      payload.itemsPerPage = pgMdl.pageSize;
+    }
+
+    const fltrMdl = filtersModel.current;
+
+    if (fltrMdl) {
+      let statuses;
+
+      for (let i = 0; i < fltrMdl.items.length; i++) {
+        const item = fltrMdl.items[i];
+
+        switch (item.field) {
+          case 'status': {
+            statuses = item.value;
+            break;
+          }
+        }
+      }
+
+      payload.statuses = statuses;
+    }
+
+    const sortBy = sortModel.current?.[0];
+
+    if (sortBy?.sort) {
+      switch (sortBy.field) {
+        case 'dateTimeOrderedSort': {
+          payload.dateTimeOrderedSort = sortBy.sort as ESortDirection;
+          break;
+        }
+        case 'dateTimeCompleted': {
+          payload.dateTimeCompletedSort = sortBy.sort as ESortDirection;
+          break;
+        }
+      }
+    }
+
+    onUpdate(payload);
+  }
+
+  const updateDebounce = useDebouncedCallback(handleUpdate, 300);
+
+  const paginationChangeHandler = (model: GridPaginationModel) => {
+    paginationModel.current = model;
+    handleUpdate();
+  }
+
+  const filtersModelChangeHandler = (model: GridFilterModel, details: GridCallbackDetails<'filter'>) => {
+    if (!details.reason) {
+      return;
+    }
+
+    filtersModel.current = model;
+
+    if (paginationModel.current) {
+      paginationModel.current.page = 0;
+    }
+
+    updateDebounce();
+  }
+
+  const sortModelChangeHandler = (model: GridSortModel) => {
+    sortModel.current = model;
+    updateDebounce();
+  }
+
+  const inputPaginationModel = useMemo(() => {
+    return {
+      paginationModel: {
+        page: (formValue?.page ?? pagination?.currentPage ?? 1) - 1,
+        pageSize: formValue?.itemsPerPage ?? pagination?.itemsPerPage ?? 5,
+      },
+    };
+  }, [pagination])
+
+  const inputFilter = useMemo(() => {
+    if (!formValue) {
+      return undefined;
+    }
+
+    const items = [];
+
+    if (formValue.statuses) {
+      items.push({
+        field: 'status',
+        operator: 'isAnyOf',
+        value: formValue.statuses,
+      });
+    }
+
+    return {
+      filterModel: {
+        items,
+      },
+    };
+  }, [formValue]);
+
+  const inputSorting = useMemo(() => {
+    const sortModel = [];
+
+    if (formValue?.dateTimeOrderedSort) {
+      sortModel.push({
+        field: 'dateTimeOrdered',
+        sort: formValue.dateTimeOrderedSort,
+      });
+    }
+
+    if (formValue?.dateTimeOrderedSort) {
+      sortModel.push({
+        field: 'dateTimeOrdered',
+        sort: formValue.dateTimeOrderedSort,
+      });
+    }
+
+    return { sortModel };
+  }, [formValue]);
+
+  const initialState = useMemo(() => {
+    return {
+      pagination: inputPaginationModel,
+      filter: inputFilter,
+      sorting: inputSorting,
+    };
+  }, [inputPaginationModel, inputFilter, inputSorting]);
+
+  const paginationModel = useRef<GridPaginationModel | null>(inputPaginationModel.paginationModel);
+  const filtersModel = useRef<GridFilterModel | null>(inputFilter?.filterModel);
+  const sortModel = useRef<GridSortModel | null>(inputSorting?.sortModel);
+
   return (
     <DataGrid
       sx={{ width: '100%', boxSizing: 'border-box' }}
@@ -146,6 +324,14 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items }) => {
       showToolbar={true}
       localeText={localeText}
       pageSizeOptions={[5, 10, 25]}
+      initialState={initialState}
+      rowCount={pagination?.totalItems ?? 0}
+      paginationMode="server"
+      sortingMode="server"
+      filterMode="server"
+      onPaginationModelChange={paginationChangeHandler}
+      onFilterModelChange={filtersModelChangeHandler}
+      onSortModelChange={sortModelChangeHandler}
     />
   )
 }

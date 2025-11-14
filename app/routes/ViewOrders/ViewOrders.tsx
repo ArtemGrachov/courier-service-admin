@@ -11,6 +11,8 @@ import i18n from '~/i18n/config';
 import { EStatus } from '~/constants/status';
 
 import { PrevRoute } from '~/router/prev-route';
+import { OrdersFilterProvider } from './providers/orders-filter';
+import { useOrdersFilterCtx } from './providers/orders-filter';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import { fetchOrders } from '~/providers/orders/data';
 import type { IOrdersStoreData } from '~/providers/orders/store';
@@ -22,11 +24,14 @@ import OrdersHeader from './components/OrdersHeader';
 import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
+import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
+
 const ViewOrders: ComponentType = observer(() => {
   const { t } = useTranslation();
   const { store: ordersStore, setProcessing } = useOrdersCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
+  const { store: ordersFilterStore, handleUpdate } = useOrdersFilterCtx();
 
   const reloadPageData = () => {
     setProcessing();
@@ -39,6 +44,10 @@ const ViewOrders: ComponentType = observer(() => {
 
     errorSnackbar(ordersStore.getError);
   }, [ordersStore.isError]);
+
+  const tableUpdateHandler = (payload: IFormOrdersFilter) => {
+    handleUpdate(payload);
+  }
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
@@ -57,6 +66,9 @@ const ViewOrders: ComponentType = observer(() => {
         <OrdersTable
           isProcessing={ordersStore.isProcessing}
           items={ordersStore.data?.data}
+          pagination={ordersStore.data?.pagination}
+          formValue={ordersFilterStore.formValue}
+          onUpdate={tableUpdateHandler}
         />
       </Box>
     </ReloadPageProvider>
@@ -68,7 +80,9 @@ const Wrapper: ComponentType = () => {
 
   return (
     <OrdersProvider initialData={loaderData.ordersState}>
-      <ViewOrders />
+      <OrdersFilterProvider>
+        <ViewOrders />
+      </OrdersFilterProvider>
     </OrdersProvider>
   )
 }
