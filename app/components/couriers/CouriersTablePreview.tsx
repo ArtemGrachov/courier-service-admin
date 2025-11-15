@@ -1,19 +1,10 @@
-import { useMemo, useRef, type ComponentType } from 'react';
+import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DataGrid,
-  getGridStringOperators,
-  getGridSingleSelectOperators,
-  type GridCallbackDetails,
   type GridColDef,
   type GridSingleSelectColDef,
-  type GridPaginationModel,
-  type GridFilterModel,
-  type GridSortModel,
 } from '@mui/x-data-grid';
-
-import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
-import type { ESortDirection } from '~/constants/sort';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import CourierStatus from '~/components/couriers/CourierStatus';
@@ -47,14 +38,6 @@ const enum EColumns {
   RATING = 'rating',
   ACTIONS = 'actions',
 }
-
-const STRING_OPERATORS = [
-  getGridStringOperators().find(o => o.value === 'contains')!,
-];
-
-const SELECT_OPERATORS = [
-  getGridSingleSelectOperators().find(o => o.value === 'is')!,
-];
 
 const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   [EColumns.ID]: {
@@ -96,7 +79,6 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     headerName: 'couriers_table.status',
     flex: 1,
     renderCell: params => <CourierStatus status={params.value} />,
-    valueOptions: COURIER_STATUSES,
     filterable: false,
     sortable: false,
     getOptionLabel: o => (o as unknown as any)?.label,
@@ -139,13 +121,11 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   },
 };
 
-const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, formValue, onUpdate }) => {
+const CouriersTablePreview: ComponentType<IProps> = ({ isProcessing, items }) => {
   const { t, i18n } = useTranslation();
   const localeText = useDataGridLabels();
 
   const outputColumns = useMemo((): GridColDef[] => {
-    const statusCol = BASE_COLUMNS[EColumns.STATUS] as GridSingleSelectColDef;
-
     return [
       BASE_COLUMNS[EColumns.ID],
       BASE_COLUMNS[EColumns.NAME],
@@ -172,9 +152,10 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       paginationMode="server"
       sortingMode="server"
       filterMode="server"
+      rowCount={items?.length ?? 0}
     />
   )
 }
 
-export default CouriersTable;
+export default CouriersTablePreview;
 

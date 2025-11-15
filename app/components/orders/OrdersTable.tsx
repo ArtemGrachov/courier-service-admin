@@ -36,7 +36,6 @@ import type { ICourier } from '~/types/models/courier';
 import type { IClient } from '~/types/models/client';
 import type { IPagination } from '~/types/other/pagination';
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
-import OrderReceiversOperator from '~/components/orders/OrdersReceiversOperator';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -95,7 +94,7 @@ const RECEIVERS_OPERATORS: GridFilterOperator<any, number[]>[] = [
         return Number(value) >= Number(filterItem.value);
       };
     },
-    InputComponent: OrderReceiversOperator,
+    InputComponent: OrdersReceiversOperator,
     getValueAsString: (value: number) => value.toString(),
   }
 ];

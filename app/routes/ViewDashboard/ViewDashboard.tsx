@@ -17,7 +17,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useRoutePath } from '~/hooks/routing/use-route-path';
 import CouriersTablePreview from '~/components/couriers/CouriersTablePreview';
-import OrdersTable from '~/components/orders/OrdersTable';
+import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 import { loadCouriers } from './loaders/load-couriers';
@@ -63,7 +63,7 @@ const ViewDashboard: ComponentType = () => {
             </Button>
           </Grid>
           <Grid size={6} gap={2}>
-            <OrdersTable
+            <OrdersTablePreview
               isProcessing={ordersStore.isProcessing}
               items={ordersStore.data?.data}
             />
