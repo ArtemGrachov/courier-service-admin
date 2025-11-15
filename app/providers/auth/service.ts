@@ -35,6 +35,7 @@ export const useAuthService = () => {
 
   useEffect(() => {
     init();
+    authStore.current.initialize();
   }, []);
 
   return {

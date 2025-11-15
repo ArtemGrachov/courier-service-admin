@@ -41,8 +41,7 @@
   },
   "common_errors": {
     "generic": "An error occured",
-    "alert_title": "Error",
-    "page_title": "Error"
+    "alert_title": "Error"
   },
   "common_modals": {
     "close": "Close",
@@ -210,6 +209,13 @@
   },
   "view_orders": {
     "title": "Orders"
+  },
+  "view_error": {
+    "title_generic": "Error",
+    "subtitle_generic": "An error occured",
+    "title_not_found": "404",
+    "subtitle_not_found": "Page not found",
+    "return": "Return home"
   }
 }
 
