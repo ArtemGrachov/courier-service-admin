@@ -314,6 +314,30 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
       });
     }
 
+    if (formValue.courierIds) {
+      items.push({
+        field: 'courier',
+        operator: 'isAnyOf',
+        value: formValue.courierIds,
+      });
+    }
+
+    if (formValue.senderIds) {
+      items.push({
+        field: 'sender',
+        operator: 'isAnyOf',
+        value: formValue.senderIds,
+      });
+    }
+
+    if (formValue.receiverIds) {
+      items.push({
+        field: 'receiver',
+        operator: 'isAnyOf',
+        value: formValue.receiverIds,
+      });
+    }
+
     return {
       filterModel: {
         items,
