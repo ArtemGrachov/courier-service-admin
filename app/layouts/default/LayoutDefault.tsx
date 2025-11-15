@@ -19,6 +19,10 @@ const LayoutDefault: ComponentType = observer(() => {
   const { routeKey } = useRouteKeyCtx()!;
   const titleRef = useRef<HTMLDivElement | null>(null);
 
+  if (!store.isInitialized) {
+    return null;
+  }
+
   if (!store.isAuthorized) {
     return <Navigate to={routePath(ROUTES.LOGIN)} />
   }
@@ -58,3 +62,4 @@ const Wrapper: ComponentType = () => {
 }
 
 export default Wrapper;
+
