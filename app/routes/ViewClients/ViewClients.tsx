@@ -12,7 +12,6 @@ import i18n from '~/i18n/config';
 import { PrevRoute } from '~/router/prev-route';
 import { ClientsFilterProvider, useClientsFilterCtx } from './providers/clients-filter';
 import { ClientsProvider, useClientsCtx } from '~/providers/clients';
-import type { IClientsStoreData } from '~/store/clients.store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
