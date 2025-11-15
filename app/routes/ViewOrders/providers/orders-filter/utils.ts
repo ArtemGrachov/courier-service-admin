@@ -22,6 +22,18 @@ export const formValueToRouteQuery = (formValue: IFormOrdersFilter) => {
     params.statuses = formValue.statuses;
   }
 
+  if (formValue.senderIds) {
+    params.senders = formValue.senderIds.map(id => id.toString());
+  }
+
+  if (formValue.receiverIds) {
+    params.receivers = formValue.receiverIds.map(id => id.toString());
+  }
+
+  if (formValue.courierIds) {
+    params.couriers = formValue.courierIds.map(id => id.toString());
+  }
+
   if (formValue.dateTimeOrderedSort) {
     params.dateTimeOrderedSort = formValue.dateTimeOrderedSort;
   }
@@ -44,6 +56,18 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   const dateTimeOrderedSort = validateSort(newSearchParams.get('dateTimeOrderedSort'));
   const dateTimeClosedSort = validateSort(newSearchParams.get('dateTimeClosedSort'));
   const statuses = ORDER_STATUSES.filter(s => rawStatusesSet.has(s));
+  const courierIds = newSearchParams
+    .getAll('couriers')
+    .map(rawId => +rawId)
+    .filter(id => !isNaN(id));
+  const senderIds = newSearchParams
+    .getAll('senders')
+    .map(rawId => +rawId)
+    .filter(id => !isNaN(id));
+  const receiverIds = newSearchParams
+    .getAll('receivers')
+    .map(rawId => +rawId)
+    .filter(id => !isNaN(id));
 
   if (rawPage != null) {
     const numPage = +rawPage;
@@ -65,6 +89,9 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
     page,
     itemsPerPage,
     statuses: statuses.length ? statuses : undefined,
+    courierIds: courierIds.length ? courierIds : undefined,
+    senderIds: senderIds.length ? senderIds : undefined,
+    receiverIds: receiverIds.length ? receiverIds : undefined,
     dateTimeOrderedSort,
     dateTimeClosedSort,
   };

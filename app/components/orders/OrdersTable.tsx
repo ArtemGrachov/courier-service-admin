@@ -213,6 +213,9 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
 
     if (fltrMdl) {
       let statuses;
+      let courierIds;
+      let senderIds;
+      let receiverIds;
 
       for (let i = 0; i < fltrMdl.items.length; i++) {
         const item = fltrMdl.items[i];
@@ -222,10 +225,25 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
             statuses = item.value;
             break;
           }
+          case 'courier': {
+            courierIds = item.value;
+            break;
+          }
+          case 'sender': {
+            senderIds = item.value;
+            break;
+          }
+          case 'receiver': {
+            receiverIds = item.value;
+            break;
+          }
         }
       }
 
       payload.statuses = statuses;
+      payload.courierIds = courierIds;
+      payload.senderIds = senderIds;
+      payload.receiverIds = receiverIds;
     }
 
     const sortBy = sortModel.current?.[0];

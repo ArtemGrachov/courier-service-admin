@@ -10,7 +10,7 @@ export class MapFiltersStore implements IMapFiltersStoreData {
   public formValue: IFormMapFilters = {
     statuses: [],
     courierIds: [],
-    sendersIds: [],
+    senderIds: [],
     receiverIds: [],
   }
 

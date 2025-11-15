@@ -11,6 +11,8 @@ import { useOrderFilterCtx } from '~/providers/order-filters';
 
 import AutocompleteExternal from '~/components/inputs/AutocompleExternal';
 
+import type { ICourier } from '~/types/models/courier';
+
 const SEARCH_QUERY = {
   itemsPerPage: 5,
 };

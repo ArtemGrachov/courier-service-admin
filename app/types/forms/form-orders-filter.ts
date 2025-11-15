@@ -6,7 +6,7 @@ export interface IFormOrdersFilter {
   itemsPerPage?: number | null;
   statuses?: EOrderStatus[] | null;
   courierIds?: number[];
-  sendersIds?: number[];
+  senderIds?: number[];
   receiverIds?: number[];
   dateTimeOrderedSort?: ESortDirection | null;
   dateTimeClosedSort?: ESortDirection | null;
