@@ -11,32 +11,32 @@ import { useOrderFilterCtx } from '~/providers/order-filters';
 
 import AutocompleteExternal from '~/components/inputs/AutocompleExternal';
 
-import type { ICourier } from '~/types/models/courier';
+import type { IClient } from '~/types/models/client';
 
 const SEARCH_QUERY = {
   itemsPerPage: 5,
 };
 
-const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observer(({ item, applyValue, focusElementRef }) => {
+const OrdersSendersOperator: ComponentType<GridFilterInputValueProps> = observer(({ item, applyValue, focusElementRef }) => {
   const { t } = useTranslation();
 
   const {
-    couriersStore,
-    fetchCouriers,
+    sendersStore,
+    fetchSenders,
   } = useOrderFilterCtx();
 
-  const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
+  const senders = useMemo(() => sendersStore.data?.data, [sendersStore.data]);
 
-  const couriersMap = useMemo(() => {
-    return couriers?.reduce((acc, curr) => {
+  const sendersMap = useMemo(() => {
+    return senders?.reduce((acc, curr) => {
       acc[curr.id] = curr;
       return acc;
-    }, {} as Record<number, ICourier>) ?? {};
-  }, [couriers]);
+    }, {} as Record<number, IClient>) ?? {};
+  }, []);
 
-  const courierOptions = useMemo(() => {
-    return couriers?.map(s => s.id) ?? [];
-  }, [couriers]);
+  const senderOptions = useMemo(() => {
+    return senders?.map(s => s.id) ?? [];
+  }, [senders]);
 
   const renderValue = (v: number[]) => {
     return t('map_filters.options_selected', { count: v.length });
@@ -54,20 +54,20 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
   return (
     <AutocompleteExternal
       ref={focusElementRef}
-      options={courierOptions}
+      options={senderOptions}
       size="small"
       multiple={true}
-      getOptionLabel={v => couriersMap[v]?.name ?? '-'}
+      getOptionLabel={v => sendersMap[v]?.name ?? '-'}
       disableCloseOnSelect={true}
       renderValue={renderValue}
       label={t('orders_couriers_operator.label')}
       value={item.value ?? []}
       onChange={changeHandler}
-      onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}
-      onOpenLoad={() => fetchCouriers(SEARCH_QUERY)}
+      onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
+      onOpenLoad={() => fetchSenders(SEARCH_QUERY)}
     />
   )
 });
 
-export default OrdersCouriersOperator;
+export default OrdersSendersOperator;
 

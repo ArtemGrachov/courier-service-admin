@@ -28,12 +28,15 @@ import OrdersCourierLink from '~/components/orders/OrdersCourierLink';
 import OrderReceiverCell from '~/components/orders/OrderReceiverCell';
 import OrderSenderCell from '~/components/orders/OrderSenderCell';
 import OrdersCouriersOperator from '~/components/orders/OrdersCouriersOperator';
+import OrdersSendersOperator from '~/components/orders/OrdersSendersOperator';
+import OrdersReceiversOperator from '~/components/orders/OrdersReceiversOperator';
 
 import type { IOrder } from '~/types/models/order';
 import type { ICourier } from '~/types/models/courier';
 import type { IClient } from '~/types/models/client';
 import type { IPagination } from '~/types/other/pagination';
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
+import OrderReceiversOperator from '~/components/orders/OrdersReceiversOperator';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -63,6 +66,40 @@ const SELECT_OPERATORS = [
   getGridSingleSelectOperators().find(o => o.value === 'isAnyOf')!,
 ];
 
+const SENDERS_OPERATORS: GridFilterOperator<any, number[]>[] = [
+  {
+    label: 'Any of',
+    value: 'isAnyOf',
+    getApplyFilterFn: (filterItem) => {
+      if (!filterItem.field || !filterItem.value || !filterItem.operator) {
+        return null;
+      }
+      return (value) => {
+        return Number(value) >= Number(filterItem.value);
+      };
+    },
+    InputComponent: OrdersSendersOperator,
+    getValueAsString: (value: number) => value.toString(),
+  }
+];
+
+const RECEIVERS_OPERATORS: GridFilterOperator<any, number[]>[] = [
+  {
+    label: 'Any of',
+    value: 'isAnyOf',
+    getApplyFilterFn: (filterItem) => {
+      if (!filterItem.field || !filterItem.value || !filterItem.operator) {
+        return null;
+      }
+      return (value) => {
+        return Number(value) >= Number(filterItem.value);
+      };
+    },
+    InputComponent: OrderReceiversOperator,
+    getValueAsString: (value: number) => value.toString(),
+  }
+];
+
 const COURIERS_OPERATORS: GridFilterOperator<any, number[]>[] = [
   {
     label: 'Any of',
@@ -76,10 +113,10 @@ const COURIERS_OPERATORS: GridFilterOperator<any, number[]>[] = [
       };
     },
     InputComponent: OrdersCouriersOperator,
-    getValueAsString: (value: number) => `${value} Stars`,
+    getValueAsString: (value: number) => value.toString(),
   }
 ];
-
+  
 const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   [EColumns.ID]: {
     field: 'id',
@@ -94,6 +131,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     headerName: 'orders_table.sender',
     flex: 1,
     valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
+    filterOperators: SENDERS_OPERATORS,
     renderCell: (params) => useMemo(() => <OrderSenderCell params={params} />, [params.row?.sender?.id]),
     valueGetter: (v: IClient | undefined) => v?.name ?? '-',
     sortable: false,
@@ -105,6 +143,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     headerName: 'orders_table.receiver',
     flex: 1,
     valueFormatter: (v: IClient | undefined) => v?.name ?? '-',
+    filterOperators: RECEIVERS_OPERATORS,
     renderCell: (params) => useMemo(() => <OrderReceiverCell params={params} />, [params.row?.receiver?.id]),
     valueGetter: (v: IClient | undefined) => v?.name ?? '-',
     sortable: false,

@@ -11,32 +11,32 @@ import { useOrderFilterCtx } from '~/providers/order-filters';
 
 import AutocompleteExternal from '~/components/inputs/AutocompleExternal';
 
-import type { ICourier } from '~/types/models/courier';
+import type { IClient } from '~/types/models/client';
 
 const SEARCH_QUERY = {
   itemsPerPage: 5,
 };
 
-const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observer(({ item, applyValue, focusElementRef }) => {
+const OrderReceiversOperator: ComponentType<GridFilterInputValueProps> = observer(({ item, applyValue, focusElementRef }) => {
   const { t } = useTranslation();
 
   const {
-    couriersStore,
-    fetchCouriers,
+    receiversStore,
+    fetchReceivers,
   } = useOrderFilterCtx();
 
-  const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
+  const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
 
   const couriersMap = useMemo(() => {
-    return couriers?.reduce((acc, curr) => {
+    return receivers?.reduce((acc, curr) => {
       acc[curr.id] = curr;
       return acc;
-    }, {} as Record<number, ICourier>) ?? {};
-  }, [couriers]);
+    }, {} as Record<number, IClient>) ?? {};
+  }, [receivers]);
 
-  const courierOptions = useMemo(() => {
-    return couriers?.map(s => s.id) ?? [];
-  }, [couriers]);
+  const receiverOptions = useMemo(() => {
+    return receivers?.map(s => s.id) ?? [];
+  }, [receivers]);
 
   const renderValue = (v: number[]) => {
     return t('map_filters.options_selected', { count: v.length });
@@ -54,7 +54,7 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
   return (
     <AutocompleteExternal
       ref={focusElementRef}
-      options={courierOptions}
+      options={receiverOptions}
       size="small"
       multiple={true}
       getOptionLabel={v => couriersMap[v]?.name ?? '-'}
@@ -63,11 +63,11 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
       label={t('orders_couriers_operator.label')}
       value={item.value ?? []}
       onChange={changeHandler}
-      onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}
-      onOpenLoad={() => fetchCouriers(SEARCH_QUERY)}
+      onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
+      onOpenLoad={() => fetchReceivers(SEARCH_QUERY)}
     />
   )
 });
 
-export default OrdersCouriersOperator;
+export default OrderReceiversOperator;
 
