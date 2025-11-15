@@ -1,6 +1,7 @@
 import { useMemo, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import MapIcon from '@mui/icons-material/Map';
 import WorkIcon from '@mui/icons-material/Work';
 import ChecklistIcon from '@mui/icons-material/Checklist';
@@ -10,6 +11,12 @@ import { ROUTES } from '~/router/routes';
 import NavList from '~/components/navigation/NavList';
 
 const NAV_ITEMS = [
+  {
+    key: 'dashboard',
+    icon: <DashboardIcon />,
+    translation: 'nav.dashboard',
+    path: ROUTES.HOME,
+  },
   {
     key: 'map',
     icon: <MapIcon />,

@@ -1,6 +1,7 @@
 {
   "test": "Test translation EN",
   "nav": {
+    "dashboard": "Dashboard",
     "map": "Map",
     "couriers": "Couriers",
     "orders": "Orders",
@@ -216,6 +217,10 @@
     "title_not_found": "404",
     "subtitle_not_found": "Page not found",
     "return": "Return home"
+  },
+  "view_dashboard": {
+    "see_all_couriers": "See all couriers",
+    "see_all_orders": "See all orders"
   }
 }
 
