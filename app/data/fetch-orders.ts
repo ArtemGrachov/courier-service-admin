@@ -1,3 +1,7 @@
+import dayjs from 'dayjs';
+
+import { ESortDirection } from '~/constants/sort';
+
 import type { IGetOrdersQuery, IGetOrdersResponse } from '~/types/api/orders';
 import type { IClient } from '~/types/models/client';
 import type { ICourier } from '~/types/models/courier';
@@ -39,6 +43,22 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
   if (query?.statuses) {
     const set = new Set(query.statuses);
     orders = orders.filter(o => set.has(o.status));
+  }
+
+  if (query?.dateTimeOrderedSort) {
+    const direction = query.dateTimeOrderedSort === ESortDirection.ASC ? 1 : -1;
+
+    orders = [...orders].sort((a, b) => {
+      return (dayjs(a.dateTimeOrdered ?? new Date()).isAfter(b.dateTimeOrdered ?? new Date()) ? 1 : -1) * direction;
+    });
+  }
+
+  if (query?.dateTimeClosedSort) {
+    const direction = query.dateTimeClosedSort === ESortDirection.ASC ? 1 : -1;
+
+    orders = [...orders].sort((a, b) => {
+      return (dayjs(a.dateTimeClosed ?? new Date()).isAfter(b.dateTimeClosed ?? new Date()) ? 1 : -1) * direction;
+    });
   }
 
   const data = await mockPaginationRequest<IGetOrdersResponse, IOrder>(

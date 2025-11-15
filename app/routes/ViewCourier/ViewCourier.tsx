@@ -18,7 +18,7 @@ import { fetchCourier } from '~/providers/courier/data';
 
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import type { IOrdersStoreData } from '~/providers/orders/store';
-import { fetchOrders } from '~/providers/orders/data';
+import { fetchOrders } from '~/data/fetch-orders';
 
 import { ActiveOrdersProvider, useActiveOrdersCtx } from './providers/active-orders';
 

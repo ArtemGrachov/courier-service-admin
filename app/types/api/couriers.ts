@@ -7,6 +7,7 @@ export interface IGetCouriersQuery {
   page?: number | null;
   itemsPerPage?: number | null;
   courierIds?: number[];
+  search?: string | null;
   nameSearch?: string | null;
   emailSearch?: string | null;
   phoneSearch?: string | null;

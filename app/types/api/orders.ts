@@ -1,4 +1,6 @@
 import type { EOrderStatus } from '~/constants/order';
+import type { ESortDirection } from '~/constants/sort';
+
 import type { IOrder } from '~/types/models/order';
 import type { IPagination } from '~/types/other/pagination';
 
@@ -10,6 +12,8 @@ export interface IGetOrdersQuery {
   senderIds?: number[];
   receiverIds?: number[];
   statuses?: EOrderStatus[];
+  dateTimeOrderedSort?: ESortDirection | null;
+  dateTimeClosedSort?: ESortDirection | null;
 }
 
 export interface IGetOrdersResponse {

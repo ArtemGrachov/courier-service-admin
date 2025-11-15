@@ -8,18 +8,23 @@ import { mockPaginationRequest } from '~/utils/mock-request';
 export const fetchCouriers = async (query?: IGetCouriersQuery) => {
   let couriers = await import('~/mock-data/couriers.json').then(m => m.default as ICourier[]);
 
-  if (query?.nameSearch) {
-    const searchBy = query.nameSearch.toLowerCase();
+  const nameSearch = query?.nameSearch ?? query?.search;
+  const phoneSearch = query?.phoneSearch ?? query?.search;
+  const emailSearch = query?.emailSearch ?? query?.search;
+
+
+  if (nameSearch) {
+    const searchBy = nameSearch.toLowerCase();
     couriers = couriers.filter(c => c.name.toLowerCase().includes(searchBy));
   }
 
-  if (query?.phoneSearch) {
-    const searchBy = query.phoneSearch.toLowerCase();
+  if (phoneSearch) {
+    const searchBy = phoneSearch.toLowerCase();
     couriers = couriers.filter(c => c.phoneNumber.toLowerCase().replaceAll(' ', '').includes(searchBy));
   }
 
-  if (query?.emailSearch) {
-    const searchBy = query.emailSearch.toLowerCase();
+  if (emailSearch) {
+    const searchBy = emailSearch.toLowerCase();
     couriers = couriers.filter(c => c.email.toLowerCase().includes(searchBy));
   }
 

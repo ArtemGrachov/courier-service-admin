@@ -23,8 +23,8 @@ export const useMapFiltersService = () => {
       params.statuses = formValue.statuses;
     }
 
-    if (formValue.sendersIds) {
-      params.senders = formValue.sendersIds.map(id => id.toString());
+    if (formValue.senderIds) {
+      params.senders = formValue.senderIds.map(id => id.toString());
     }
 
     if (formValue.receiverIds) {
@@ -46,7 +46,7 @@ export const useMapFiltersService = () => {
       .getAll('couriers')
       .map(rawId => +rawId)
       .filter(id => !isNaN(id));
-    const sendersIds = newSearchParams
+    const senderIds = newSearchParams
       .getAll('senders')
       .map(rawId => +rawId)
       .filter(id => !isNaN(id));
@@ -58,7 +58,7 @@ export const useMapFiltersService = () => {
     const newFormValue: IFormMapFilters = {
       statuses,
       courierIds,
-      sendersIds,
+      senderIds,
       receiverIds,
     };
 

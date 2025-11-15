@@ -11,9 +11,9 @@ import i18n from '~/i18n/config';
 import { EStatus } from '~/constants/status';
 
 import { PrevRoute } from '~/router/prev-route';
+import { OrdersFilterProvider } from './providers/orders-filter';
+import { useOrdersFilterCtx } from './providers/orders-filter';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
-import { fetchOrders } from '~/providers/orders/data';
-import type { IOrdersStoreData } from '~/providers/orders/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
@@ -21,12 +21,18 @@ import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import OrdersHeader from './components/OrdersHeader';
 import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
+import OrderFilterProvider from '~/providers/order-filters';
+
+import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
+
+import { loadOrders } from './loaders/load-orders';
 
 const ViewOrders: ComponentType = observer(() => {
   const { t } = useTranslation();
   const { store: ordersStore, setProcessing } = useOrdersCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
+  const { store: ordersFilterStore, handleUpdate } = useOrdersFilterCtx();
 
   const reloadPageData = () => {
     setProcessing();
@@ -39,6 +45,10 @@ const ViewOrders: ComponentType = observer(() => {
 
     errorSnackbar(ordersStore.getError);
   }, [ordersStore.isError]);
+
+  const tableUpdateHandler = (payload: IFormOrdersFilter) => {
+    handleUpdate(payload);
+  }
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
@@ -57,6 +67,9 @@ const ViewOrders: ComponentType = observer(() => {
         <OrdersTable
           isProcessing={ordersStore.isProcessing}
           items={ordersStore.data?.data}
+          pagination={ordersStore.data?.pagination}
+          formValue={ordersFilterStore.formValue}
+          onUpdate={tableUpdateHandler}
         />
       </Box>
     </ReloadPageProvider>
@@ -68,7 +81,11 @@ const Wrapper: ComponentType = () => {
 
   return (
     <OrdersProvider initialData={loaderData.ordersState}>
-      <ViewOrders />
+      <OrdersFilterProvider>
+        <OrderFilterProvider>
+          <ViewOrders />
+        </OrderFilterProvider>
+      </OrdersFilterProvider>
     </OrdersProvider>
   )
 }
@@ -81,26 +98,13 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
 
-  const ordersState: IOrdersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  try {
-    const data = await fetchOrders();
-    ordersState.data = data;
-    ordersState.getStatus = EStatus.SUCCESS;
-  } catch (err) {
-    if (isSamePath) {
-      ordersState.getError = err;
-      ordersState.getStatus = EStatus.ERROR;
-    } else {
-      throw err;
-    }
-  }
+  const ordersState = await loadOrders(loaderArgs);
 
   prevRoute.updatePath(url);
+
+  if (!isSamePath && ordersState.getStatus === EStatus.ERROR) {
+    throw ordersState.getError;
+  }
 
   return {
     ordersState,

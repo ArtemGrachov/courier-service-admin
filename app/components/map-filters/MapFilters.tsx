@@ -51,7 +51,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     defaultValues: formValue ?? {
       statuses: [],
       courierIds: [],
-      sendersIds: [],
+      senderIds: [],
       receiverIds: [],
     },
   });
@@ -160,7 +160,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
       <FormControl>
         <Controller
           control={control}
-          name="sendersIds"
+          name="senderIds"
           render={({ field }) => (
             <AutocompleteExternal
               options={senderOptions}
