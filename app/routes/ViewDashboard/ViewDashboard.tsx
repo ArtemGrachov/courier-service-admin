@@ -6,13 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { observer } from 'mobx-react-lite';
 
 import { EStatus } from '~/constants/status';
 
 import { ROUTES } from '~/router/routes';
+import { PrevRoute } from '~/router/prev-route';
 
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
+import { StatsProvider, useStatsCtx } from '~/providers/stats';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useRoutePath } from '~/hooks/routing/use-route-path';
@@ -22,18 +25,20 @@ import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 import { loadCouriers } from './loaders/load-couriers';
 import { loadOrders } from './loaders/load-orders';
-import { PrevRoute } from '~/router/prev-route';
+import { loadStats } from './loaders/load-stats';
 
-const ViewDashboard: ComponentType = () => {
+const ViewDashboard: ComponentType = observer(() => {
   const { t } = useTranslation();
   const routePath = useRoutePath();
 
   const { store: ordersStore, setProcessing: setOrdersProcessing } = useOrdersCtx();
   const { store: couriersStore, setProcessing: setCouriersProcessing } = useCouriersCtx();
+  const { store: statsStore, setProcessing: setStatsProcessing } = useStatsCtx();
 
   const reloadPageData = () => {
     setOrdersProcessing();
     setCouriersProcessing();
+    setStatsProcessing();
   }
 
   return (
@@ -81,7 +86,7 @@ const ViewDashboard: ComponentType = () => {
       </Box>
     </ReloadPageProvider>
   )
-}
+});
 
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
@@ -89,7 +94,9 @@ const Wrapper: ComponentType = () => {
   return (
     <CouriersProvider initialData={loaderData.couriersState}>
       <OrdersProvider initialData={loaderData.ordersState}>
-        <ViewDashboard />
+        <StatsProvider initialData={loaderData.statsState}>
+          <ViewDashboard />
+        </StatsProvider>
       </OrdersProvider>
     </CouriersProvider>
   )
@@ -103,9 +110,10 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
 
-  const [ordersState, couriersState] = await Promise.all([
+  const [ordersState, couriersState, statsState] = await Promise.all([
     loadOrders(),
     loadCouriers(),
+    loadStats(),
   ]);
 
   prevRoute.updatePath(url);
@@ -123,6 +131,7 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
   return {
     ordersState,
     couriersState,
+    statsState,
   };
 }
 
