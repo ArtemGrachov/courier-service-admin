@@ -6,13 +6,7 @@ export const fetchStats = async () => {
   const orders = await import('~/mock-data/orders.json').then(m => m.default as IOrder[]);
 
   const stats = orders.reduce((acc, curr) => {
-    const { dateTimeClosed, dateTimeOrdered, status } = curr;
-    const orderedDay = dayjs(dateTimeOrdered).format('YYYY.MM.DD');
-
-    if (status === EOrderStatus.ORDERED) {
-      const orderedDayData = acc[orderedDay] || (acc[orderedDay] = {});
-      orderedDayData.ordered = (orderedDayData.ordered ?? 0) + 1;
-    }
+    const { dateTimeClosed, status } = curr;
 
     if (dateTimeClosed) {
       const closedDay = dayjs(dateTimeClosed).format('YYYY.MM.DD');
