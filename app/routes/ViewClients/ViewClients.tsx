@@ -6,14 +6,12 @@ import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewClients/+types/ViewClients';
 import { useTranslation } from 'react-i18next';
 
+import { EStatus } from '~/constants/status';
 import i18n from '~/i18n/config';
 
-import { EStatus } from '~/constants/status';
-
 import { PrevRoute } from '~/router/prev-route';
+import { ClientsFilterProvider, useClientsFilterCtx } from './providers/clients-filter';
 import { ClientsProvider, useClientsCtx } from '~/providers/clients';
-import { fetchClients } from '~/data/fetch-clients';
-import type { IClientsStoreData } from '~/store/clients.store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
@@ -22,11 +20,16 @@ import ClientsHeader from './components/ClientsHeader';
 import ClientsTable from '~/components/clients/ClientsTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
+import type { IFormClientsFilter } from '~/types/forms/form-clients-filter';
+
+import { loadClients } from './loaders/load-clients';
+
 const ViewClients: ComponentType = observer(() => {
   const { t } = useTranslation();
   const { store: clientsStore, setProcessing } = useClientsCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
+  const { store: clientsFilterStore, handleUpdate } = useClientsFilterCtx();
 
   const reloadPageData = () => {
     setProcessing();
@@ -39,6 +42,10 @@ const ViewClients: ComponentType = observer(() => {
 
     errorSnackbar(clientsStore.getError);
   }, [clientsStore.isError]);
+
+  const tableUpdateHandler = (payload: IFormClientsFilter) => {
+    handleUpdate(payload);
+  }
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
@@ -57,6 +64,9 @@ const ViewClients: ComponentType = observer(() => {
         <ClientsTable
           isProcessing={clientsStore.isProcessing}
           items={clientsStore.data?.data}
+          pagination={clientsStore.data?.pagination}
+          formValue={clientsFilterStore.formValue}
+          onUpdate={tableUpdateHandler}
         />
       </Box>
     </ReloadPageProvider>
@@ -68,7 +78,9 @@ const Wrapper: ComponentType = () => {
 
   return (
     <ClientsProvider initialData={loaderData.clientsState}>
-      <ViewClients />
+      <ClientsFilterProvider>
+        <ViewClients />
+      </ClientsFilterProvider>
     </ClientsProvider>
   )
 }
@@ -81,26 +93,13 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
 
-  const clientsState: IClientsStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  try {
-    const data = await fetchClients();
-    clientsState.data = data;
-    clientsState.getStatus = EStatus.SUCCESS;
-  } catch (err) {
-    if (isSamePath) {
-      clientsState.getError = err;
-      clientsState.getStatus = EStatus.ERROR;
-    } else {
-      throw err;
-    }
-  }
+  const clientsState = await loadClients(loaderArgs);
 
   prevRoute.updatePath(url);
+
+  if (!isSamePath && clientsState.getStatus === EStatus.ERROR) {
+    throw clientsState.getError;
+  }
 
   return {
     clientsState,

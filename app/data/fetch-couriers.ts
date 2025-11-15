@@ -12,7 +12,6 @@ export const fetchCouriers = async (query?: IGetCouriersQuery) => {
   const phoneSearch = query?.phoneSearch ?? query?.search;
   const emailSearch = query?.emailSearch ?? query?.search;
 
-
   if (nameSearch) {
     const searchBy = nameSearch.toLowerCase();
     couriers = couriers.filter(c => c.name.toLowerCase().includes(searchBy));
