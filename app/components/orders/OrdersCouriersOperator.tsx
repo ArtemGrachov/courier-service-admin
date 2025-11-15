@@ -17,7 +17,7 @@ const SEARCH_QUERY = {
   itemsPerPage: 5,
 };
 
-const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observer(({ item, applyValue, focusElementRef }) => {
+const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observer(({ item, applyValue, focusElementRef, ...props }) => {
   const { t } = useTranslation();
 
   const {
@@ -53,6 +53,7 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
 
   return (
     <AutocompleteExternal
+      ref={focusElementRef}
       options={courierOptions}
       size="small"
       multiple={true}
@@ -60,6 +61,7 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
       disableCloseOnSelect={true}
       renderValue={renderValue}
       label={t('orders_couriers_operator.label')}
+      value={item.value ?? []}
       onChange={changeHandler}
       onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}
       onOpenLoad={() => fetchCouriers(SEARCH_QUERY)}
