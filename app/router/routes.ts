@@ -12,6 +12,7 @@ export const ROUTE_PATHS = {
   LOGIN: 'login',
   FORGOT_PASSWORD: 'forgot-password',
   RESET_PASSWORD: 'reset-password/:token',
+  ABOUT: 'about'
 };
 
 export const ROUTES = Object.entries(ROUTE_PATHS).reduce((acc, [key, value]) => {
