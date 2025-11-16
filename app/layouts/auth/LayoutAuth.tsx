@@ -3,6 +3,8 @@ import { Navigate, Outlet } from 'react-router';
 import Toolbar from '@mui/material/Toolbar';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router';
 
 import { ROUTES } from '~/router/routes';
 
@@ -35,7 +37,14 @@ const LayoutAuth: ComponentType = () => {
       <Box margin="auto" display="flex" justifyContent="center" width="100%">
         <Outlet />
       </Box>
-      <Toolbar />
+      <Box padding={4} display="flex" justifyContent="center">
+        <Link
+          to={routePath(ROUTES.ABOUT)}
+          component={RouterLink}
+        >
+          About the project
+        </Link>
+      </Box>
     </Stack>
   )
 }
