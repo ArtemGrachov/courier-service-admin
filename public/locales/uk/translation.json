@@ -43,8 +43,7 @@
   },
   "common_errors": {
     "generic": "Сталася помилка",
-    "alert_title": "Помилка",
-    "page_title": "Помилка"
+    "alert_title": "Помилка"
   },
   "common_modals": {
     "close": "Закрити",
@@ -212,6 +211,17 @@
   },
   "view_orders": {
     "title": "Замовлення"
+  },
+  "view_error": {
+    "title_generic": "Помилка",
+    "subtitle_generic": "Трапилась помилка",
+    "title_not_found": "404",
+    "subtitle_not_found": "Сторінк не знайдено",
+    "return": "Повернутись на головну"
+  },
+  "view_dashboard": {
+    "see_all_couriers": "Усі кур'єри",
+    "see_all_orders": "Усі замовлення"
   },
   "view_about": {
     "main_link": "Повернутися на головну сторінку"
