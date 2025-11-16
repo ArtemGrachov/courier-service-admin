@@ -5,6 +5,7 @@ import Divider from '@mui/material/Divider';
 
 import Navigation from './Navigation';
 import Logout from './Logout';
+import About from './About';
 
 const drawerWidth = 240;
 
@@ -24,6 +25,8 @@ const Sidebar: ComponentType = () => {
       <Toolbar />
       <Navigation />
       <Divider sx={{ marginTop: 'auto' }} />
+      <About />
+      <Divider />
       <Logout />
     </Drawer>
   )

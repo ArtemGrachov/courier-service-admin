@@ -19,4 +19,7 @@ export default [
     route(ROUTE_PATHS.FORGOT_PASSWORD, './routes/ViewForgotPassword/ViewForgotPassword.tsx', { id: ROUTE_PATHS.FORGOT_PASSWORD }),
     route(ROUTE_PATHS.RESET_PASSWORD, './routes/ViewResetPassword/ViewResetPassword.tsx', { id: ROUTE_PATHS.RESET_PASSWORD }),
   ]),
+  layout('./layouts/general/LayoutGeneral.tsx', [
+    route(ROUTE_PATHS.ABOUT, './routes/ViewAbout/ViewAbout.tsx', { id: ROUTE_PATHS.ABOUT }),
+  ]),
 ] satisfies RouteConfig;
