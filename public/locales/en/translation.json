@@ -221,6 +221,9 @@
   "view_dashboard": {
     "see_all_couriers": "See all couriers",
     "see_all_orders": "See all orders"
+  },
+  "view_about": {
+    "main_link": "Return to main page"
   }
 }
 
