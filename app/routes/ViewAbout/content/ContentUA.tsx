@@ -48,7 +48,12 @@ const ContentUA: ComponentType = () => {
         💻 Використання
       </Typography>
       <Typography variant="body1" gutterBottom>
-        Проєкт є Open-Source та може бути вільно використаний іншими розробниками без дозволу.
+        Проєкт є open-source та може бути вільно використаний іншими розробниками без дозволу.
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <Link href="https://github.com/ArtemGrachov/courier-service-admin" target="_blank">
+          Вихідний код адмін-панелі - GitHub
+        </Link>
       </Typography>
       <Typography variant="h5" component="h2" gutterBottom>
         🤖 AI
