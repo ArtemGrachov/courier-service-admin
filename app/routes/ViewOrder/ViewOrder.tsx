@@ -23,6 +23,7 @@ import ClientCard from '~/components/clients/ClientCard';
 import CourierCard from '~/components/couriers/CourierCard';
 import Map from '~/components/map/Map';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
+import ReloadButton from '~/components/other/ReloadButton';
 
 const ViewOrder: ComponentType = observer(() => {
   const { t } = useTranslation();
@@ -54,6 +55,10 @@ const ViewOrder: ComponentType = observer(() => {
             <Grid container spacing={2} flexGrow={1} alignItems="stretch" boxSizing="border-box">
               <Grid size={3}>
                 <Stack gap={2}>
+                  <ReloadButton
+                    isProcessing={orderStore.isProcessing}
+                    onReload={reloadPageData}
+                  />
                   <OrderCard order={order} />
                   {order.sender && <ClientCard client={order.sender} isSender={true} />}
                   {order.receiver && <ClientCard client={order.receiver} isReceiver={true} />}
