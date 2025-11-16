@@ -19,6 +19,7 @@ import { StatsProvider, useStatsCtx } from '~/providers/stats';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useRoutePath } from '~/hooks/routing/use-route-path';
+import DashboardHeader from './components/DashboardHeader';
 import CouriersTablePreview from '~/components/couriers/CouriersTablePreview';
 import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
@@ -52,6 +53,7 @@ const ViewDashboard: ComponentType = observer(() => {
         width="100%"
         boxSizing="border-box"
       >
+        <DashboardHeader />
         <OrdersChart stats={statsStore.data?.stats} />
         <Grid container spacing={2}>
           <Grid size={6} gap={2}>
