@@ -1,0 +1,35 @@
+import dayjs from 'dayjs';
+import { EOrderStatus } from '~/constants/order';
+import type { IOrder } from '~/types/models/order';
+import type { IStatsRecord } from '~/types/models/stats';
+
+export const fetchStats = async () => {
+  const orders = await import('~/mock-data/orders.json').then(m => m.default as IOrder[]);
+
+  const stats = orders.reduce((acc, curr) => {
+    const { dateTimeClosed, status } = curr;
+
+    if (dateTimeClosed) {
+      const closedDay = dayjs(dateTimeClosed).format('YYYY.MM.DD');
+      const closedDayData = acc[closedDay] || (acc[closedDay] = {});
+
+      switch (status) {
+        case EOrderStatus.COMPLETED: {
+          closedDayData.completed = (closedDayData.completed ?? 0) + 1;
+          break;
+        }
+        case EOrderStatus.CANCELLED: {
+          closedDayData.cancelled = (closedDayData.cancelled ?? 0) + 1;
+          break;
+        }
+      }
+    }
+
+    return acc;
+  }, {} as Record<string, IStatsRecord>);
+
+  return {
+    stats,
+  };
+}
+

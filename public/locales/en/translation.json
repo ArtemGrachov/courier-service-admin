@@ -1,3 +1,234 @@
 {
-  "test": "Test translation EN"
+  "test": "Test translation EN",
+  "nav": {
+    "dashboard": "Dashboard",
+    "map": "Map",
+    "couriers": "Couriers",
+    "orders": "Orders",
+    "clients": "Clients",
+    "about": "About",
+    "logout": "Logout"
+  },
+  "common_locales": {
+    "en": "English",
+    "uk": "Ukrainian / Українська"
+  },
+  "form_login": {
+    "login": "Email / Phone number",
+    "submit": "Log in"
+  },
+  "view_login": {
+    "title": "Log in"
+  },
+  "auth_links": {
+    "login_link": "Log in",
+    "forgot_password_link": "Forgot password"
+  },
+  "form_common": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "new_password": "New password",
+    "repeat_password": "Repeat password",
+    "phone": "Phone number",
+    "submit": "Submit"
+  },
+  "view_forgot_password": {
+    "title": "Forgot password",
+    "success_hint": "Password reset link was sent to {{email}}"
+  },
+  "view_reset_password": {
+    "title": "Reset password",
+    "success_hint": "Your password was resetted successfully. Now you can <Link>log in</Link>."
+  },
+  "common_errors": {
+    "page_title": "Error",
+    "generic": "An error occured",
+    "alert_title": "Error"
+  },
+  "common_modals": {
+    "close": "Close",
+    "reject": "Reject",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "logout": {
+    "title": "Log out",
+    "question": "Are you sure you want to log out?"
+  },
+  "input_password": {
+    "show_password": "Show password",
+    "hide_password": "Hide password"
+  },
+  "common_validation": {
+    "required": "This field is required",
+    "pattern": "This field has incorrect pattern",
+    "email": "This field must be a valid email",
+    "contain_upper_case": "This field must contain uppercase character",
+    "contain_lower_case": "This field must contain lowercase character",
+    "contain_number": "This field must contain number",
+    "only_latin": "This field must contain only lating characters",
+    "special_symbol": "This field must contain special symbols",
+    "min_length": "This field must have at least {{minLength}} characters",
+    "confirm_password": "Passwords must match"
+  },
+  "password_validation_hint": {
+    "contain_upper_case": "Contains uppercase characters",
+    "contain_lower_case": "Contains lowercase characters",
+    "contain_number": "Contains numbers",
+    "only_latin": "Only latin characters",
+    "special_symbol": "Contains special symbols",
+    "min_length": "Minimum length {{minLength}}"
+  },
+  "couriers_table": {
+    "id": "ID",
+    "name": "Name",
+    "phone": "Phone number",
+    "email": "Email",
+    "status": "Status",
+    "current_orders_count": "Active orders",
+    "total_orders_count": "Total orders",
+    "rating": "Rating",
+    "details": "Details"
+  },
+  "courier_status": {
+    "offline": "Offline",
+    "idle": "Idle",
+    "delivering": "Delivering"
+  },
+  "view_couriers": {
+    "couriers_header": {
+      "add_courier": "Add courier"
+    },
+    "title": "Couriers"
+  },
+  "form_courier": {
+    "password_hint": "Leave this field empty to generate the password automatically. The password will be sent to the courier's email"
+  },
+  "view_upsert_courier": {
+    "create_success": "Courier was reigstered successfully",
+    "edit_success": "Courier data was updated successfully",
+    "title_create": "Add courier",
+    "title_edit": "Update courier ID {{id}} {{name}} data"
+  },
+  "page_error": {
+    "title": "Page data loading error",
+    "tip_native_reload": "Try to fully reload page",
+    "tip_reload": "Press the reload button to try again",
+    "reload": "Reload"
+  },
+  "order_status": {
+    "ordered": "Ordered",
+    "processing": "Processing",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "orders_table": {
+    "id": "ID",
+    "sender": "Sender",
+    "receiver": "Receiver",
+    "courier": "Courier",
+    "status": "Status",
+    "ordered_at": "Ordered date/time",
+    "closed_at": "Closed date/time",
+    "details": "Details"
+  },
+  "order_card": {
+    "id": "Order ID",
+    "ordered_at": "Ordered date/time",
+    "closed_at": "Closed date/time"
+  },
+  "client_card": {
+    "receiver_id": "Receiver ID",
+    "sender_id": "Sender ID",
+    "client_id": "Client ID",
+    "rating": "Rating",
+    "name": "Name",
+    "link": "Details"
+  },
+  "courier_card": {
+    "id": "Courier ID",
+    "rating": "Rating",
+    "current_orders_count": "Active orders",
+    "link": "Details"
+  },
+  "clients_table": {
+    "id": "ID",
+    "name": "Name",
+    "current_orders_count": "Active orders",
+    "total_orders_count": "Total orders",
+    "phone": "Phone number",
+    "email": "Email",
+    "rating": "Rating",
+    "details": "Details"
+  },
+  "client_details": {
+    "client_id": "Client ID",
+    "rating": "Rating",
+    "phone": "Phone number",
+    "email": "Email"
+  },
+  "courier_details": {
+    "id": "Courier ID",
+    "rating": "Rating",
+    "status": "Status",
+    "current_orders_count": "Active orders",
+    "total_orders_count": "Total orders",
+    "phone": "Phone number",
+    "email": "Email"
+  },
+  "map": {
+    "close_all_windows": "Close all windows"
+  },
+  "map_filters": {
+    "status": "Status",
+    "senders": "Senders",
+    "receivers": "Receivers",
+    "couriers": "Couriers",
+    "options_selected": "Selected {{count}}"
+  },
+  "meta": {
+    "title": "Admin panel",
+    "description": "Courier Service app admin panel"
+  },
+  "common_meta": {
+    "title_template": "{{title}} | Courier Delivery Service"
+  },
+  "view_client": {
+    "title": "Client ID {{id}} {{name}}",
+    "sender_orders": "All sendings",
+    "receiver_orders": "All received"
+  },
+  "view_clients": {
+    "title": "Clients"
+  },
+  "view_courier": {1
+    "title": "Courier ID {{id}} {{name}}",
+    "orders": "All orders"
+  },
+  "view_map": {
+    "title": "Map"
+  },
+  "view_order": {
+    "title": "Order ID {{id}}"
+  },
+  "view_orders": {
+    "title": "Orders"
+  },
+  "view_error": {
+    "title_generic": "Error",
+    "subtitle_generic": "An error occured",
+    "title_not_found": "404",
+    "subtitle_not_found": "Page not found",
+    "return": "Return home"
+  },
+  "view_dashboard": {
+    "see_all_couriers": "See all couriers",
+    "see_all_orders": "See all orders"
+  },
+  "view_about": {
+    "main_link": "Return to main page"
+  }
 }
+

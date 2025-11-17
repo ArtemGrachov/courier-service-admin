@@ -1,23 +1,31 @@
 import {
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from 'react-router';
+import 'reflect-metadata';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import type { Route } from './+types/root';
+import { StorageProvider } from '~/providers/storage';
+import { AuthProvider } from '~/providers/auth';
+import { ModalsProvider } from '~/providers/modals';
 
-import '~/i18n/config';
+import ModalRoot from '~/components/modals/ModalRoot';
+import PageLoader from '~/components/other/PageLoader';
+import ViewError from '~/routes/ViewError/ViewError';
+
+import i18n from '~/i18n/config';
 import './app.scss';
 
 const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
+  colorSchemes: {
+    dark: true,
+    light: true,
   },
 });
 
@@ -31,10 +39,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
+        <StorageProvider>
+          <AuthProvider>
+            <ThemeProvider theme={darkTheme}>
+              <ModalsProvider>
+                <CssBaseline />
+                <PageLoader />
+                {children}
+                <ModalRoot />
+              </ModalsProvider>
+            </ThemeProvider>
+          </AuthProvider>
+        </StorageProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -43,34 +59,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return <Outlet />
 }
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = 'Oops!';
-  let details = 'An unexpected error occurred.';
-  let stack: string | undefined;
+export function meta() {
+  const { t } = i18n;
 
-  if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? '404' : 'Error';
-    details =
-      error.status === 404
-        ? 'The requested page could not be found'
-        : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
-    details = error.message;
-    stack = error.stack;
-  }
+  return [
+    { title: t('common_meta.title_template', { title: t('meta.title') }) },
+    { name: 'description', content: t('meta.description') },
+  ];
+}
 
+export function ErrorBoundary() {
   return (
-    <main>
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre>
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
-  );
+    <ViewError />
+  )
 }
+

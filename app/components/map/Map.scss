@@ -1,0 +1,7 @@
+.csa-map {
+  &.csa-has-highlight {
+    .csa-marker:not(.csa-is-highlighted) {
+      opacity: 0.4;
+    }
+  }
+}

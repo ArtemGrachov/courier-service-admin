@@ -1,0 +1,234 @@
+{
+  "test": "Тестовий переклад UA",
+  "nav": {
+    "dashboard": "Головна",
+    "map": "Карта",
+    "couriers": "Кур'єри",
+    "orders": "Замовлення",
+    "clients": "Клієнти",
+    "about": "Про проєкт",
+    "logout": "Вийти"
+  },
+  "common_locales": {
+    "en": "Англійська / English",
+    "uk": "Українська"
+  },
+  "form_login": {
+    "login": "Email / Номер телефону",
+    "submit": "Увійти"
+  },
+  "view_login": {
+    "title": "Вхід"
+  },
+  "auth_links": {
+    "login_link": "Увійти",
+    "forgot_password_link": "Забули пароль"
+  },
+  "form_common": {
+    "name": "Ім'я",
+    "email": "Email",
+    "password": "Пароль",
+    "new_password": "Новий пароль",
+    "repeat_password": "Повторити пароль",
+    "phone": "Номер телефону",
+    "submit": "Відправити"
+  },
+  "view_forgot_password": {
+    "title": "Забули пароль",
+    "success_hint": "Лист із посиланням для скидання паролю було надіслано на {{email}}"
+  },
+  "view_reset_password": {
+    "title": "Скинути пароль",
+    "success_hint": "Ваш пароль було успішно скинуто. Тепер ви можете <Link>увійти в систему</Link>."
+  },
+  "common_errors": {
+    "page_title": "Помилка",
+    "generic": "Сталася помилка",
+    "alert_title": "Помилка"
+  },
+  "common_modals": {
+    "close": "Закрити",
+    "reject": "Відхилити",
+    "confirm": "Прийняти",
+    "yes": "Так",
+    "no": "Ні"
+  },
+  "logout": {
+    "title": "Вихід із системи",
+    "question": "Ви впевнені, що бажаєте вийти із системи?"
+  },
+  "input_password": {
+    "show_password": "Показати пароль",
+    "hide_password": "Приховати пароль"
+  },
+  "common_validation": {
+    "required": "Це поле обов'язкове",
+    "pattern": "У цього поля некоректний паттерн",
+    "email": "Це поле має відповідати формату email",
+    "contain_upper_case": "Це поле має містити велику літеру",
+    "contain_lower_case": "Це поле має містити маленьку літеру",
+    "contain_number": "Це поле має містити цифру",
+    "only_latin": "Це поле має містити лише латинські символи",
+    "special_symbol": "Це поле має містити спеціальний символ",
+    "min_length": "Це поле має містити не менше {{minLength}} символів",
+    "confirm_password": "Паролі повинні співпадати"
+  },
+  "password_validation_hint": {
+    "contain_upper_case": "Містить великі літери",
+    "contain_lower_case": "Містить маленькі літери",
+    "contain_number": "Містить цифри",
+    "only_latin": "Тільки латинські символи",
+    "special_symbol": "Містить спеціальні символи",
+    "min_length": "Мінімум {{minLength}} символів"
+  },
+  "couriers_table": {
+    "id": "ID",
+    "name": "Ім'я",
+    "phone": "Номер телефону",
+    "email": "Email",
+    "status": "Статус",
+    "current_orders_count": "Активних замовлень",
+    "total_orders_count": "Замовлень загалом",
+    "rating": "Рейтинг",
+    "details": "Деталі"
+  },
+  "courier_status": {
+    "offline": "Не на роботі",
+    "idle": "Простій",
+    "delivering": "Доставка"
+  },
+  "view_couriers": {
+    "couriers_header": {
+      "add_courier": "Додати кур'єра"
+    },
+    "title": "Кур'єри"
+  },
+  "form_courier": {
+    "password_hint": "Залишіть це поле пустим, щоб пароль було згенеровано автоматично. Пароль буде надіслано на пошту кур'єра"
+  },
+  "view_upsert_courier": {
+    "create_success": "Кур'єра було успішно зареєстровано",
+    "edit_success": "Дані кур'єра було успішно оновлено",
+    "title_create": "Додати кур'єра",
+    "title_edit": "Оновити дані кур'єра ID {{id}} {{name}}"
+  },
+  "page_error": {
+    "title": "Помилка завантаження даних сторінки",
+    "tip_native_reload": "Спробуйте перезавантажити сторінку",
+    "tip_reload": "Натисніть кнопку перезавантаження щоб спробувати знову",
+    "reload": "Перезавантажити"
+  },
+  "order_status": {
+    "ordered": "Замовлено",
+    "processing": "Виконується",
+    "completed": "Виконано",
+    "cancelled": "Скасовано"
+  },
+  "orders_table": {
+    "id": "ID",
+    "sender": "Відправник",
+    "receiver": "Отримувач",
+    "courier": "Кур'єр",
+    "status": "Статус",
+    "ordered_at": "Дата/час замовлення",
+    "closed_at": "Дата/час завершення",
+    "details": "Деталі"
+  },
+  "order_card": {
+    "id": "Замовлення ID",
+    "ordered_at": "Дата/час замовлення",
+    "closed_at": "Дата/час завершення"
+  },
+  "client_card": {
+    "receiver_id": "Отримувач ID",
+    "sender_id": "Відправник ID",
+    "client_id": "Клієнт ID",
+    "rating": "Рейтинг",
+    "name": "Ім'я",
+    "link": "Деталі"
+  },
+  "courier_card": {
+    "id": "Кур'єр ID",
+    "rating": "Рейтинг",
+    "current_orders_count": "Активних замовлень",
+    "link": "Деталі"
+  },
+  "clients_table": {
+    "id": "ID",
+    "name": "Ім'я",
+    "current_orders_count": "Активних замовлень",
+    "total_orders_count": "Замовлень загалом",
+    "phone": "Номер телефону",
+    "email": "Email",
+    "rating": "Рейтинг",
+    "details": "Деталі"
+  },
+  "client_details": {
+    "client_id": "Клієнт ID",
+    "rating": "Рейтинг",
+    "phone": "Номер телефону",
+    "email": "Email"
+  },
+  "courier_details": {
+    "id": "Кур'єр ID",
+    "rating": "Рейтинг",
+    "status": "Статус",
+    "current_orders_count": "Активних замовлень",
+    "total_orders_count": "Замовлень загалом",
+    "phone": "Номер телефону",
+    "email": "Email"
+  },
+  "map": {
+    "close_all_windows": "Закрити усі вікна"
+  },
+  "map_filters": {
+    "status": "Статус",
+    "senders": "Відправники",
+    "receivers": "Отримувачі",
+    "couriers": "Кур'єри",
+    "options_selected": "Обрано {{count}}"
+  },
+  "meta": {
+    "title": "Адмінпанель",
+    "description": "Адмінпанель сервісу кур'єрської доставки"
+  },
+  "common_meta": {
+    "title_template": "{{title}} | Сервіс кур'єрської доставки"
+  },
+  "view_client": {
+    "title": "Клієнт ID {{id}} {{name}}",
+    "sender_orders": "Усі відправлення",
+    "receiver_orders": "Усі отримані"
+  },
+  "view_clients": {
+    "title": "Клієнти"
+  },
+  "view_courier": {
+    "title": "Кур'єр' ID {{id}} {{name}}",
+    "orders": "Усі замовлення"
+  },
+  "view_map": {
+    "title": "Карта"
+  },
+  "view_order": {
+    "title": "Замовлення ID {{id}}"
+  },
+  "view_orders": {
+    "title": "Замовлення"
+  },
+  "view_error": {
+    "title_generic": "Помилка",
+    "subtitle_generic": "Трапилась помилка",
+    "title_not_found": "404",
+    "subtitle_not_found": "Сторінк не знайдено",
+    "return": "Повернутись на головну"
+  },
+  "view_dashboard": {
+    "see_all_couriers": "Усі кур'єри",
+    "see_all_orders": "Усі замовлення"
+  },
+  "view_about": {
+    "main_link": "Повернутися на головну сторінку"
+  }
+}
+
