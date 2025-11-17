@@ -282,6 +282,9 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
       payload.receiverIds = receiverIds;
     }
 
+    payload.dateTimeOrderedSort = null;
+    payload.dateTimeClosedSort = null;
+
     const sortBy = sortModel.current?.[0];
 
     if (sortBy?.sort) {
