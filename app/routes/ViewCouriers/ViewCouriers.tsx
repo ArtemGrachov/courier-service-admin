@@ -90,13 +90,13 @@ const Wrapper: ComponentType = () => {
   });
 
   return (
-    <PageDataContext.Provider value={service}>
+    <PageDataContext value={service}>
       <CouriersProvider initialData={service.state?.couriersState}>
         <CouriersFiltersProvider>
           <ViewCouriers />
         </CouriersFiltersProvider>
       </CouriersProvider>
-    </PageDataContext.Provider>
+    </PageDataContext>
   )
 }
 

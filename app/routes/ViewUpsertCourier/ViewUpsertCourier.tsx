@@ -17,7 +17,6 @@ import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
 import { usePageDataService } from '~/providers/page-data/service';
 import { UpsertCourierProvider, useUpsertCourierCtx } from './providers/upsert-courier';
 import { CourierProvider, useCourierCtx } from '~/providers/courier';
-import { fetchCourier } from '~/providers/courier/data';
 import type { ICourierStoreData } from '~/providers/courier/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
@@ -29,6 +28,8 @@ import FormCourier from '~/components/forms/FormCourier';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 import type { IFormCourier } from '~/types/forms/form-courier';
+
+import { loadCourier } from './loaders/load-courier';
 
 const ViewUpsertCourier: ComponentType = observer(() => {
   const { store: upsertCourierStore, submitCreate: submit } = useUpsertCourierCtx();
@@ -121,13 +122,13 @@ const Wrapper = () => {
   });
 
   return (
-    <PageDataContext.Provider value={service}>
+    <PageDataContext value={service}>
       <CourierProvider initialData={service.state?.courierState}>
         <UpsertCourierProvider>
           <ViewUpsertCourier />
         </UpsertCourierProvider>
       </CourierProvider>
-    </PageDataContext.Provider>
+    </PageDataContext>
   )
 }
 
@@ -138,18 +139,7 @@ interface ILoaderResult {
 }
 
 const loader = async (courierId: number) => {
-  const courierState: ICourierStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  if (!isNaN(courierId)) {
-    await fetchCourier(courierId).then(data => {
-      courierState.data = data;
-      courierState.getStatus = EStatus.SUCCESS;
-    });
-  }
+  const courierState = await loadCourier(courierId);
 
   const hasError = courierState.getStatus === EStatus.ERROR;
 

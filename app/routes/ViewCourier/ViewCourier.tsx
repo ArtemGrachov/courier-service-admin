@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import i18n from '~/i18n/config';
 
 import { EStatus } from '~/constants/status';
-import { EOrderStatus } from '~/constants/order';
 
 import routeLoader from '~/router/route-loader';
 
@@ -19,11 +18,9 @@ import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
 import { usePageDataService } from '~/providers/page-data/service';
 import { CourierProvider, useCourierCtx } from '~/providers/courier';
 import type { ICourierStoreData } from '~/providers/courier/store';
-import { fetchCourier } from '~/providers/courier/data';
 
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import type { IOrdersStoreData } from '~/providers/orders/store';
-import { fetchOrders } from '~/data/fetch-orders';
 
 import { ActiveOrdersProvider, useActiveOrdersCtx } from './providers/active-orders';
 
@@ -37,8 +34,13 @@ import Map from '~/components/map/Map';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 import ReloadButton from '~/components/other/ReloadButton';
 
+import { loadOrders } from './loaders/load-orders';
+import { loadCourier } from './loaders/load-courier';
+import { loadActiveOrders } from './loaders/load-active-orders';
+
 const ViewCourier: ComponentType = observer(() => {
   const { t } = useTranslation();
+  const titlePortalRef = useTitlePortalCtx();
   const errorSnackbar = useErrorSnackbar();
   const { reload } = usePageDataCtx();
   const [isLoading, setIsLoading] = useState(false);
@@ -46,8 +48,6 @@ const ViewCourier: ComponentType = observer(() => {
   const { store: courierStore } = useCourierCtx();
   const { store: ordersStore } = useOrdersCtx();
   const { store: activeOrdersStore } = useActiveOrdersCtx();
-
-  const titlePortalRef = useTitlePortalCtx();
 
   const courier = courierStore.data;
 
@@ -64,19 +64,19 @@ const ViewCourier: ComponentType = observer(() => {
   }
 
   return (
-    <Box
-      flexDirection="column"
-      display="flex"
-      gap={2}
-      padding={3}
-      width="100%"
-      boxSizing="border-box"
-      flexGrow={1}
-    >
-      <Portal container={() => titlePortalRef?.current ?? null}>
-        {t('view_courier.title', { id: courier?.id, name: courier?.name })}
-      </Portal>
-      <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
+      <Box
+        flexDirection="column"
+        display="flex"
+        gap={2}
+        padding={3}
+        width="100%"
+        boxSizing="border-box"
+        flexGrow={1}
+      >
+        <Portal container={() => titlePortalRef?.current ?? null}>
+          {t('view_courier.title', { id: courier?.id, name: courier?.name })}
+        </Portal>
         <Grid container spacing={2}>
           <Grid size={5}>
             <Stack gap={2}>
@@ -103,18 +103,18 @@ const ViewCourier: ComponentType = observer(() => {
             isProcessing={ordersStore.isProcessing}
           />
         )}
-      </ReloadPageProvider>
-    </Box>
+      </Box>
+    </ReloadPageProvider>
   )
 })
 
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
-  const { courerId } = useParams();
+  const { courierId } = useParams();
 
   const service = usePageDataService<ILoaderResult>({
     initialData: loaderData,
-    loader: () => loader(+courerId!),
+    loader: () => loader(+courierId!),
     updateCondition: newState => (
       newState?.courierState?.getStatus !== EStatus.ERROR &&
       newState?.ordersState?.getStatus !== EStatus.ERROR &&
@@ -123,7 +123,7 @@ const Wrapper: ComponentType = () => {
   });
 
   return (
-    <PageDataContext.Provider value={service}>
+    <PageDataContext value={service}>
       <OrdersProvider initialData={service.state?.ordersState}>
         <ActiveOrdersProvider initialData={service.state?.activeOrdersState}>
           <CourierProvider initialData={service.state?.courierState}>
@@ -131,7 +131,7 @@ const Wrapper: ComponentType = () => {
           </CourierProvider>
         </ActiveOrdersProvider>
       </OrdersProvider>
-    </PageDataContext.Provider>
+    </PageDataContext>
   )
 }
 
@@ -144,43 +144,15 @@ interface ILoaderResult {
 }
 
 const loader = async (courierId: number) => {
-  const courierState: ICourierStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  const ordersState: IOrdersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  const activeOrdersState: IOrdersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  if (!isNaN(courierId)) {
-    await Promise.all([
-      fetchCourier(courierId)
-        .then(data => {
-          courierState.data = data;
-          courierState.getStatus = EStatus.SUCCESS;
-        }),
-      fetchOrders({ courierIds: [courierId] })
-        .then(data => {
-          ordersState.data = data;
-          ordersState.getStatus = EStatus.SUCCESS;
-        }),
-      fetchOrders({ courierIds: [courierId], statuses: [EOrderStatus.PROCESSING] })
-        .then(data => {
-          activeOrdersState.data = data;
-          activeOrdersState.getStatus = EStatus.SUCCESS;
-        })
-    ]);
+  if (isNaN(courierId)) {
+    throw { status: 404 };
   }
+
+  const [courierState, ordersState, activeOrdersState] = await Promise.all([
+    loadCourier(courierId),
+    loadOrders(courierId),
+    loadActiveOrders(courierId),
+  ]);
 
   const hasError = ordersState.getStatus === EStatus.ERROR || courierState.getStatus === EStatus.ERROR || activeOrdersState.getStatus === EStatus.ERROR;
 

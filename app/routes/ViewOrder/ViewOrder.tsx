@@ -17,7 +17,6 @@ import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
 import { usePageDataService } from '~/providers/page-data/service';
 import { OrderProvider, useOrderCtx } from '~/providers/order';
 import type { IOrderStoreData } from '~/providers/order/store';
-import { fetchOrder } from '~/providers/order/data';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
@@ -28,6 +27,8 @@ import CourierCard from '~/components/couriers/CourierCard';
 import Map from '~/components/map/Map';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 import ReloadButton from '~/components/other/ReloadButton';
+
+import { loadOrder } from './loaders/load-order';
 
 const ViewOrder: ComponentType = observer(() => {
   const { t } = useTranslation();
@@ -102,11 +103,11 @@ const Wrapper: ComponentType = () => {
   });
 
   return (
-    <PageDataContext.Provider value={service}>
+    <PageDataContext value={service}>
       <OrderProvider initialData={service.state?.orderState}>
         <ViewOrder />
       </OrderProvider>
-    </PageDataContext.Provider>
+    </PageDataContext>
   )
 }
 
@@ -117,17 +118,11 @@ interface ILoaderResult {
 }
 
 const loader = async (orderId: number) => {
-  const orderState: IOrderStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  if (!isNaN(orderId)) {
-    const data = await fetchOrder(orderId);
-    orderState.data = data;
-    orderState.getStatus = EStatus.SUCCESS;
+  if (isNaN(orderId)) {
+    throw { status: 404 };
   }
+
+  const orderState = await loadOrder(orderId);
 
   const hasError = orderState.getStatus === EStatus.ERROR;
 

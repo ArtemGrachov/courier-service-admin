@@ -92,13 +92,13 @@ const Wrapper: ComponentType = () => {
   });
 
   return (
-    <PageDataContext.Provider value={service}>
+    <PageDataContext value={service}>
       <ClientsProvider initialData={service.state?.clientsState}>
         <ClientsFilterProvider>
           <ViewClients />
         </ClientsFilterProvider>
       </ClientsProvider>
-    </PageDataContext.Provider>
+    </PageDataContext>
   )
 }
 

@@ -18,11 +18,9 @@ import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
 import { usePageDataService } from '~/providers/page-data/service';
 import { ClientProvider, useClientCtx } from '~/providers/client';
 import type { IClientStoreData } from '~/providers/client/store';
-import { fetchClient } from '~/providers/client/data';
 
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import type { IOrdersStoreData } from '~/providers/orders/store';
-import { fetchOrders } from '~/data/fetch-orders';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
@@ -31,6 +29,9 @@ import ClientDetails from '~/components/clients/ClientDetails';
 import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 import RefreshButton from '~/components/other/ReloadButton';
+
+import { loadClient } from './loaders/load-client';
+import { loadOrders } from './loaders/load-orders';
 
 const ViewClient: ComponentType = observer(() => {
   const { t } = useTranslation();
@@ -121,29 +122,13 @@ interface ILoaderResult {
 }
 
 const loader = async (clientId: number) => {
-  const clientState: IClientStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  const ordersState: IOrdersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
+  if (isNaN(clientId)) {
+    throw { status: 404 };
   }
 
-  await Promise.all([
-    fetchClient(clientId)
-      .then(data => {
-        clientState.data = data;
-        clientState.getStatus = EStatus.SUCCESS;
-      }),
-    fetchOrders({ clientIds: [clientId] })
-      .then(data => {
-        ordersState.data = data;
-        ordersState.getStatus = EStatus.SUCCESS;
-      }),
+  const [clientState, ordersState] = await Promise.all([
+    loadClient(clientId),
+    loadOrders(clientId),
   ]);
 
   const hasError = ordersState.getStatus === EStatus.ERROR || clientState.getStatus === EStatus.ERROR;
