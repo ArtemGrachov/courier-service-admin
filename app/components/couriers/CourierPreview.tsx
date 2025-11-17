@@ -54,32 +54,36 @@ const CourierPreview: ComponentType<IProps> = ({ courier }) => {
           <CourierStatus status={status} />
         </Box>
       </Stack>
-      <Box>
-        <Link
-          to={routePath(ROUTES.COURIER, { courierId: id })}
-          component={RouterLink}
-        >
-          {t('courier_card.link')}
-        </Link>
-      </Box>
-      {phoneNumber && <Box>
-        <Link
-          component="a"
-          href={`tel:${phoneNumber}`}
-          target="_blank"
-        >
-          {phoneNumber}
-        </Link>
-      </Box>}
-      {email && <Box>
-        <Link
-          component="a"
-          href={`mailto:${email}`}
-          target="_blank"
-        >
-          {email}
-        </Link>
-      </Box>}
+      <Stack direction="row" gap={2} justifyContent="space-between" alignItems="flex-end">
+        <Stack gap={2}>
+          {phoneNumber && <Box>
+            <Link
+              component="a"
+              href={`tel:${phoneNumber}`}
+              target="_blank"
+            >
+              {phoneNumber}
+            </Link>
+          </Box>}
+          {email && <Box>
+            <Link
+              component="a"
+              href={`mailto:${email}`}
+              target="_blank"
+            >
+              {email}
+            </Link>
+          </Box>}
+        </Stack>
+        <Box>
+          <Link
+            to={routePath(ROUTES.COURIER, { courierId: id })}
+            component={RouterLink}
+          >
+            {t('courier_card.link')}
+          </Link>
+        </Box>
+      </Stack>
     </Stack>
   )
 }

@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe';
 import { createEmitter } from '@kitbag/events';
 
-import type { IMarker, MarkerData } from '../../types';
+import type { IMarker } from '../../types';
 
 export interface IMarkerClickPayload {
   marker: IMarker;

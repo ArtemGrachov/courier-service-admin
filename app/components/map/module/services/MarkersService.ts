@@ -1,6 +1,7 @@
 import { injectable } from 'tsyringe';
 
 import { EMarkerTypes } from '../../constants';
+import { EOrderStatus } from '~/constants/order';
 
 import type { MarkerData } from '../../types';
 import type { ICourier } from '~/types/models/courier';
@@ -34,7 +35,7 @@ export class MarkersService {
       });
     }
 
-    if (courier?.location) {
+    if ((order.status === EOrderStatus.PROCESSING || order.status === EOrderStatus.ORDERED) && courier?.location) {
       markersData.push({
         key: getCourierKey(courier.id),
         location: courier.location,

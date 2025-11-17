@@ -18,7 +18,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
-import OrdersHeader from './components/OrdersHeader';
+import ReloadButton from '~/components/other/ReloadButton';
 import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 import OrderFilterProvider from '~/providers/order-filters';
@@ -63,7 +63,10 @@ const ViewOrders: ComponentType = observer(() => {
         width="100%"
         boxSizing="border-box"
       >
-        <OrdersHeader />
+        <ReloadButton
+          isProcessing={ordersStore.isProcessing}
+          onReload={reloadPageData}
+        />
         <OrdersTable
           isProcessing={ordersStore.isProcessing}
           items={ordersStore.data?.data}
