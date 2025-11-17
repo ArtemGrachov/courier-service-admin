@@ -9,13 +9,16 @@ import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMa
 
 import i18n from '~/i18n/config';
 
-import { MapFiltersProvider } from './providers/map-filters';
+import { MapFiltersProvider, useMapFiltersCtx } from './providers/map-filters';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
+import OrderFilterProvider from '~/providers/order-filters';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
-import FilterMediator from './components/FilterMediator';
+import MapFilters from '~/components/map-filters/MapFilters';
 import Map from '~/components/map/Map';
+
+import type { IFormMapFilters } from '~/types/forms/form-map-filters';
 
 import { loadOrders } from './loaders/load-orders';
 import { loadCouriers } from './loaders/load-couriers';
@@ -25,10 +28,15 @@ const ViewMap: ComponentType = observer(() => {
 
   const { store: couriersStore } = useCouriersCtx();
   const { store: ordersStore } = useOrdersCtx();
+  const { store: mapFiltersStore, handleUpdate } = useMapFiltersCtx();
 
   const titlePortalRef = useTitlePortalCtx();
 
   const orders = ordersStore.data?.data;
+
+  const submitHandler = (formValue: IFormMapFilters) => {
+    handleUpdate(formValue);
+  }
 
   return (
     <>
@@ -37,7 +45,10 @@ const ViewMap: ComponentType = observer(() => {
       </Portal>
       <Box height="100%" position="relative">
         <Card sx={{ position: 'absolute', top: 8, right: 8, padding: 1, zIndex: 1300 }}>
-          <FilterMediator />
+        <MapFilters
+          formValue={mapFiltersStore.formValue}
+          onSubmit={submitHandler}
+        />
         </Card>
         <Map
           couriers={couriersStore.data?.data}
@@ -56,7 +67,9 @@ const Wrapper: ComponentType = () => {
     <OrdersProvider initialData={loaderData.ordersState}>
       <CouriersProvider initialData={loaderData.couriersState}>
         <MapFiltersProvider>
-          <ViewMap />
+          <OrderFilterProvider>
+            <ViewMap />
+          </OrderFilterProvider>
         </MapFiltersProvider>
       </CouriersProvider>
     </OrdersProvider>
