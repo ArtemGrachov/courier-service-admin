@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 const ContentUA: ComponentType = () => {
   return (
     <div>
-      <Typography variant="h4" component="h1" gutterBottom>📦 Сервіс кур'єрської доставки</Typography>
+      <Typography variant="h4" component="h1" gutterBottom>📦 Адмінпанель | Сервіс кур'єрської доставки</Typography>
       <Typography variant="body1" gutterBottom>
         Створено з демонстративною та навчальною метою
       </Typography>

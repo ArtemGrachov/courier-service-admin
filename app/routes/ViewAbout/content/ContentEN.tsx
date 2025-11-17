@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 const ContentEN: ComponentType = () => {
   return (
     <div>
-      <Typography variant="h4" component="h1" gutterBottom>📦 Courier delivery service</Typography>
+      <Typography variant="h4" component="h1" gutterBottom>📦 Admin panel | Courier delivery service</Typography>
       <Typography variant="body1" gutterBottom>
         Created for demo and educational purposes
       </Typography>
