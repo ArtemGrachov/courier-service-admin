@@ -10,5 +10,7 @@ export interface IFormOrdersFilter {
   receiverIds?: number[];
   dateTimeOrderedSort?: ESortDirection | null;
   dateTimeClosedSort?: ESortDirection | null;
+  search?: string | null;
+  id?: string | null;
 }
 

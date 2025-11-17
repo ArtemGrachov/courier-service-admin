@@ -40,13 +40,8 @@ const Map: ComponentType<IProps> = ({ orders, couriers, center, showPopupOrderDa
     const mModule = MapModule.createModule();
     mModule.init(mapRef.current!, center);
 
-    if (orders) {
-      mModule.updateOrders(orders);
-    }
-
-    if (couriers) {
-      mModule.updateCouriers(couriers);
-    }
+    mModule.updateCouriers(couriers ?? []);
+    mModule.updateOrders(orders ?? []);
 
     if (!center) {
       mModule.scaleToMarkers({
@@ -82,16 +77,9 @@ const Map: ComponentType<IProps> = ({ orders, couriers, center, showPopupOrderDa
   }, []);
 
   useEffect(() => {
-    if (orders) {
-      mapModule.current?.updateOrders(orders);
-    }
-  }, [orders]);
-
-  useEffect(() => {
-    if (couriers) {
-      mapModule.current?.updateCouriers(couriers);
-    }
-  }, [couriers]);
+    mapModule.current?.updateCouriers(couriers ?? []);
+    mapModule.current?.updateOrders(orders ?? []);
+  }, [orders, couriers]);
 
   const paperBg = useMemo(() => {
     return (theme.vars || theme).palette.background.paper;

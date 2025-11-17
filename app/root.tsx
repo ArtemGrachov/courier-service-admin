@@ -4,9 +4,9 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useRouteError,
 } from 'react-router';
 import 'reflect-metadata';
+import { useTranslation } from 'react-i18next';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -65,6 +65,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const { ready } = useTranslation();
+
+  if (!ready) {
+    return null;
+  }
+
   return <Outlet />
 }
 

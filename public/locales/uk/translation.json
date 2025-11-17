@@ -130,6 +130,7 @@
     "receiver": "Отримувач",
     "courier": "Кур'єр",
     "status": "Статус",
+    "description": "Опис",
     "ordered_at": "Дата/час замовлення",
     "closed_at": "Дата/час завершення",
     "details": "Деталі"
@@ -137,7 +138,10 @@
   "order_card": {
     "id": "Замовлення ID",
     "ordered_at": "Дата/час замовлення",
-    "closed_at": "Дата/час завершення"
+    "closed_at": "Дата/час завершення",
+    "size": "Розмір",
+    "volume": "Об'єм",
+    "weight": "Вага"
   },
   "client_card": {
     "receiver_id": "Отримувач ID",
@@ -182,11 +186,11 @@
     "close_all_windows": "Закрити усі вікна"
   },
   "map_filters": {
+    "order_id": "ID замовлення",
     "status": "Статус",
     "senders": "Відправники",
     "receivers": "Отримувачі",
-    "couriers": "Кур'єри",
-    "options_selected": "Обрано {{count}}"
+    "couriers": "Кур'єри"
   },
   "meta": {
     "title": "Адмінпанель",
@@ -229,6 +233,18 @@
   },
   "view_about": {
     "main_link": "Повернутися на головну сторінку"
+  },
+  "common_filters": {
+    "options_selected": "Обрано {{count}}"
+  },
+  "orders_couriers_operator": {
+    "label": "Кур'єри"
+  },
+  "orders_senders_operator": {
+    "label": "Відправники"
+  },
+  "orders_receivers_operator": {
+    "label": "Отримувачі"
   }
 }
 

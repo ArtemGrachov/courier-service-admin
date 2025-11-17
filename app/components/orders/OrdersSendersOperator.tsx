@@ -39,7 +39,7 @@ const OrdersSendersOperator: ComponentType<GridFilterInputValueProps> = observer
   }, [senders]);
 
   const renderValue = (v: number[]) => {
-    return t('map_filters.options_selected', { count: v.length });
+    return t('common_filters.options_selected', { count: v.length });
   }
 
   const changeHandler = (
@@ -60,7 +60,7 @@ const OrdersSendersOperator: ComponentType<GridFilterInputValueProps> = observer
       getOptionLabel={v => sendersMap[v]?.name ?? '-'}
       disableCloseOnSelect={true}
       renderValue={renderValue}
-      label={t('orders_couriers_operator.label')}
+      label={t('orders_senders_operator.label')}
       value={item.value ?? []}
       onChange={changeHandler}
       onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}

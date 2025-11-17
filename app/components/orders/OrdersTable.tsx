@@ -2,6 +2,7 @@ import { useMemo, useRef, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   getGridSingleSelectOperators,
+  getGridStringOperators,
   DataGrid,
   type GridColDef,
   type GridSingleSelectColDef,
@@ -57,6 +58,7 @@ const enum EColumns {
   RECEIVER = 'receiver',
   COURIER = 'courier',
   STATUS = 'status',
+  DESCRIPTION = 'description',
   ORDERED_AT = 'orderedAt',
   CLOSED_AT = 'closedAt',
   ACTIONS = 'actions',
@@ -116,14 +118,19 @@ const COURIERS_OPERATORS: GridFilterOperator<any, number[]>[] = [
     getValueAsString: (value: number) => value.toString(),
   }
 ];
-  
+
+const STRING_OPERATORS = [
+  getGridStringOperators().find(o => o.value === 'contains')!,
+];
+
 const BASE_COLUMNS: Record<EColumns, GridColDef> = {
   [EColumns.ID]: {
     field: 'id',
     headerName: 'orders_table.id',
     width: 70,
+    filterOperators: STRING_OPERATORS,
     sortable: false,
-    filterable: false,
+    filterable: true,
   },
   [EColumns.SENDER]: {
     field: 'sender',
@@ -173,6 +180,15 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     getOptionLabel: o => (o as unknown as any)?.label,
     getOptionValue: o => (o as unknown as any)?.value,
   } as GridSingleSelectColDef,
+  [EColumns.DESCRIPTION]: {
+    field: 'description',
+    type: 'string',
+    headerName: 'orders_table.description',
+    flex: 2,
+    filterOperators: STRING_OPERATORS,
+    sortable: false,
+    filterable: true,
+  },
   [EColumns.ORDERED_AT]: {
     field: 'dateTimeOrdered',
     type: 'dateTime',
@@ -224,6 +240,7 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
           label: t(`order_status.${status}`)
         }))
       } as GridColDef,
+      BASE_COLUMNS[EColumns.DESCRIPTION],
       BASE_COLUMNS[EColumns.ORDERED_AT],
       BASE_COLUMNS[EColumns.CLOSED_AT],
       BASE_COLUMNS[EColumns.ACTIONS],
@@ -250,7 +267,9 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
     const fltrMdl = filtersModel.current;
 
     if (fltrMdl) {
+      let id;
       let statuses;
+      let search;
       let courierIds;
       let senderIds;
       let receiverIds;
@@ -259,8 +278,16 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
         const item = fltrMdl.items[i];
 
         switch (item.field) {
+          case 'id': {
+            id = item.value;
+            break;
+          }
           case 'status': {
             statuses = item.value;
+            break;
+          }
+          case 'description': {
+            search = item.value;
             break;
           }
           case 'courier': {
@@ -282,6 +309,8 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
       payload.courierIds = courierIds;
       payload.senderIds = senderIds;
       payload.receiverIds = receiverIds;
+      payload.search = search;
+      payload.id = id;
     }
 
     payload.dateTimeOrderedSort = null;
@@ -346,6 +375,22 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
     }
 
     const items = [];
+
+    if (formValue.id) {
+      items.push({
+        field: 'id',
+        operator: 'contains',
+        value: formValue.search,
+      })
+    }
+
+    if (formValue.search) {
+      items.push({
+        field: 'description',
+        operator: 'contains',
+        value: formValue.search,
+      })
+    }
 
     if (formValue.statuses) {
       items.push({

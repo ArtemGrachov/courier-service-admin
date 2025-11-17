@@ -1,5 +1,7 @@
 import { useRef } from 'react';
 
+import { Cache } from '~/cache/Cache';
+
 import { ClientsStore } from '~/store/clients.store';
 import { CouriersStore } from '~/store/couriers.store';
 
@@ -26,10 +28,29 @@ export const useOrderFiltersService = () => {
     receiversStore.current = new ClientsStore();
   }
 
+  const cachedSearch = async <T, >(
+    key: string,
+    query: any,
+    request: () => Promise<T>,
+  ) => {
+    const cache = Cache.instance;
+    const cacheKey = key + JSON.stringify(query);
+    const cachedData = cache.get(cacheKey);
+
+    if (cachedData) {
+      return cachedData;
+    }
+
+    const result = await request();
+    cache.set(cacheKey, result);
+
+    return result;
+  }
+
   const fetchCouriers = async (query?: IGetCouriersQuery) => {
     try {
       couriersStore.current.doGetInit();
-      const data = await apiFetchCouriers(query);
+      const data = await cachedSearch('couriers', query, () => apiFetchCouriers(query));
       couriersStore.current.doGetSuccess(data);
     } catch (err) {
       couriersStore.current.doGetError(err);
@@ -40,7 +61,7 @@ export const useOrderFiltersService = () => {
   const fetchSenders = async (query?: IGetClientsQuery) => {
     try {
       sendersStore.current.doGetInit();
-      const data = await fetchClients(query);
+      const data = await cachedSearch('clients', query, () => fetchClients(query));
       sendersStore.current.doGetSuccess(data);
     } catch (err) {
       sendersStore.current.doGetError(err);
@@ -51,7 +72,7 @@ export const useOrderFiltersService = () => {
   const fetchReceivers = async (query?: IGetClientsQuery) => {
     try {
       receiversStore.current.doGetInit();
-      const data = await fetchClients(query);
+      const data = await cachedSearch('clients', query, () => fetchClients(query));
       receiversStore.current.doGetSuccess(data);
     } catch (err) {
       receiversStore.current.doGetError(err);

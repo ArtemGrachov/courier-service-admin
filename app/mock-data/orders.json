@@ -5,12 +5,22 @@
     "receiverId": 12,
     "senderAddress": "42 The Grove, Ealing, London W5 5LH",
     "receiverAddress": "11 City Road, London EC1Y 1AA",
-    "senderGeoPos": { "lat": 51.5144, "lng": -0.3012 },
-    "receiverGeoPos": { "lat": 51.5222, "lng": -0.0881 },
+    "senderGeoPos": {
+      "lat": 51.5144,
+      "lng": -0.3012
+    },
+    "receiverGeoPos": {
+      "lat": 51.5222,
+      "lng": -0.0881
+    },
     "courierId": 5,
     "status": "ordered",
     "dateTimeOrdered": "2025-11-10T08:25:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Beauty products \u2013 skincare set",
+    "size": "42x31x20 cm",
+    "volume": "26040 cm\u00b3",
+    "weight": "10.45 kg"
   },
   {
     "id": 2,
@@ -18,12 +28,22 @@
     "receiverId": 25,
     "senderAddress": "19 Church Lane, Hornchurch RM11 1EH",
     "receiverAddress": "83 Norwood High Street, West Norwood SE27 9JF",
-    "senderGeoPos": { "lat": 51.5610, "lng": 0.2142 },
-    "receiverGeoPos": { "lat": 51.4313, "lng": -0.1037 },
+    "senderGeoPos": {
+      "lat": 51.561,
+      "lng": 0.2142
+    },
+    "receiverGeoPos": {
+      "lat": 51.4313,
+      "lng": -0.1037
+    },
     "courierId": 8,
     "status": "processing",
     "dateTimeOrdered": "2025-11-09T14:12:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Kitchenware \u2013 stainless steel utensils",
+    "size": "10x9x24 cm",
+    "volume": "2160 cm\u00b3",
+    "weight": "0.27 kg"
   },
   {
     "id": 3,
@@ -31,12 +51,22 @@
     "receiverId": 9,
     "senderAddress": "55 Fulham Palace Road, Hammersmith, London W6 8JA",
     "receiverAddress": "2 Cranbrook Road, Ilford IG1 4PU",
-    "senderGeoPos": { "lat": 51.4876, "lng": -0.2224 },
-    "receiverGeoPos": { "lat": 51.5595, "lng": 0.0718 },
+    "senderGeoPos": {
+      "lat": 51.4876,
+      "lng": -0.2224
+    },
+    "receiverGeoPos": {
+      "lat": 51.5595,
+      "lng": 0.0718
+    },
     "courierId": 11,
     "status": "processing",
     "dateTimeOrdered": "2025-11-09T10:47:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Tools \u2013 screwdriver set",
+    "size": "32x24x13 cm",
+    "volume": "9984 cm\u00b3",
+    "weight": "4.08 kg"
   },
   {
     "id": 4,
@@ -44,12 +74,22 @@
     "receiverId": 19,
     "senderAddress": "28 High Street, Croydon CR0 1YB",
     "receiverAddress": "12 Belmont Hill, Lewisham SE13 5AX",
-    "senderGeoPos": { "lat": 51.3727, "lng": -0.0996 },
-    "receiverGeoPos": { "lat": 51.4639, "lng": -0.0103 },
+    "senderGeoPos": {
+      "lat": 51.3727,
+      "lng": -0.0996
+    },
+    "receiverGeoPos": {
+      "lat": 51.4639,
+      "lng": -0.0103
+    },
     "courierId": 13,
     "status": "ordered",
     "dateTimeOrdered": "2025-11-10T09:10:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Hobby items \u2013 art supplies",
+    "size": "43x27x33 cm",
+    "volume": "38313 cm\u00b3",
+    "weight": "7.89 kg"
   },
   {
     "id": 5,
@@ -57,12 +97,22 @@
     "receiverId": 28,
     "senderAddress": "6 The Broadway, Wimbledon, London SW19 1RF",
     "receiverAddress": "44 Pinner Road, Harrow HA1 4HZ",
-    "senderGeoPos": { "lat": 51.4214, "lng": -0.2077 },
-    "receiverGeoPos": { "lat": 51.5864, "lng": -0.3412 },
+    "senderGeoPos": {
+      "lat": 51.4214,
+      "lng": -0.2077
+    },
+    "receiverGeoPos": {
+      "lat": 51.5864,
+      "lng": -0.3412
+    },
     "courierId": 2,
     "status": "processing",
     "dateTimeOrdered": "2025-11-09T15:48:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Toys \u2013 board game",
+    "size": "34x16x40 cm",
+    "volume": "21760 cm\u00b3",
+    "weight": "11.93 kg"
   },
   {
     "id": 6,
@@ -70,12 +120,22 @@
     "receiverId": 14,
     "senderAddress": "7 The Green, Richmond TW9 1PL",
     "receiverAddress": "22 Victoria Park Road, Hackney E9 7NU",
-    "senderGeoPos": { "lat": 51.4600, "lng": -0.3037 },
-    "receiverGeoPos": { "lat": 51.5442, "lng": -0.0459 },
+    "senderGeoPos": {
+      "lat": 51.46,
+      "lng": -0.3037
+    },
+    "receiverGeoPos": {
+      "lat": 51.5442,
+      "lng": -0.0459
+    },
     "courierId": 7,
     "status": "ordered",
     "dateTimeOrdered": "2025-11-10T10:01:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Small home appliance \u2013 toaster",
+    "size": "20x26x20 cm",
+    "volume": "10400 cm\u00b3",
+    "weight": "2.8 kg"
   },
   {
     "id": 7,
@@ -83,12 +143,22 @@
     "receiverId": 22,
     "senderAddress": "63 Station Road, Edgware HA8 7HX",
     "receiverAddress": "50 Bromley Road, Beckenham BR3 5NP",
-    "senderGeoPos": { "lat": 51.6123, "lng": -0.2751 },
-    "receiverGeoPos": { "lat": 51.4039, "lng": -0.0156 },
+    "senderGeoPos": {
+      "lat": 51.6123,
+      "lng": -0.2751
+    },
+    "receiverGeoPos": {
+      "lat": 51.4039,
+      "lng": -0.0156
+    },
     "courierId": 9,
     "status": "processing",
     "dateTimeOrdered": "2025-11-09T13:32:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Food items \u2013 packaged snacks",
+    "size": "16x10x30 cm",
+    "volume": "4800 cm\u00b3",
+    "weight": "13.28 kg"
   },
   {
     "id": 8,
@@ -96,12 +166,22 @@
     "receiverId": 23,
     "senderAddress": "30 North Street, Romford RM1 1BH",
     "receiverAddress": "74 Church Street, Twickenham TW1 3NR",
-    "senderGeoPos": { "lat": 51.5774, "lng": 0.1820 },
-    "receiverGeoPos": { "lat": 51.4470, "lng": -0.3293 },
+    "senderGeoPos": {
+      "lat": 51.5774,
+      "lng": 0.182
+    },
+    "receiverGeoPos": {
+      "lat": 51.447,
+      "lng": -0.3293
+    },
     "courierId": 16,
     "status": "ordered",
     "dateTimeOrdered": "2025-11-10T11:14:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Clothing \u2013 winter jacket",
+    "size": "55x24x33 cm",
+    "volume": "43560 cm\u00b3",
+    "weight": "0.94 kg"
   },
   {
     "id": 9,
@@ -109,12 +189,22 @@
     "receiverId": 16,
     "senderAddress": "14 Oxford Street, London W1D 1BS",
     "receiverAddress": "59 South Street, Romford RM1 1BH",
-    "senderGeoPos": { "lat": 51.5142, "lng": -0.1332 },
-    "receiverGeoPos": { "lat": 51.5746, "lng": 0.1834 },
+    "senderGeoPos": {
+      "lat": 51.5142,
+      "lng": -0.1332
+    },
+    "receiverGeoPos": {
+      "lat": 51.5746,
+      "lng": 0.1834
+    },
     "courierId": 10,
     "status": "processing",
     "dateTimeOrdered": "2025-11-09T17:26:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Health items \u2013 vitamins",
+    "size": "60x31x22 cm",
+    "volume": "40920 cm\u00b3",
+    "weight": "8.27 kg"
   },
   {
     "id": 10,
@@ -122,12 +212,22 @@
     "receiverId": 7,
     "senderAddress": "21 Uxbridge Road, Hayes UB4 0JN",
     "receiverAddress": "91 Kennington Lane, London SE11 4HQ",
-    "senderGeoPos": { "lat": 51.5101, "lng": -0.4216 },
-    "receiverGeoPos": { "lat": 51.4880, "lng": -0.1125 },
+    "senderGeoPos": {
+      "lat": 51.5101,
+      "lng": -0.4216
+    },
+    "receiverGeoPos": {
+      "lat": 51.488,
+      "lng": -0.1125
+    },
     "courierId": 12,
     "status": "ordered",
     "dateTimeOrdered": "2025-11-10T07:55:00Z",
-    "dateTimeClosed": null
+    "dateTimeClosed": null,
+    "description": "Toys \u2013 board game",
+    "size": "33x26x27 cm",
+    "volume": "23166 cm\u00b3",
+    "weight": "8.35 kg"
   },
   {
     "id": 11,
@@ -135,12 +235,22 @@
     "receiverId": 24,
     "senderAddress": "23 Green Lanes, Palmers Green, London N13 4TT",
     "receiverAddress": "66 Garratt Lane, Wandsworth SW18 4FT",
-    "senderGeoPos": { "lat": 51.6187, "lng": -0.1021 },
-    "receiverGeoPos": { "lat": 51.4543, "lng": -0.1924 },
+    "senderGeoPos": {
+      "lat": 51.6187,
+      "lng": -0.1021
+    },
+    "receiverGeoPos": {
+      "lat": 51.4543,
+      "lng": -0.1924
+    },
     "courierId": 4,
     "status": "completed",
     "dateTimeOrdered": "2025-11-07T08:42:00Z",
-    "dateTimeClosed": "2025-11-07T11:17:00Z"
+    "dateTimeClosed": "2025-11-07T11:17:00Z",
+    "description": "Books \u2013 mixed collection",
+    "size": "48x17x15 cm",
+    "volume": "12240 cm\u00b3",
+    "weight": "4.33 kg"
   },
   {
     "id": 12,
@@ -148,12 +258,22 @@
     "receiverId": 27,
     "senderAddress": "14 Watford Road, Wembley HA0 3HG",
     "receiverAddress": "78 Station Parade, Barking IG11 8TD",
-    "senderGeoPos": { "lat": 51.5510, "lng": -0.3056 },
-    "receiverGeoPos": { "lat": 51.5373, "lng": 0.0770 },
+    "senderGeoPos": {
+      "lat": 51.551,
+      "lng": -0.3056
+    },
+    "receiverGeoPos": {
+      "lat": 51.5373,
+      "lng": 0.077
+    },
     "courierId": 15,
     "status": "completed",
     "dateTimeOrdered": "2025-11-06T12:23:00Z",
-    "dateTimeClosed": "2025-11-06T14:41:00Z"
+    "dateTimeClosed": "2025-11-06T14:41:00Z",
+    "description": "Small home appliance \u2013 toaster",
+    "size": "17x14x27 cm",
+    "volume": "6426 cm\u00b3",
+    "weight": "0.26 kg"
   },
   {
     "id": 13,
@@ -161,12 +281,22 @@
     "receiverId": 29,
     "senderAddress": "5 High Street, Uxbridge UB8 1JN",
     "receiverAddress": "10 Park Road, Enfield EN3 6TJ",
-    "senderGeoPos": { "lat": 51.5466, "lng": -0.4772 },
-    "receiverGeoPos": { "lat": 51.6653, "lng": -0.0474 },
+    "senderGeoPos": {
+      "lat": 51.5466,
+      "lng": -0.4772
+    },
+    "receiverGeoPos": {
+      "lat": 51.6653,
+      "lng": -0.0474
+    },
     "courierId": 9,
     "status": "completed",
     "dateTimeOrdered": "2025-11-08T09:58:00Z",
-    "dateTimeClosed": "2025-11-08T13:14:00Z"
+    "dateTimeClosed": "2025-11-08T13:14:00Z",
+    "description": "Baby products \u2013 diapers",
+    "size": "57x6x27 cm",
+    "volume": "9234 cm\u00b3",
+    "weight": "4.2 kg"
   },
   {
     "id": 14,
@@ -174,12 +304,22 @@
     "receiverId": 26,
     "senderAddress": "33 Church Street, Croydon CR0 1RH",
     "receiverAddress": "7 East Street, Bromley BR1 1QX",
-    "senderGeoPos": { "lat": 51.3722, "lng": -0.1005 },
-    "receiverGeoPos": { "lat": 51.4036, "lng": 0.0174 },
+    "senderGeoPos": {
+      "lat": 51.3722,
+      "lng": -0.1005
+    },
+    "receiverGeoPos": {
+      "lat": 51.4036,
+      "lng": 0.0174
+    },
     "courierId": 1,
     "status": "completed",
     "dateTimeOrdered": "2025-11-05T10:11:00Z",
-    "dateTimeClosed": "2025-11-05T12:59:00Z"
+    "dateTimeClosed": "2025-11-05T12:59:00Z",
+    "description": "Books \u2013 mixed collection",
+    "size": "34x18x5 cm",
+    "volume": "3060 cm\u00b3",
+    "weight": "13.21 kg"
   },
   {
     "id": 15,
@@ -187,12 +327,22 @@
     "receiverId": 30,
     "senderAddress": "16 Sutton Road, Kingston upon Thames KT1 2SH",
     "receiverAddress": "47 High Street, Harlesden NW10 4NJ",
-    "senderGeoPos": { "lat": 51.4108, "lng": -0.3001 },
-    "receiverGeoPos": { "lat": 51.5365, "lng": -0.2439 },
+    "senderGeoPos": {
+      "lat": 51.4108,
+      "lng": -0.3001
+    },
+    "receiverGeoPos": {
+      "lat": 51.5365,
+      "lng": -0.2439
+    },
     "courierId": 18,
     "status": "completed",
     "dateTimeOrdered": "2025-11-04T15:20:00Z",
-    "dateTimeClosed": "2025-11-04T18:45:00Z"
+    "dateTimeClosed": "2025-11-04T18:45:00Z",
+    "description": "Electronics \u2013 portable speaker",
+    "size": "56x10x24 cm",
+    "volume": "13440 cm\u00b3",
+    "weight": "0.38 kg"
   },
   {
     "id": 16,
@@ -200,12 +350,22 @@
     "receiverId": 32,
     "senderAddress": "7 Market Street, Watford WD18 0PD",
     "receiverAddress": "61 Kingsland Road, Hackney E2 8AG",
-    "senderGeoPos": { "lat": 51.6546, "lng": -0.3926 },
-    "receiverGeoPos": { "lat": 51.5320, "lng": -0.0759 },
+    "senderGeoPos": {
+      "lat": 51.6546,
+      "lng": -0.3926
+    },
+    "receiverGeoPos": {
+      "lat": 51.532,
+      "lng": -0.0759
+    },
     "courierId": 3,
     "status": "completed",
     "dateTimeOrdered": "2025-11-02T08:40:00Z",
-    "dateTimeClosed": "2025-11-02T11:00:00Z"
+    "dateTimeClosed": "2025-11-02T11:00:00Z",
+    "description": "Toys \u2013 board game",
+    "size": "16x26x25 cm",
+    "volume": "10400 cm\u00b3",
+    "weight": "0.94 kg"
   },
   {
     "id": 17,
@@ -213,12 +373,22 @@
     "receiverId": 34,
     "senderAddress": "12 Victoria Avenue, Southend-on-Sea SS2 6AL",
     "receiverAddress": "38 Lea Bridge Road, Leyton E10 7AT",
-    "senderGeoPos": { "lat": 51.5440, "lng": 0.7073 },
-    "receiverGeoPos": { "lat": 51.5703, "lng": -0.0282 },
+    "senderGeoPos": {
+      "lat": 51.544,
+      "lng": 0.7073
+    },
+    "receiverGeoPos": {
+      "lat": 51.5703,
+      "lng": -0.0282
+    },
     "courierId": 14,
     "status": "cancelled",
     "dateTimeOrdered": "2025-11-03T09:35:00Z",
-    "dateTimeClosed": "2025-11-03T09:58:00Z"
+    "dateTimeClosed": "2025-11-03T09:58:00Z",
+    "description": "Electronics \u2013 portable speaker",
+    "size": "28x23x27 cm",
+    "volume": "17388 cm\u00b3",
+    "weight": "10.85 kg"
   },
   {
     "id": 18,
@@ -226,12 +396,22 @@
     "receiverId": 36,
     "senderAddress": "4 London Road, Croydon CR0 2TA",
     "receiverAddress": "5 The Broadway, Ealing W5 2ND",
-    "senderGeoPos": { "lat": 51.3792, "lng": -0.1033 },
-    "receiverGeoPos": { "lat": 51.5133, "lng": -0.3021 },
+    "senderGeoPos": {
+      "lat": 51.3792,
+      "lng": -0.1033
+    },
+    "receiverGeoPos": {
+      "lat": 51.5133,
+      "lng": -0.3021
+    },
     "courierId": 10,
     "status": "completed",
     "dateTimeOrdered": "2025-11-06T07:15:00Z",
-    "dateTimeClosed": "2025-11-06T09:30:00Z"
+    "dateTimeClosed": "2025-11-06T09:30:00Z",
+    "description": "Small home appliance \u2013 toaster",
+    "size": "23x30x19 cm",
+    "volume": "13110 cm\u00b3",
+    "weight": "8.51 kg"
   },
   {
     "id": 19,
@@ -239,12 +419,22 @@
     "receiverId": 38,
     "senderAddress": "29 The Parade, Bourne End SL8 5SB",
     "receiverAddress": "88 Denmark Hill, Camberwell SE5 9JW",
-    "senderGeoPos": { "lat": 51.5772, "lng": -0.7093 },
-    "receiverGeoPos": { "lat": 51.4685, "lng": -0.0898 },
+    "senderGeoPos": {
+      "lat": 51.5772,
+      "lng": -0.7093
+    },
+    "receiverGeoPos": {
+      "lat": 51.4685,
+      "lng": -0.0898
+    },
     "courierId": 6,
     "status": "completed",
     "dateTimeOrdered": "2025-11-03T10:23:00Z",
-    "dateTimeClosed": "2025-11-03T13:11:00Z"
+    "dateTimeClosed": "2025-11-03T13:11:00Z",
+    "description": "Pet supplies \u2013 dog toys",
+    "size": "42x27x17 cm",
+    "volume": "19278 cm\u00b3",
+    "weight": "1.97 kg"
   },
   {
     "id": 20,
@@ -252,12 +442,22 @@
     "receiverId": 40,
     "senderAddress": "8 Windsor Road, Slough SL1 2EJ",
     "receiverAddress": "12 Kensington High Street, London W8 4PF",
-    "senderGeoPos": { "lat": 51.5095, "lng": -0.5955 },
-    "receiverGeoPos": { "lat": 51.5014, "lng": -0.1948 },
+    "senderGeoPos": {
+      "lat": 51.5095,
+      "lng": -0.5955
+    },
+    "receiverGeoPos": {
+      "lat": 51.5014,
+      "lng": -0.1948
+    },
     "courierId": 17,
     "status": "cancelled",
     "dateTimeOrdered": "2025-11-05T12:35:00Z",
-    "dateTimeClosed": "2025-11-05T13:02:00Z"
+    "dateTimeClosed": "2025-11-05T13:02:00Z",
+    "description": "Beauty products \u2013 skincare set",
+    "size": "44x16x32 cm",
+    "volume": "22528 cm\u00b3",
+    "weight": "11.38 kg"
   },
   {
     "id": 21,
@@ -265,12 +465,22 @@
     "receiverId": 2,
     "senderAddress": "12 Uxbridge Road, Hayes UB4 0JN",
     "receiverAddress": "45 Kennington Lane, London SE11 4HQ",
-    "senderGeoPos": { "lat": 51.5101, "lng": -0.4216 },
-    "receiverGeoPos": { "lat": 51.4880, "lng": -0.1125 },
+    "senderGeoPos": {
+      "lat": 51.5101,
+      "lng": -0.4216
+    },
+    "receiverGeoPos": {
+      "lat": 51.488,
+      "lng": -0.1125
+    },
     "courierId": 1,
     "status": "completed",
     "dateTimeOrdered": "2025-10-20T09:12:00Z",
-    "dateTimeClosed": "2025-10-20T11:45:00Z"
+    "dateTimeClosed": "2025-10-20T11:45:00Z",
+    "description": "Toys \u2013 board game",
+    "size": "52x10x30 cm",
+    "volume": "15600 cm\u00b3",
+    "weight": "6.13 kg"
   },
   {
     "id": 22,
@@ -278,12 +488,22 @@
     "receiverId": 4,
     "senderAddress": "42 The Grove, Ealing, London W5 5LH",
     "receiverAddress": "63 Station Road, Edgware HA8 7HX",
-    "senderGeoPos": { "lat": 51.5144, "lng": -0.3012 },
-    "receiverGeoPos": { "lat": 51.6123, "lng": -0.2751 },
+    "senderGeoPos": {
+      "lat": 51.5144,
+      "lng": -0.3012
+    },
+    "receiverGeoPos": {
+      "lat": 51.6123,
+      "lng": -0.2751
+    },
     "courierId": 2,
     "status": "completed",
     "dateTimeOrdered": "2025-10-21T10:05:00Z",
-    "dateTimeClosed": "2025-10-21T12:33:00Z"
+    "dateTimeClosed": "2025-10-21T12:33:00Z",
+    "description": "Kitchenware \u2013 stainless steel utensils",
+    "size": "34x35x8 cm",
+    "volume": "9520 cm\u00b3",
+    "weight": "2.87 kg"
   },
   {
     "id": 23,
@@ -291,12 +511,22 @@
     "receiverId": 6,
     "senderAddress": "23 Green Lanes, Palmers Green, London N13 4TT",
     "receiverAddress": "19 Church Lane, Hornchurch RM11 1EH",
-    "senderGeoPos": { "lat": 51.6187, "lng": -0.1021 },
-    "receiverGeoPos": { "lat": 51.5610, "lng": 0.2142 },
+    "senderGeoPos": {
+      "lat": 51.6187,
+      "lng": -0.1021
+    },
+    "receiverGeoPos": {
+      "lat": 51.561,
+      "lng": 0.2142
+    },
     "courierId": 3,
     "status": "completed",
     "dateTimeOrdered": "2025-10-22T08:40:00Z",
-    "dateTimeClosed": "2025-10-22T11:12:00Z"
+    "dateTimeClosed": "2025-10-22T11:12:00Z",
+    "description": "Sports equipment \u2013 yoga mat",
+    "size": "46x29x16 cm",
+    "volume": "21344 cm\u00b3",
+    "weight": "4.18 kg"
   },
   {
     "id": 24,
@@ -304,12 +534,22 @@
     "receiverId": 8,
     "senderAddress": "7 The Broadway, Wimbledon, London SW19 1RF",
     "receiverAddress": "11 City Road, London EC1Y 1AA",
-    "senderGeoPos": { "lat": 51.4214, "lng": -0.2077 },
-    "receiverGeoPos": { "lat": 51.5222, "lng": -0.0881 },
+    "senderGeoPos": {
+      "lat": 51.4214,
+      "lng": -0.2077
+    },
+    "receiverGeoPos": {
+      "lat": 51.5222,
+      "lng": -0.0881
+    },
     "courierId": 4,
     "status": "cancelled",
     "dateTimeOrdered": "2025-10-23T14:15:00Z",
-    "dateTimeClosed": "2025-10-23T14:38:00Z"
+    "dateTimeClosed": "2025-10-23T14:38:00Z",
+    "description": "Clothing \u2013 winter jacket",
+    "size": "17x20x40 cm",
+    "volume": "13600 cm\u00b3",
+    "weight": "11.82 kg"
   },
   {
     "id": 25,
@@ -317,12 +557,22 @@
     "receiverId": 10,
     "senderAddress": "55 Fulham Palace Road, Hammersmith, London W6 8JA",
     "receiverAddress": "22 Victoria Park Road, Hackney E9 7NU",
-    "senderGeoPos": { "lat": 51.4876, "lng": -0.2224 },
-    "receiverGeoPos": { "lat": 51.5442, "lng": -0.0459 },
+    "senderGeoPos": {
+      "lat": 51.4876,
+      "lng": -0.2224
+    },
+    "receiverGeoPos": {
+      "lat": 51.5442,
+      "lng": -0.0459
+    },
     "courierId": 5,
     "status": "completed",
     "dateTimeOrdered": "2025-10-24T09:05:00Z",
-    "dateTimeClosed": "2025-10-24T11:50:00Z"
+    "dateTimeClosed": "2025-10-24T11:50:00Z",
+    "description": "Gadgets \u2013 power bank",
+    "size": "19x36x22 cm",
+    "volume": "15048 cm\u00b3",
+    "weight": "14.34 kg"
   },
   {
     "id": 26,
@@ -330,12 +580,22 @@
     "receiverId": 12,
     "senderAddress": "14 Watford Road, Wembley HA0 3HG",
     "receiverAddress": "83 Norwood High Street, West Norwood SE27 9JF",
-    "senderGeoPos": { "lat": 51.5510, "lng": -0.3056 },
-    "receiverGeoPos": { "lat": 51.4313, "lng": -0.1037 },
+    "senderGeoPos": {
+      "lat": 51.551,
+      "lng": -0.3056
+    },
+    "receiverGeoPos": {
+      "lat": 51.4313,
+      "lng": -0.1037
+    },
     "courierId": 6,
     "status": "completed",
     "dateTimeOrdered": "2025-10-25T11:10:00Z",
-    "dateTimeClosed": "2025-10-25T13:55:00Z"
+    "dateTimeClosed": "2025-10-25T13:55:00Z",
+    "description": "Sports equipment \u2013 yoga mat",
+    "size": "37x9x35 cm",
+    "volume": "11655 cm\u00b3",
+    "weight": "5.68 kg"
   },
   {
     "id": 27,
@@ -343,12 +603,22 @@
     "receiverId": 14,
     "senderAddress": "5 High Street, Uxbridge UB8 1JN",
     "receiverAddress": "28 High Street, Croydon CR0 1RH",
-    "senderGeoPos": { "lat": 51.5466, "lng": -0.4772 },
-    "receiverGeoPos": { "lat": 51.3727, "lng": -0.1005 },
+    "senderGeoPos": {
+      "lat": 51.5466,
+      "lng": -0.4772
+    },
+    "receiverGeoPos": {
+      "lat": 51.3727,
+      "lng": -0.1005
+    },
     "courierId": 7,
     "status": "completed",
     "dateTimeOrdered": "2025-10-26T08:50:00Z",
-    "dateTimeClosed": "2025-10-26T11:30:00Z"
+    "dateTimeClosed": "2025-10-26T11:30:00Z",
+    "description": "Health items \u2013 vitamins",
+    "size": "35x17x32 cm",
+    "volume": "19040 cm\u00b3",
+    "weight": "1.85 kg"
   },
   {
     "id": 28,
@@ -356,12 +626,22 @@
     "receiverId": 16,
     "senderAddress": "16 Sutton Road, Kingston upon Thames KT1 2SH",
     "receiverAddress": "44 Pinner Road, Harrow HA1 4HZ",
-    "senderGeoPos": { "lat": 51.4108, "lng": -0.3001 },
-    "receiverGeoPos": { "lat": 51.5864, "lng": -0.3412 },
+    "senderGeoPos": {
+      "lat": 51.4108,
+      "lng": -0.3001
+    },
+    "receiverGeoPos": {
+      "lat": 51.5864,
+      "lng": -0.3412
+    },
     "courierId": 8,
     "status": "cancelled",
     "dateTimeOrdered": "2025-10-27T12:35:00Z",
-    "dateTimeClosed": "2025-10-27T12:58:00Z"
+    "dateTimeClosed": "2025-10-27T12:58:00Z",
+    "description": "Electronics \u2013 Bluetooth headphones",
+    "size": "51x32x25 cm",
+    "volume": "40800 cm\u00b3",
+    "weight": "11.5 kg"
   },
   {
     "id": 29,
@@ -369,12 +649,22 @@
     "receiverId": 18,
     "senderAddress": "12 Victoria Avenue, Southend-on-Sea SS2 6AL",
     "receiverAddress": "30 North Street, Romford RM1 1BH",
-    "senderGeoPos": { "lat": 51.5440, "lng": 0.7073 },
-    "receiverGeoPos": { "lat": 51.5774, "lng": 0.1820 },
+    "senderGeoPos": {
+      "lat": 51.544,
+      "lng": 0.7073
+    },
+    "receiverGeoPos": {
+      "lat": 51.5774,
+      "lng": 0.182
+    },
     "courierId": 9,
     "status": "completed",
     "dateTimeOrdered": "2025-10-28T09:25:00Z",
-    "dateTimeClosed": "2025-10-28T11:55:00Z"
+    "dateTimeClosed": "2025-10-28T11:55:00Z",
+    "description": "Food items \u2013 packaged snacks",
+    "size": "35x13x21 cm",
+    "volume": "9555 cm\u00b3",
+    "weight": "7.63 kg"
   },
   {
     "id": 30,
@@ -382,12 +672,22 @@
     "receiverId": 20,
     "senderAddress": "8 Windsor Road, Slough SL1 2EJ",
     "receiverAddress": "12 Kensington High Street, London W8 4PF",
-    "senderGeoPos": { "lat": 51.5095, "lng": -0.5955 },
-    "receiverGeoPos": { "lat": 51.5014, "lng": -0.1948 },
+    "senderGeoPos": {
+      "lat": 51.5095,
+      "lng": -0.5955
+    },
+    "receiverGeoPos": {
+      "lat": 51.5014,
+      "lng": -0.1948
+    },
     "courierId": 10,
     "status": "completed",
     "dateTimeOrdered": "2025-10-29T10:00:00Z",
-    "dateTimeClosed": "2025-10-29T12:40:00Z"
+    "dateTimeClosed": "2025-10-29T12:40:00Z",
+    "description": "Small home appliance \u2013 toaster",
+    "size": "44x34x31 cm",
+    "volume": "46376 cm\u00b3",
+    "weight": "13.23 kg"
   },
   {
     "id": 31,
@@ -395,12 +695,22 @@
     "receiverId": 22,
     "senderAddress": "25 Knightsbridge, London SW1X 7RZ",
     "receiverAddress": "91 Kennington Lane, London SE11 4HQ",
-    "senderGeoPos": { "lat": 51.5010, "lng": -0.1595 },
-    "receiverGeoPos": { "lat": 51.4880, "lng": -0.1125 },
+    "senderGeoPos": {
+      "lat": 51.501,
+      "lng": -0.1595
+    },
+    "receiverGeoPos": {
+      "lat": 51.488,
+      "lng": -0.1125
+    },
     "courierId": 11,
     "status": "completed",
     "dateTimeOrdered": "2025-10-15T09:12:00Z",
-    "dateTimeClosed": "2025-10-15T11:45:00Z"
+    "dateTimeClosed": "2025-10-15T11:45:00Z",
+    "description": "Kitchenware \u2013 stainless steel utensils",
+    "size": "54x20x17 cm",
+    "volume": "18360 cm\u00b3",
+    "weight": "8.25 kg"
   },
   {
     "id": 32,
@@ -408,12 +718,22 @@
     "receiverId": 24,
     "senderAddress": "12 Regent Street, London SW1Y 4PE",
     "receiverAddress": "1 Church Street, Twickenham TW1 3NJ",
-    "senderGeoPos": { "lat": 51.5092, "lng": -0.1355 },
-    "receiverGeoPos": { "lat": 51.4468, "lng": -0.3295 },
+    "senderGeoPos": {
+      "lat": 51.5092,
+      "lng": -0.1355
+    },
+    "receiverGeoPos": {
+      "lat": 51.4468,
+      "lng": -0.3295
+    },
     "courierId": 12,
     "status": "completed",
     "dateTimeOrdered": "2025-10-16T10:20:00Z",
-    "dateTimeClosed": "2025-10-16T13:05:00Z"
+    "dateTimeClosed": "2025-10-16T13:05:00Z",
+    "description": "Gadgets \u2013 power bank",
+    "size": "19x6x19 cm",
+    "volume": "2166 cm\u00b3",
+    "weight": "13.28 kg"
   },
   {
     "id": 33,
@@ -421,12 +741,22 @@
     "receiverId": 26,
     "senderAddress": "30 Finsbury Square, London EC2A 1AG",
     "receiverAddress": "29 Richmond Park Road, Kingston KT2 6AH",
-    "senderGeoPos": { "lat": 51.5205, "lng": -0.0873 },
-    "receiverGeoPos": { "lat": 51.4163, "lng": -0.3057 },
+    "senderGeoPos": {
+      "lat": 51.5205,
+      "lng": -0.0873
+    },
+    "receiverGeoPos": {
+      "lat": 51.4163,
+      "lng": -0.3057
+    },
     "courierId": 13,
     "status": "completed",
     "dateTimeOrdered": "2025-10-17T08:50:00Z",
-    "dateTimeClosed": "2025-10-17T11:30:00Z"
+    "dateTimeClosed": "2025-10-17T11:30:00Z",
+    "description": "Electronics \u2013 Bluetooth headphones",
+    "size": "58x13x30 cm",
+    "volume": "22620 cm\u00b3",
+    "weight": "1.91 kg"
   },
   {
     "id": 34,
@@ -434,12 +764,22 @@
     "receiverId": 28,
     "senderAddress": "24 Bishopsgate, London EC2N 4BQ",
     "receiverAddress": "50 Long Lane, Uxbridge UB10 8SY",
-    "senderGeoPos": { "lat": 51.5151, "lng": -0.0832 },
-    "receiverGeoPos": { "lat": 51.5512, "lng": -0.4723 },
+    "senderGeoPos": {
+      "lat": 51.5151,
+      "lng": -0.0832
+    },
+    "receiverGeoPos": {
+      "lat": 51.5512,
+      "lng": -0.4723
+    },
     "courierId": 14,
     "status": "completed",
     "dateTimeOrdered": "2025-10-18T09:40:00Z",
-    "dateTimeClosed": "2025-10-18T12:25:00Z"
+    "dateTimeClosed": "2025-10-18T12:25:00Z",
+    "description": "Baby products \u2013 diapers",
+    "size": "27x37x10 cm",
+    "volume": "9990 cm\u00b3",
+    "weight": "8.36 kg"
   },
   {
     "id": 35,
@@ -447,12 +787,22 @@
     "receiverId": 30,
     "senderAddress": "60 Cannon Street, London EC4N 6NP",
     "receiverAddress": "7 Park View Road, Wembley HA9 6JX",
-    "senderGeoPos": { "lat": 51.5123, "lng": -0.0925 },
-    "receiverGeoPos": { "lat": 51.5584, "lng": -0.2813 },
+    "senderGeoPos": {
+      "lat": 51.5123,
+      "lng": -0.0925
+    },
+    "receiverGeoPos": {
+      "lat": 51.5584,
+      "lng": -0.2813
+    },
     "courierId": 15,
     "status": "completed",
     "dateTimeOrdered": "2025-10-19T07:50:00Z",
-    "dateTimeClosed": "2025-10-19T10:20:00Z"
+    "dateTimeClosed": "2025-10-19T10:20:00Z",
+    "description": "Electronics \u2013 Bluetooth headphones",
+    "size": "47x10x13 cm",
+    "volume": "6110 cm\u00b3",
+    "weight": "11.41 kg"
   },
   {
     "id": 36,
@@ -460,12 +810,22 @@
     "receiverId": 32,
     "senderAddress": "50 Holborn Viaduct, London EC1A 2FD",
     "receiverAddress": "84 Sydenham Road, Croydon CR0 2EE",
-    "senderGeoPos": { "lat": 51.5174, "lng": -0.1043 },
-    "receiverGeoPos": { "lat": 51.3763, "lng": -0.0933 },
+    "senderGeoPos": {
+      "lat": 51.5174,
+      "lng": -0.1043
+    },
+    "receiverGeoPos": {
+      "lat": 51.3763,
+      "lng": -0.0933
+    },
     "courierId": 16,
     "status": "cancelled",
     "dateTimeOrdered": "2025-10-20T11:30:00Z",
-    "dateTimeClosed": "2025-10-20T11:52:00Z"
+    "dateTimeClosed": "2025-10-20T11:52:00Z",
+    "description": "Electronics \u2013 Bluetooth headphones",
+    "size": "17x26x5 cm",
+    "volume": "2210 cm\u00b3",
+    "weight": "12.77 kg"
   },
   {
     "id": 37,
@@ -473,12 +833,22 @@
     "receiverId": 34,
     "senderAddress": "80 Strand, London WC2R 0DU",
     "receiverAddress": "5 South Hill Avenue, Harrow HA1 3NY",
-    "senderGeoPos": { "lat": 51.5099, "lng": -0.1205 },
-    "receiverGeoPos": { "lat": 51.5695, "lng": -0.3441 },
+    "senderGeoPos": {
+      "lat": 51.5099,
+      "lng": -0.1205
+    },
+    "receiverGeoPos": {
+      "lat": 51.5695,
+      "lng": -0.3441
+    },
     "courierId": 17,
     "status": "completed",
     "dateTimeOrdered": "2025-10-21T09:10:00Z",
-    "dateTimeClosed": "2025-10-21T11:40:00Z"
+    "dateTimeClosed": "2025-10-21T11:40:00Z",
+    "description": "Sports equipment \u2013 yoga mat",
+    "size": "38x11x15 cm",
+    "volume": "6270 cm\u00b3",
+    "weight": "6.71 kg"
   },
   {
     "id": 38,
@@ -486,12 +856,22 @@
     "receiverId": 36,
     "senderAddress": "18 Upper Ground, London SE1 9PD",
     "receiverAddress": "63 Watling Street, Radlett WD7 7NQ",
-    "senderGeoPos": { "lat": 51.5078, "lng": -0.1113 },
-    "receiverGeoPos": { "lat": 51.6852, "lng": -0.3171 },
+    "senderGeoPos": {
+      "lat": 51.5078,
+      "lng": -0.1113
+    },
+    "receiverGeoPos": {
+      "lat": 51.6852,
+      "lng": -0.3171
+    },
     "courierId": 18,
     "status": "completed",
     "dateTimeOrdered": "2025-10-22T10:45:00Z",
-    "dateTimeClosed": "2025-10-22T13:15:00Z"
+    "dateTimeClosed": "2025-10-22T13:15:00Z",
+    "description": "Automotive accessories \u2013 car phone holder",
+    "size": "25x38x40 cm",
+    "volume": "38000 cm\u00b3",
+    "weight": "4.84 kg"
   },
   {
     "id": 39,
@@ -499,25 +879,44 @@
     "receiverId": 38,
     "senderAddress": "5 Southwark Bridge Road, London SE1 9HQ",
     "receiverAddress": "12 Belmont Hill, Lewisham SE13 5AX",
-    "senderGeoPos": { "lat": 51.5052, "lng": -0.0933 },
-    "receiverGeoPos": { "lat": 51.4639, "lng": -0.0103 },
+    "senderGeoPos": {
+      "lat": 51.5052,
+      "lng": -0.0933
+    },
+    "receiverGeoPos": {
+      "lat": 51.4639,
+      "lng": -0.0103
+    },
     "courierId": 6,
     "status": "cancelled",
     "dateTimeOrdered": "2025-10-23T12:00:00Z",
-    "dateTimeClosed": "2025-10-23T12:22:00Z"
+    "dateTimeClosed": "2025-10-23T12:22:00Z",
+    "description": "Small home appliance \u2013 toaster",
+    "size": "23x31x14 cm",
+    "volume": "9982 cm\u00b3",
+    "weight": "3.9 kg"
   },
   {
     "id": 40,
     "senderId": 39,
     "receiverId": 40,
     "senderAddress": "5 Crescent Road, Croydon CR0 6AW",
-    "receiverAddress": "42 St Mary’s Road, Ealing W5 5EX",
-    "senderGeoPos": { "lat": 51.3692, "lng": -0.0985 },
-    "receiverGeoPos": { "lat": 51.5127, "lng": -0.3058 },
+    "receiverAddress": "42 St Mary\u2019s Road, Ealing W5 5EX",
+    "senderGeoPos": {
+      "lat": 51.3692,
+      "lng": -0.0985
+    },
+    "receiverGeoPos": {
+      "lat": 51.5127,
+      "lng": -0.3058
+    },
     "courierId": 8,
     "status": "completed",
     "dateTimeOrdered": "2025-10-24T08:30:00Z",
-    "dateTimeClosed": "2025-10-24T11:00:00Z"
+    "dateTimeClosed": "2025-10-24T11:00:00Z",
+    "description": "Health items \u2013 vitamins",
+    "size": "43x27x26 cm",
+    "volume": "30186 cm\u00b3",
+    "weight": "13.48 kg"
   }
 ]
-

@@ -39,7 +39,7 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
   }, [couriers]);
 
   const renderValue = (v: number[]) => {
-    return t('map_filters.options_selected', { count: v.length });
+    return t('common_filters.options_selected', { count: v.length });
   }
 
   const changeHandler = (

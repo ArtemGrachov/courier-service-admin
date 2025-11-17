@@ -12,19 +12,28 @@ export const fetchCouriers = async (query?: IGetCouriersQuery) => {
   const phoneSearch = query?.phoneSearch ?? query?.search;
   const emailSearch = query?.emailSearch ?? query?.search;
 
-  if (nameSearch) {
-    const searchBy = nameSearch.toLowerCase();
-    couriers = couriers.filter(c => c.name.toLowerCase().includes(searchBy));
-  }
+  const hasSearch = nameSearch != null || phoneSearch != null || emailSearch != null;
 
-  if (phoneSearch) {
-    const searchBy = phoneSearch.toLowerCase();
-    couriers = couriers.filter(c => c.phoneNumber.toLowerCase().replaceAll(' ', '').includes(searchBy));
-  }
+  if (hasSearch) {
+    const searchByName = nameSearch?.toLowerCase();
+    const searchByPhone = phoneSearch?.toLowerCase();
+    const searchByEmail = emailSearch?.toLowerCase();
 
-  if (emailSearch) {
-    const searchBy = emailSearch.toLowerCase();
-    couriers = couriers.filter(c => c.email.toLowerCase().includes(searchBy));
+    couriers = couriers.filter(courier => {
+      if (searchByName != null && courier.name.toLowerCase().includes(searchByName)) {
+        return true;
+      }
+
+      if (searchByEmail != null && courier.name.toLowerCase().includes(searchByEmail)) {
+        return true;
+      }
+
+      if (searchByPhone != null && courier.phoneNumber.toLowerCase().replaceAll(' ', '').includes(searchByPhone)) {
+        return true;
+      }
+
+      return false;
+    })
   }
 
   if (query?.courierIds) {

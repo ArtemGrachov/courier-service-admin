@@ -19,4 +19,9 @@ export interface IOrder {
   sender?: IClient;
   receiver?: IClient;
   courier?: ICourier;
+  description: string;
+  size: string;
+  volume: string;
+  weight: string;
 }
+

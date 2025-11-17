@@ -20,6 +20,24 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     import('~/mock-data/clients.json').then(m => m.default as IClient[]),
   ]);
 
+  if (query?.id) {
+    orders = orders.filter(o => o.id.toString() === query.id as string);
+  }
+
+  const hasSearch = !!query?.search;
+
+  if (hasSearch) {
+    const searchByDescription = query?.search?.toLowerCase();
+
+    orders = orders.filter(order => {
+      if (searchByDescription != null && order.description.toLowerCase().includes(searchByDescription)) {
+        return true;
+      }
+
+      return false;
+    })
+  }
+
   if (query?.clientIds) {
     const set = new Set(query.clientIds);
     orders = orders.filter(o => set.has(o.senderId) || set.has(o.receiverId));

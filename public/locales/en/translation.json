@@ -130,6 +130,7 @@
     "receiver": "Receiver",
     "courier": "Courier",
     "status": "Status",
+    "description": "Description",
     "ordered_at": "Ordered date/time",
     "closed_at": "Closed date/time",
     "details": "Details"
@@ -137,7 +138,10 @@
   "order_card": {
     "id": "Order ID",
     "ordered_at": "Ordered date/time",
-    "closed_at": "Closed date/time"
+    "closed_at": "Closed date/time",
+    "size": "Size",
+    "volume": "Volume",
+    "weight": "Weight"
   },
   "client_card": {
     "receiver_id": "Receiver ID",
@@ -182,6 +186,7 @@
     "close_all_windows": "Close all windows"
   },
   "map_filters": {
+    "order_id": "Order ID",
     "status": "Status",
     "senders": "Senders",
     "receivers": "Receivers",
@@ -203,7 +208,7 @@
   "view_clients": {
     "title": "Clients"
   },
-  "view_courier": {1
+  "view_courier": {
     "title": "Courier ID {{id}} {{name}}",
     "orders": "All orders"
   },
@@ -229,6 +234,18 @@
   },
   "view_about": {
     "main_link": "Return to main page"
+  },
+  "common_filters": {
+    "options_selected": "Selected {{count}}"
+  },
+  "orders_couriers_operator": {
+    "label": "Couriers"
+  },
+  "orders_senders_operator": {
+    "label": "Senders"
+  },
+  "orders_receivers_operator": {
+    "label": "Receivers"
   }
 }
 

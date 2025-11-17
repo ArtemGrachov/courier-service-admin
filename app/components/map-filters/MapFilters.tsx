@@ -13,6 +13,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { deepCompare } from 'deep-compare-advanced';
 
@@ -57,9 +58,11 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     fetchCouriers,
   } = useOrderFilterCtx();
 
-  const { control, register, getValues, reset, watch } = useForm<IFormMapFilters>({
+  const { control, getValues, register, reset, watch } = useForm<IFormMapFilters>({
     defaultValues: formValue ?? EMPTY_FORM_VALUE,
   });
+
+  const orderIdField = register('orderId');
 
   const currentFormValue = watch();
 
@@ -68,7 +71,8 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
   const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
 
   const hasValues = useMemo(() => {
-    return currentFormValue.status ||
+    return currentFormValue.orderId ||
+      currentFormValue.status ||
       currentFormValue.senderIds?.length ||
       currentFormValue.courierIds?.length ||
       currentFormValue.receiverIds?.length;
@@ -110,10 +114,8 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
   const { t } = useTranslation();
 
   const renderValue = (v: number[]) => {
-    return t('map_filters.options_selected', { count: v.length });
+    return t('common_filters.options_selected', { count: v.length });
   }
-
-  const fieldStatus = register('status');
 
   const submitHandler = () => {
     if (!onSubmit) {
@@ -131,9 +133,9 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     onSubmit(submitFormValues);
   }
 
-  const submitDebounce = useDebouncedCallback(() => {
+  const submitDebounceQuick = useDebouncedCallback(() => {
     submitHandler();
-  }, 2000);
+  }, 200);
 
   const changeHandler = (
     field: ControllerRenderProps,
@@ -146,10 +148,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
 
     if (reason === 'blur' || reason === 'clear') {
       submitHandler();
-      return;
     }
-
-    submitDebounce();
   }
 
   const resetHandler = () => {
@@ -171,6 +170,18 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
       >
         <CloseIcon />
       </IconButton>
+      <FormControl>
+        <TextField
+          sx={{ width: 140 }}
+          size="small"
+          label={t('map_filters.order_id')}
+          {...orderIdField}
+          onChange={(e) => {
+            orderIdField.onChange(e);
+            submitDebounceQuick();
+          }}
+        />
+      </FormControl>
       <FormControl>
         <InputLabel size="small">
           {t('map_filters.status')}
