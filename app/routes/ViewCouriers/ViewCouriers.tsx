@@ -1,14 +1,17 @@
 import { useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import { observer } from 'mobx-react-lite';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, Link as RouterLink } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewCouriers/+types/ViewCouriers';
 import { useTranslation } from 'react-i18next';
 
 import { EStatus } from '~/constants/status';
 import i18n from '~/i18n/config';
 import routeLoader from '~/router/route-loader';
+import { ROUTES } from '~/router/routes';
 
 import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
 import { usePageDataService } from '~/providers/page-data/service';
@@ -18,6 +21,7 @@ import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
+import { useRoutePath } from '~/hooks/routing/use-route-path';
 import ReloadButton from '~/components/other/ReloadButton';
 import CouriersTable from '~/components/couriers/CouriersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
@@ -35,6 +39,7 @@ const ViewCouriers: ComponentType = observer(() => {
   const { store: couriersFiltersStore, handleUpdate } = useCouriersFiltersCtx();
   const { reload } = usePageDataCtx();
   const [isLoading, setIsLoading] = useState(false);
+  const routePath = useRoutePath();
 
   const reloadPageData = async () => {
     setIsLoading(true);
@@ -65,10 +70,20 @@ const ViewCouriers: ComponentType = observer(() => {
         width="100%"
         boxSizing="border-box"
       >
-        <ReloadButton
-          isProcessing={isLoading}
-          onReload={reloadPageData}
-        />
+        <Stack direction="row" gap={2}>
+          <ReloadButton
+            isProcessing={isLoading}
+            onReload={reloadPageData}
+          />
+          <Button
+            component={RouterLink}
+            to={routePath(ROUTES.COURIER_ADD)}
+            variant="contained"
+            color="success"
+          >
+            {t('view_couriers.add_courier')}
+          </Button>
+        </Stack>
         <CouriersTable
           isProcessing={couriersStore.isProcessing}
           items={couriersStore.data?.data}
