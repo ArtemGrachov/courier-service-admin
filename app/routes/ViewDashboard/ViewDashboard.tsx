@@ -12,10 +12,14 @@ import { EStatus } from '~/constants/status';
 
 import { ROUTES } from '~/router/routes';
 import { PrevRoute } from '~/router/prev-route';
+import { Cache } from '~/cache/Cache';
 
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
+import type { ICouriersStoreData } from '~/store/couriers.store';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
+import type { IOrdersStoreData } from '~/providers/orders/store';
 import { StatsProvider, useStatsCtx } from '~/providers/stats';
+import type { IStatsStoreData } from '~/providers/stats/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useRoutePath } from '~/hooks/routing/use-route-path';
@@ -111,11 +115,24 @@ const Wrapper: ComponentType = () => {
 
 export default Wrapper;
 
-export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
+interface ILoaderResult {
+  couriersState: ICouriersStoreData;
+  ordersState: IOrdersStoreData;
+  statsState: IStatsStoreData;
+}
+
+export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<ILoaderResult> {
   const url = loaderArgs.request.url;
 
+  const cache = Cache.instance;
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
+
+  const cachedData = cache.get<ILoaderResult>(url);
+
+  if (cachedData) {
+    return cachedData;
+  }
 
   const [ordersState, couriersState, statsState] = await Promise.all([
     loadOrders(),
@@ -125,21 +142,23 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
 
   prevRoute.updatePath(url);
 
-  if (!isSamePath) {
-    if (ordersState.getStatus === EStatus.ERROR) {
-      throw ordersState.getError;
-    }
+  const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR || statsState.getStatus === EStatus.ERROR;
 
-    if (couriersState.getStatus === EStatus.ERROR) {
-      throw couriersState.getError;
+  if (hasError) {
+    if (!isSamePath) {
+      throw ordersState.getError || couriersState.getError || statsState.getError;
     }
   }
 
-  return {
+  const result = {
     ordersState,
     couriersState,
     statsState,
   };
+
+  cache.set(url, result);
+
+  return result;
 }
 
 export { ErrorBoundary };
