@@ -1,5 +1,3 @@
-import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMap';
-
 import { EOrderStatus } from '~/constants/order';
 import { EStatus } from '~/constants/status';
 
@@ -8,8 +6,8 @@ import type { IOrdersStoreData } from '~/providers/orders/store';
 
 import type { IGetOrdersQuery } from '~/types/api/orders';
 
-export async function loadOrders({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
+export async function loadOrders(requestUrl: string) {
+  const url = new URL(requestUrl);
   const searchParams = url.searchParams;
 
   const ordersState: IOrdersStoreData = {

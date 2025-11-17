@@ -1,4 +1,4 @@
-import { useEffect, type ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
@@ -11,6 +11,8 @@ import i18n from '~/i18n/config';
 
 import routeLoader from '~/router/route-loader';
 
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { ClientsFilterProvider, useClientsFilterCtx } from './providers/clients-filter';
 import { ClientsProvider, useClientsCtx } from '~/providers/clients';
 import { ReloadPageProvider } from '~/providers/reload-page';
@@ -28,29 +30,31 @@ import { loadClients } from './loaders/load-clients';
 
 const ViewClients: ComponentType = observer(() => {
   const { t } = useTranslation();
-  const { store: clientsStore, setProcessing } = useClientsCtx();
+  const { store: clientsStore } = useClientsCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
   const { store: clientsFilterStore, handleUpdate } = useClientsFilterCtx();
+  const { reload } = usePageDataCtx();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const reloadPageData = () => {
-    setProcessing();
-  }
+  const reloadPageData = async () => {
+    setIsLoading(true);
 
-  useEffect(() => {
-    if (!clientsStore.isError) {
-      return;
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
     }
 
-    errorSnackbar(clientsStore.getError);
-  }, [clientsStore.isError]);
+    setIsLoading(false);
+  }
 
   const tableUpdateHandler = (payload: IFormClientsFilter) => {
     handleUpdate(payload);
   }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Portal container={() => titlePortalRef?.current ?? null}>
         {t('view_clients.title')}
       </Portal>
@@ -63,7 +67,7 @@ const ViewClients: ComponentType = observer(() => {
         boxSizing="border-box"
       >
         <ReloadButton
-          isProcessing={clientsStore.isProcessing}
+          isProcessing={isLoading}
           onReload={reloadPageData}
         />
         <ClientsTable
@@ -81,12 +85,19 @@ const ViewClients: ComponentType = observer(() => {
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader: () => loader(location.href),
+  });
+
   return (
-    <ClientsProvider initialData={loaderData.clientsState}>
-      <ClientsFilterProvider>
-        <ViewClients />
-      </ClientsFilterProvider>
-    </ClientsProvider>
+    <PageDataContext.Provider value={service}>
+      <ClientsProvider initialData={loaderData.clientsState}>
+        <ClientsFilterProvider>
+          <ViewClients />
+        </ClientsFilterProvider>
+      </ClientsProvider>
+    </PageDataContext.Provider>
   )
 }
 
@@ -96,21 +107,24 @@ interface ILoaderResult {
   clientsState: IClientsStoreData;
 }
 
+const loader = async (url: string) => {
+  const clientsState = await loadClients(url);
+  const hasError = clientsState.getStatus === EStatus.ERROR;
+
+  if (hasError) {
+    throw clientsState.getError;
+  }
+
+  const result = {
+    clientsState,
+  };
+
+  return result;
+}
+
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
-  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
-    const clientsState = await loadClients(loaderArgs);
-      const hasError = clientsState.getStatus === EStatus.ERROR;
-
-      if (hasError) {
-        throw clientsState.getError;
-      }
-
-      const result = {
-        clientsState,
-      };
-
-      return result;
-  });
+  const url = loaderArgs.request.url;
+  return routeLoader<ILoaderResult>(url, () => loader(url));
 }
 
 export { ErrorBoundary };

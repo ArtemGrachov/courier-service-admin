@@ -1,4 +1,4 @@
-import { useEffect, type ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
@@ -10,6 +10,8 @@ import { EStatus } from '~/constants/status';
 import i18n from '~/i18n/config';
 import routeLoader from '~/router/route-loader';
 
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { CouriersFiltersProvider, useCouriersFiltersCtx } from './providers/couriers-filters';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
@@ -27,29 +29,31 @@ import { loadCouriers } from './loaders/load-couriers';
 
 const ViewCouriers: ComponentType = observer(() => {
   const { t } = useTranslation();
-  const { store: couriersStore, setProcessing } = useCouriersCtx();
+  const { store: couriersStore } = useCouriersCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
   const { store: couriersFiltersStore, handleUpdate } = useCouriersFiltersCtx();
+  const { reload } = usePageDataCtx();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const reloadPageData = () => {
-    setProcessing();
-  }
+  const reloadPageData = async () => {
+    setIsLoading(true);
 
-  useEffect(() => {
-    if (!couriersStore.isError) {
-      return;
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
     }
 
-    errorSnackbar(couriersStore.getError);
-  }, [couriersStore.isError]);
+    setIsLoading(false);
+  }
 
   const tableUpdateHandler = (payload: IFormCouriersFilter) => {
     handleUpdate(payload);
   }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Portal container={() => titlePortalRef?.current ?? null}>
         {t('view_couriers.title')}
       </Portal>
@@ -62,7 +66,7 @@ const ViewCouriers: ComponentType = observer(() => {
         boxSizing="border-box"
       >
         <ReloadButton
-          isProcessing={couriersStore.isProcessing}
+          isProcessing={isLoading}
           onReload={reloadPageData}
         />
         <CouriersTable
@@ -80,12 +84,19 @@ const ViewCouriers: ComponentType = observer(() => {
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader: () => loader(location.href),
+  });
+
   return (
-    <CouriersProvider initialData={loaderData.couriersState}>
-      <CouriersFiltersProvider>
-        <ViewCouriers />
-      </CouriersFiltersProvider>
-    </CouriersProvider>
+    <PageDataContext.Provider value={service}>
+      <CouriersProvider initialData={loaderData.couriersState}>
+        <CouriersFiltersProvider>
+          <ViewCouriers />
+        </CouriersFiltersProvider>
+      </CouriersProvider>
+    </PageDataContext.Provider>
   )
 }
 
@@ -95,9 +106,8 @@ interface ILoaderResult {
   couriersState: ICouriersStoreData;
 }
 
-export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
-  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
-    const couriersState = await loadCouriers(loaderArgs);
+const loader = async (url: string) => {
+    const couriersState = await loadCouriers(url);
 
     const hasError = couriersState.getStatus === EStatus.ERROR;
 
@@ -110,7 +120,11 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
     };
 
     return result;
-  });
+}
+
+export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
+  const url = loaderArgs.request.url;
+  return routeLoader<ILoaderResult>(url, () => loader(url));
 }
 
 export { ErrorBoundary };

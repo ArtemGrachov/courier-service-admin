@@ -1,4 +1,4 @@
-import { useEffect, type ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
@@ -11,6 +11,8 @@ import routeLoader from '~/router/route-loader';
 
 import { EStatus } from '~/constants/status';
 
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { OrdersFilterProvider } from './providers/orders-filter';
 import { useOrdersFilterCtx } from './providers/orders-filter';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
@@ -30,29 +32,31 @@ import { loadOrders } from './loaders/load-orders';
 
 const ViewOrders: ComponentType = observer(() => {
   const { t } = useTranslation();
-  const { store: ordersStore, setProcessing } = useOrdersCtx();
+  const { store: ordersStore } = useOrdersCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
   const { store: ordersFilterStore, handleUpdate } = useOrdersFilterCtx();
+  const { reload } = usePageDataCtx();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const reloadPageData = () => {
-    setProcessing();
-  }
+  const reloadPageData = async () => {
+    setIsLoading(true);
 
-  useEffect(() => {
-    if (!ordersStore.isError) {
-      return;
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
     }
 
-    errorSnackbar(ordersStore.getError);
-  }, [ordersStore.isError]);
+    setIsLoading(false);
+  }
 
   const tableUpdateHandler = (payload: IFormOrdersFilter) => {
     handleUpdate(payload);
   }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Portal container={() => titlePortalRef?.current ?? null}>
         {t('view_orders.title')}
       </Portal>
@@ -65,7 +69,7 @@ const ViewOrders: ComponentType = observer(() => {
         boxSizing="border-box"
       >
         <ReloadButton
-          isProcessing={ordersStore.isProcessing}
+          isProcessing={isLoading}
           onReload={reloadPageData}
         />
         <OrdersTable
@@ -83,14 +87,21 @@ const ViewOrders: ComponentType = observer(() => {
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader: () => loader(location.href),
+  });
+
   return (
-    <OrdersProvider initialData={loaderData.ordersState}>
-      <OrdersFilterProvider>
-        <OrderFilterProvider>
-          <ViewOrders />
-        </OrderFilterProvider>
-      </OrdersFilterProvider>
-    </OrdersProvider>
+    <PageDataContext.Provider value={service}>
+      <OrdersProvider initialData={loaderData.ordersState}>
+        <OrdersFilterProvider>
+          <OrderFilterProvider>
+            <ViewOrders />
+          </OrderFilterProvider>
+        </OrdersFilterProvider>
+      </OrdersProvider>
+    </PageDataContext.Provider>
   )
 }
 
@@ -100,22 +111,25 @@ interface ILoaderResult {
   ordersState: IOrdersStoreData;
 }
 
+const loader = async (url: string) => {
+  const ordersState = await loadOrders(url);
+
+  const hasError = ordersState.getStatus === EStatus.ERROR;
+
+  if (hasError) {
+    throw ordersState.getError;
+  }
+
+  const result = {
+    ordersState,
+  };
+
+  return result;
+}
+
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
-  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
-    const ordersState = await loadOrders(loaderArgs);
-
-    const hasError = ordersState.getStatus === EStatus.ERROR;
-
-    if (hasError) {
-      throw ordersState.getError;
-    }
-
-    const result = {
-      ordersState,
-    };
-
-    return result;
-  });
+  const url = loaderArgs.request.url;
+  return routeLoader<ILoaderResult>(url, async () => loader(url));
 }
 
 export { ErrorBoundary };

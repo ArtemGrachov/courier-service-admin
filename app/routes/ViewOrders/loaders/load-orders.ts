@@ -1,5 +1,3 @@
-import type { Route } from '.react-router/types/app/routes/ViewOrders/+types/ViewOrders';
-
 import { DEFAULT_ORDER_FILTERS } from '../constants/orders-filter';
 import { EStatus } from '~/constants/status';
 
@@ -9,8 +7,8 @@ import { fetchOrders } from '~/data/fetch-orders';
 
 import type { IGetOrdersQuery } from '~/types/api/orders';
 
-export async function loadOrders({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
+export async function loadOrders(requestUrl: string) {
+  const url = new URL(requestUrl);
   const searchParams = url.searchParams;
 
   const ordersState: IOrdersStoreData = {

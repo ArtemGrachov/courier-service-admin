@@ -1,4 +1,4 @@
-import { useEffect, type ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import Grid from '@mui/material/Grid';
 import type { Route } from '.react-router/types/app/routes/ViewDashboard/+types/ViewDashboard';
 import { useLoaderData } from 'react-router';
@@ -13,6 +13,8 @@ import { EStatus } from '~/constants/status';
 import { ROUTES } from '~/router/routes';
 import routeLoader from '~/router/route-loader';
 
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import type { ICouriersStoreData } from '~/store/couriers.store';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
@@ -37,27 +39,28 @@ const ViewDashboard: ComponentType = observer(() => {
   const { t } = useTranslation();
   const routePath = useRoutePath();
   const errorSnackbar = useErrorSnackbar();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { store: ordersStore, setProcessing: setOrdersProcessing } = useOrdersCtx();
-  const { store: couriersStore, setProcessing: setCouriersProcessing } = useCouriersCtx();
-  const { store: statsStore, setProcessing: setStatsProcessing } = useStatsCtx();
+  const { store: ordersStore } = useOrdersCtx();
+  const { store: couriersStore } = useCouriersCtx();
+  const { store: statsStore } = useStatsCtx();
 
-  const reloadPageData = () => {
-    setOrdersProcessing();
-    setCouriersProcessing();
-    setStatsProcessing();
-  }
+  const { reload } = usePageDataCtx();
 
-  useEffect(() => {
-    if (!ordersStore.isError && !couriersStore.isError && !statsStore.isError) {
-      return;
+  const reloadPageData = async () => {
+    setIsLoading(true);
+
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
     }
 
-    errorSnackbar(ordersStore.getError || couriersStore.getError || statsStore.getError);
-  }, [ordersStore.isError, couriersStore.isError, statsStore.isError]);
+    setIsLoading(false);
+  }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Box
         flexDirection="column"
         display="flex"
@@ -67,7 +70,7 @@ const ViewDashboard: ComponentType = observer(() => {
         boxSizing="border-box"
       >
         <ReloadButton
-          isProcessing={ordersStore.isProcessing || couriersStore.isProcessing || statsStore.isProcessing}
+          isProcessing={isLoading}
           onReload={reloadPageData}
         />
         <OrdersChart stats={statsStore.data?.stats} />
@@ -111,14 +114,21 @@ const ViewDashboard: ComponentType = observer(() => {
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader,
+  });
+
   return (
-    <CouriersProvider initialData={loaderData.couriersState}>
-      <OrdersProvider initialData={loaderData.ordersState}>
-        <StatsProvider initialData={loaderData.statsState}>
-          <ViewDashboard />
-        </StatsProvider>
-      </OrdersProvider>
-    </CouriersProvider>
+    <PageDataContext.Provider value={service}>
+      <CouriersProvider initialData={loaderData.couriersState}>
+        <OrdersProvider initialData={loaderData.ordersState}>
+          <StatsProvider initialData={loaderData.statsState}>
+            <ViewDashboard />
+          </StatsProvider>
+        </OrdersProvider>
+      </CouriersProvider>
+    </PageDataContext.Provider>
   )
 }
 
@@ -130,28 +140,30 @@ interface ILoaderResult {
   statsState: IStatsStoreData;
 }
 
+const loader = async () => {
+  const [ordersState, couriersState, statsState] = await Promise.all([
+    loadOrders(),
+    loadCouriers(),
+    loadStats(),
+  ]);
+
+  const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR || statsState.getStatus === EStatus.ERROR;
+
+  if (hasError) {
+    throw ordersState.getError || couriersState.getError || statsState.getError;
+  }
+
+  const result = {
+    ordersState,
+    couriersState,
+    statsState,
+  };
+
+  return result;
+}
+
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<ILoaderResult> {
-  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
-    const [ordersState, couriersState, statsState] = await Promise.all([
-      loadOrders(),
-      loadCouriers(),
-      loadStats(),
-    ]);
-
-    const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR || statsState.getStatus === EStatus.ERROR;
-
-    if (hasError) {
-      throw ordersState.getError || couriersState.getError || statsState.getError;
-    }
-
-    const result = {
-      ordersState,
-      couriersState,
-      statsState,
-    };
-
-    return result;
-  });
+  return routeLoader<ILoaderResult>(loaderArgs.request.url, loader);
 }
 
 export { ErrorBoundary };

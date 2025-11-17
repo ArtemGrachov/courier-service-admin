@@ -1,8 +1,8 @@
+import { useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Portal from '@mui/material/Portal';
 import Stack from '@mui/material/Stack';
-import { useEffect, type ComponentType } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,8 @@ import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMa
 import i18n from '~/i18n/config';
 import routeLoader from '~/router/route-loader';
 
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { MapFiltersProvider, useMapFiltersCtx } from './providers/map-filters';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
@@ -34,12 +36,14 @@ import { EStatus } from '~/constants/status';
 
 const ViewMap: ComponentType = observer(() => {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const errorSnackbar = useErrorSnackbar();
 
-  const { store: couriersStore, setProcessing: setCouriersProcessing } = useCouriersCtx();
-  const { store: ordersStore, setProcessing: setOrdersProcessing } = useOrdersCtx();
+  const { store: couriersStore } = useCouriersCtx();
+  const { store: ordersStore } = useOrdersCtx();
   const { store: mapFiltersStore, handleUpdate } = useMapFiltersCtx();
+  const { reload } = usePageDataCtx();
 
   const titlePortalRef = useTitlePortalCtx();
 
@@ -49,28 +53,30 @@ const ViewMap: ComponentType = observer(() => {
     handleUpdate(formValue);
   }
 
-  const reloadPageData = () => {
-    setCouriersProcessing();
-    setOrdersProcessing();
-  }
+  const reloadPageData = async () => {
+    setIsLoading(true);
 
-  useEffect(() => {
-    if (!ordersStore.isError) {
-      return;
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
     }
 
-    errorSnackbar(ordersStore.getError);
-  }, [ordersStore.isError]);
+    setIsLoading(false);
+  }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Portal container={() => titlePortalRef?.current ?? null}>
         {t('view_map.title')}
       </Portal>
       <Box height="100%" position="relative">
         <Card sx={{ position: 'absolute', top: 8, right: 8, padding: 1, zIndex: 1300 }}>
           <Stack direction="row" alignItems="center" gap={2}>
-            <ReloadButton />
+            <ReloadButton
+              isProcessing={isLoading}
+              onReload={reloadPageData}
+            />
             <MapFilters
               formValue={mapFiltersStore.formValue}
               onSubmit={submitHandler}
@@ -90,16 +96,23 @@ const ViewMap: ComponentType = observer(() => {
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader: () => loader(location.href),
+  });
+
   return (
-    <OrdersProvider initialData={loaderData.ordersState}>
-      <CouriersProvider initialData={loaderData.couriersState}>
-        <MapFiltersProvider>
-          <OrderFilterProvider>
-            <ViewMap />
-          </OrderFilterProvider>
-        </MapFiltersProvider>
-      </CouriersProvider>
-    </OrdersProvider>
+    <PageDataContext.Provider value={service}>
+      <OrdersProvider initialData={loaderData.ordersState}>
+        <CouriersProvider initialData={loaderData.couriersState}>
+          <MapFiltersProvider>
+            <OrderFilterProvider>
+              <ViewMap />
+            </OrderFilterProvider>
+          </MapFiltersProvider>
+        </CouriersProvider>
+      </OrdersProvider>
+    </PageDataContext.Provider>
   )
 }
 
@@ -110,11 +123,10 @@ interface ILoaderResult {
   couriersState: ICouriersStoreData;
 }
 
-export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<ILoaderResult> {
-  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
+const loader = async (url: string) => {
     const [ordersState, couriersState] = await Promise.all([
-      loadOrders(loaderArgs),
-      loadCouriers(loaderArgs),
+      loadOrders(url),
+      loadCouriers(url),
     ]);
 
     const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR;
@@ -129,7 +141,11 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<
     };
 
     return result;
-  });
+}
+
+export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<ILoaderResult> {
+  const url = loaderArgs.request.url;
+  return routeLoader<ILoaderResult>(url, async () => loader(url));
 }
 
 export { ErrorBoundary };
