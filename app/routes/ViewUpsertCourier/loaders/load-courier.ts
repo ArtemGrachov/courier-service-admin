@@ -3,12 +3,16 @@ import { EStatus } from '~/constants/status';
 import { fetchCourier } from '~/providers/courier/data';
 import type { ICourierStoreData } from '~/providers/courier/store';
 
-export async function loadCourier(courierId: number) {
+export async function loadCourier(courierId?: number | null) {
   const courierState: ICourierStoreData = {
     getStatus: EStatus.INIT,
     getError: null,
     data: null,
   };
+
+  if (courierId == null) {
+    return courierState;
+  }
 
   try {
     const data = await fetchCourier(courierId);

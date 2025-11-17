@@ -140,7 +140,7 @@ interface ILoaderResult {
   courierState: ICourierStoreData
 }
 
-const loader = async (courierId: number) => {
+const loader = async (courierId?: number | null) => {
   const courierState = await loadCourier(courierId);
 
   const hasError = courierState.getStatus === EStatus.ERROR;
@@ -157,7 +157,7 @@ const loader = async (courierId: number) => {
 }
 
 export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
-  const courierId = +params.courierId!;
+  const courierId = params.courierId ? +params.courierId : null;
 
   return routeLoader<ILoaderResult>(request.url, async () => {
     return loader(courierId);
