@@ -28,7 +28,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
-import OrdersTable from '~/components/orders/OrdersTable';
+import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
 import CourierDetails from '~/components/couriers/CourierDetails';
 import Map from '~/components/map/Map';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
@@ -98,10 +98,12 @@ const ViewCourier: ComponentType = observer(() => {
           </Grid>
         </Grid>
         {ordersStore.data && (
-          <OrdersTable
-            items={ordersStore.data?.data}
-            isProcessing={ordersStore.isProcessing}
-          />
+          <Box>
+            <OrdersTablePreview
+              items={ordersStore.data?.data}
+              isProcessing={ordersStore.isProcessing}
+            />
+          </Box>
         )}
       </Box>
     </ReloadPageProvider>

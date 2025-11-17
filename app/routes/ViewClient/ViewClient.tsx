@@ -26,7 +26,7 @@ import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import ClientDetails from '~/components/clients/ClientDetails';
-import OrdersTable from '~/components/orders/OrdersTable';
+import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 import RefreshButton from '~/components/other/ReloadButton';
 
@@ -83,10 +83,12 @@ const ViewClient: ComponentType = observer(() => {
           )}
         </Stack>
         {ordersStore.data && (
-          <OrdersTable
-            items={ordersStore.data?.data}
-            isProcessing={ordersStore.isProcessing}
-          />
+          <Box>
+            <OrdersTablePreview
+              items={ordersStore.data?.data}
+              isProcessing={ordersStore.isProcessing}
+            />
+          </Box>
         )}
       </Box>
     </ReloadPageProvider>
