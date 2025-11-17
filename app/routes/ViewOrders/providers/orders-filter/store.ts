@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import { DEFAULT_ORDER_FILTERS } from '../../constants/orders-filter';
+import { DEFAULT_ORDER_FILTERS } from '~/constants/orders';
 
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
 

@@ -20,6 +20,7 @@ import timezone from 'dayjs/plugin/timezone';
 import { EOrderStatus, ORDER_STATUSES } from '~/constants/order';
 import { DATE_TIME_FORMAT } from '~/constants/datetime';
 import type { ESortDirection } from '~/constants/sort';
+import { DEFAULT_ORDER_FILTERS } from '~/routes/ViewCourier/constants/orders';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import OrderStatus from '~/components/orders/OrderStatus';
@@ -235,10 +236,7 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
       return;
     }
 
-    const payload: IFormOrdersFilter = {
-      page: 1,
-      itemsPerPage: 5,
-    };
+    const payload: IFormOrdersFilter = { ...DEFAULT_ORDER_FILTERS };
 
     const pgMdl = paginationModel.current;
 

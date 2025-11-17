@@ -1,6 +1,6 @@
 import { createSearchParams, type URLSearchParamsInit } from 'react-router';
 
-import { DEFAULT_ORDER_QUERY } from '../../constants/orders-filter';
+import { DEFAULT_ORDER_QUERY } from '~/constants/orders';
 import { ORDER_STATUSES } from '~/constants/order';
 
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';

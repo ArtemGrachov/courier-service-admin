@@ -1,4 +1,4 @@
-import { DEFAULT_ORDER_FILTERS } from '../constants/orders-filter';
+import { DEFAULT_ORDER_FILTERS } from '~/constants/orders';
 import { EStatus } from '~/constants/status';
 
 import { routeQueryToFormValue } from '../providers/orders-filter/utils';
