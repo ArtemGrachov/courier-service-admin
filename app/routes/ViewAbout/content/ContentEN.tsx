@@ -35,6 +35,9 @@ const ContentEN: ComponentType = () => {
           ⚠️ Handling errors without crashing the application
         </li>
         <li>
+          🫙 Request caching
+        </li>
+        <li>
           🌙 Light / dark theme
         </li>
         <li>
