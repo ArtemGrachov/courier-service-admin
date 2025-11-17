@@ -35,6 +35,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="Courier Service Admin" />
+        <link rel="manifest" href="/site.webmanifest" />
         <Meta />
         <Links />
       </head>
@@ -65,8 +71,14 @@ export default function App() {
 export function meta() {
   const { t } = i18n;
 
+  let title = '...';
+
+  if (t('meta.title') !== 'meta.title') {
+    title = t('common_meta.title_template', { title: t('meta.title') });
+  }
+
   return [
-    { title: t('common_meta.title_template', { title: t('meta.title') }) },
+    { title },
     { name: 'description', content: t('meta.description') },
   ];
 }
