@@ -8,6 +8,8 @@ import Autocomplete, {
   type AutocompleteRenderInputParams,
 } from '@mui/material/Autocomplete';
 
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
+
 interface IProps {
   label?: ReactNode;
   onOpenLoad?: () => any;
@@ -31,13 +33,21 @@ const AutocompleteExternal = ({
   renderInput,
   ...props
 }: AutocompleExternalProps & IProps) => {
+  const isFirstLoad = useRef(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const inputValueRef = useRef<string>('');
+  const errorSnackbar = useErrorSnackbar();
 
   const searchLoadDebounce = useDebouncedCallback(async () => {
     if (onSearchLoad) {
       setIsProcessing(true);
-      await onSearchLoad(inputValueRef.current);
+
+      try {
+        await onSearchLoad(inputValueRef.current);
+      } catch (err) {
+        errorSnackbar(err);
+      }
+
       setIsProcessing(false);
     }
   }, searchTimeoutMs ?? DEFAULT_SEARCH_TIMEOUT_MS);
@@ -60,15 +70,27 @@ const AutocompleteExternal = ({
   ));
 
   const openHandler = async (event: SyntheticEvent<Element, Event>) => {
+    if (!isFirstLoad.current) {
+      return;
+    }
+
     if (onOpen) {
       onOpen(event);
     }
 
     if (onOpenLoad) {
       setIsProcessing(true);
-      await onOpenLoad();
+
+      try {
+        await onOpenLoad();
+      } catch (err) {
+        errorSnackbar(err);
+      }
+
       setIsProcessing(false);
     }
+
+    isFirstLoad.current = false;
   }
 
   const inputChangeHandler = (event: SyntheticEvent<Element, Event>, value: string, reason: AutocompleteInputChangeReason) => {
