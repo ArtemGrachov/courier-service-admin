@@ -11,6 +11,6 @@ export interface IFormCouriersFilter {
   currentOrdersCountSort?: ESortDirection | null;
   totalOrdersCountSort?: ESortDirection | null;
   ratingSort?: ESortDirection | null;
-  status?: ECourierStatus;
+  statuses?: ECourierStatus[] | null;
 }
 

@@ -41,8 +41,8 @@ export const fetchCouriers = async (query?: IGetCouriersQuery) => {
     couriers = couriers.filter(c => set.has(c.id));
   }
 
-  if (query?.status) {
-    couriers = couriers.filter(c => c.status === query.status);
+  if (query?.statuses?.length) {
+    couriers = couriers.filter(c => (query.statuses as string[]).includes(c.status));
   }
 
   if (query?.nameSort) {

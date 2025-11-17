@@ -46,8 +46,8 @@ export const formValueToRouteQuery = (formValue: IFormCouriersFilter) => {
     params.totalOrdersCountSort = formValue.totalOrdersCountSort;
   }
 
-  if (formValue.status) {
-    params.status = formValue.status;
+  if (formValue.statuses) {
+    params.statuses = formValue.statuses;
   }
 
   return createSearchParams(params);
@@ -59,6 +59,8 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
 
   const rawPage = newSearchParams.get('page');
   const rawItemsPerPage = newSearchParams.get('itemsPerPage');
+  const rawStatuses = newSearchParams.getAll('statuses');
+  const rawStatusesSet = new Set(rawStatuses);
   const nameSearch = newSearchParams.get('nameSearch');
   const emailSearch = newSearchParams.get('emailSearch');
   const phoneSearch = newSearchParams.get('phoneSearch');
@@ -66,7 +68,7 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   const currentOrdersCountSort = validateSort(newSearchParams.get('currentOrdersCountSort'));
   const totalOrdersCountSort = validateSort(newSearchParams.get('totalOrdersCountSort'));
   const ratingSort = validateSort(newSearchParams.get('ratingSort'));
-  const status = COURIER_STATUSES.find(s => s === newSearchParams.get('status'));
+  const statuses = COURIER_STATUSES.filter(s => rawStatusesSet.has(s));
 
   if (rawPage != null) {
     const numPage = +rawPage;
@@ -90,7 +92,7 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
     nameSearch,
     emailSearch,
     phoneSearch,
-    status,
+    statuses,
     nameSort,
     currentOrdersCountSort,
     totalOrdersCountSort,

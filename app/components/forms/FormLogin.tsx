@@ -28,7 +28,7 @@ const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit 
   const { formState, register, handleSubmit, reset } = useForm<IFormLogin>({
     mode: 'all',
     defaultValues: {
-      email: 'test@test.com',
+      login: 'test@test.com',
       password: 'Password1!',
     },
   });
