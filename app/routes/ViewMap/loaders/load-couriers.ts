@@ -9,11 +9,22 @@ export async function loadCouriers(requestUrl: string) {
   const url = new URL(requestUrl);
   const searchParams = url.searchParams;
 
+
   const couriersState: ICouriersStoreData = {
     getStatus: EStatus.INIT,
     getError: null,
     data: null,
   };
+
+  if (
+    searchParams.has('order') ||
+    searchParams.has('status') ||
+    searchParams.has('senders') ||
+    searchParams.has('receivers')
+  ) {
+    couriersState.getStatus = EStatus.SUCCESS;
+    return couriersState;
+  }
 
   const courierIds = searchParams
     .getAll('couriers')

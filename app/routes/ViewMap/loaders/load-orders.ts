@@ -22,7 +22,8 @@ export async function loadOrders(requestUrl: string) {
     statuses.push(EOrderStatus.ORDERED, EOrderStatus.PROCESSING);
   }
 
-  const orderId = searchParams.get('orderId');
+  const rawOrderId = searchParams.get('order');
+  const orderId = rawOrderId ? rawOrderId.trim() : null;
 
   const senderIds = searchParams
     .getAll('senders')

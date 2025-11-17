@@ -137,10 +137,6 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     submitHandler();
   }, 200);
 
-  const submitDebounce = useDebouncedCallback(() => {
-    submitHandler();
-  }, 2000);
-
   const changeHandler = (
     field: ControllerRenderProps,
     _event: SyntheticEvent<Element, Event>,
@@ -152,10 +148,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
 
     if (reason === 'blur' || reason === 'clear') {
       submitHandler();
-      return;
     }
-
-    submitDebounce();
   }
 
   const resetHandler = () => {

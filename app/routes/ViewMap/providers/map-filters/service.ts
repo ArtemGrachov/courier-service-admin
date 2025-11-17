@@ -20,7 +20,7 @@ export const useMapFiltersService = () => {
     const params: URLSearchParamsInit = {};
 
     if (formValue.orderId) {
-      params.orderId = formValue.orderId;
+      params.order = formValue.orderId;
     }
 
     if (formValue.status) {
@@ -43,7 +43,7 @@ export const useMapFiltersService = () => {
   }, []);
 
   const routeQueryToFormValue = useCallback((newSearchParams: URLSearchParams) => {
-    const orderId = newSearchParams.get('orderId');
+    const orderId = newSearchParams.get('order');
     const rawStatus = newSearchParams.get('status');
     const courierIds = newSearchParams
       .getAll('couriers')
