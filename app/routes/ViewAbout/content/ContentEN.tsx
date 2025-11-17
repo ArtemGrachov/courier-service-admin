@@ -9,7 +9,7 @@ const ContentEN: ComponentType = () => {
       <Typography variant="body1" gutterBottom>
         Created for demo and educational purposes
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         🛠️ Technologies and features:
       </Typography>
       <Typography variant="body1" component="ul" gutterBottom>
@@ -44,7 +44,7 @@ const ContentEN: ComponentType = () => {
           💽 Mock data for simulating server communication
         </li>
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         💻 Usage
       </Typography>
       <Typography variant="body1" gutterBottom>
@@ -55,13 +55,13 @@ const ContentEN: ComponentType = () => {
           Admin panel source code - GitHub
         </Link>
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         🤖 AI
       </Typography>
       <Typography variant="body1" gutterBottom>
         AI was used for generating mock orders, clients, and couriers data.
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         📋 Project management
       </Typography>
       <Typography variant="body1" component="ul" gutterBottom>

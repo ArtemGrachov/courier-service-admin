@@ -27,7 +27,6 @@ const LayoutGeneral: ComponentType = () => {
         </Stack>
       </Toolbar>
       <Container>
-        <Toolbar />
         <Outlet />
       </Container>
     </Stack>
