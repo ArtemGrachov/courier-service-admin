@@ -49,7 +49,9 @@ const Map: ComponentType<IProps> = ({ orders, couriers, center, showPopupOrderDa
     }
 
     if (!center) {
-      mModule.scaleToMarkers();
+      mModule.scaleToMarkers({
+        maxZoom: 14,
+      });
     }
 
     const markerPopupOpenCallback = ({ marker }: IMarkerPopupOpenPayload) => {
