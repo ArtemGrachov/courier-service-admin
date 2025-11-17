@@ -79,7 +79,7 @@ export class MapModule {
     this.view.closeAllPopups();
   }
 
-  public scaleToMarkers() {
+  public scaleToMarkers(options?: L.FitBoundsOptions) {
     const markersArray = this.view.markerArray;
     const positions = markersArray.map(mrk => mrk.data.location);
 
@@ -87,6 +87,6 @@ export class MapModule {
       return;
     }
 
-    this.mapService.scaleToPoints(positions);
+    this.mapService.scaleToPoints(positions, options);
   }
 }

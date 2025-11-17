@@ -36,9 +36,9 @@ export class MapService {
     }).addTo(this._map);
   }
 
-  public scaleToPoints(points: IGeoPos[]) {
+  public scaleToPoints(points: IGeoPos[], options?: L.FitBoundsOptions) {
     const bounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
-    this._map?.fitBounds(bounds);
+    this._map?.fitBounds(bounds, options);
   }
 
   public destroy() {
