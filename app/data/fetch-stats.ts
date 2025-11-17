@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { EOrderStatus } from '~/constants/order';
 import type { IOrder } from '~/types/models/order';
+import type { IStatsRecord } from '~/types/models/stats';
 
 export const fetchStats = async () => {
   const orders = await import('~/mock-data/orders.json').then(m => m.default as IOrder[]);
@@ -25,7 +26,7 @@ export const fetchStats = async () => {
     }
 
     return acc;
-  }, {});
+  }, {} as Record<string, IStatsRecord>);
 
   return {
     stats,

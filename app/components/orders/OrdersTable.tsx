@@ -170,6 +170,8 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     filterOperators: SELECT_OPERATORS,
     sortable: false,
     filterable: true,
+    getOptionLabel: o => (o as unknown as any)?.label,
+    getOptionValue: o => (o as unknown as any)?.value,
   } as GridSingleSelectColDef,
   [EColumns.ORDERED_AT]: {
     field: 'dateTimeOrdered',

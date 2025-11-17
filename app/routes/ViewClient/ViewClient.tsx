@@ -92,7 +92,7 @@ const ViewClient: ComponentType = observer(() => {
               items={ordersStore.data?.data}
               isProcessing={ordersStore.isProcessing}
             />
-            <Stack direction="horizontal" gap={2} marginTop={2}>
+            <Stack direction="row" gap={2} marginTop={2}>
               <Button
                 component={RouterLink}
                 to={routePath(ROUTES.ORDERS, { senders: [client?.id] })}

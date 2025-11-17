@@ -30,7 +30,7 @@ interface IProps {
 
 const FormCourier: ComponentType<IProps> = ({ initialValue, submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
-  const { formState, register, handleSubmit, reset, watch } = useForm<IFormCourier>({
+  const { formState, register, handleSubmit, watch } = useForm<IFormCourier>({
     mode: 'all',
     criteriaMode: 'all',
     defaultValues: initialValue,
