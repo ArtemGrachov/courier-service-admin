@@ -203,7 +203,7 @@
   "view_clients": {
     "title": "Clients"
   },
-  "view_courier": {1
+  "view_courier": {
     "title": "Courier ID {{id}} {{name}}",
     "orders": "All orders"
   },
