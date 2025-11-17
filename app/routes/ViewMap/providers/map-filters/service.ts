@@ -19,8 +19,8 @@ export const useMapFiltersService = () => {
   const formValueToRouteQuery = useCallback((formValue: IFormMapFilters) => {
     const params: URLSearchParamsInit = {};
 
-    if (formValue.statuses) {
-      params.statuses = formValue.statuses;
+    if (formValue.status) {
+      params.status = formValue.status;
     }
 
     if (formValue.senderIds) {
@@ -39,9 +39,7 @@ export const useMapFiltersService = () => {
   }, []);
 
   const routeQueryToFormValue = useCallback((newSearchParams: URLSearchParams) => {
-    const statuses = newSearchParams
-      .getAll('statuses')
-      .filter(s => ORDER_STATUSES.includes(s as EOrderStatus)) as EOrderStatus[];
+    const rawStatus = newSearchParams.get('status');
     const courierIds = newSearchParams
       .getAll('couriers')
       .map(rawId => +rawId)
@@ -55,8 +53,10 @@ export const useMapFiltersService = () => {
       .map(rawId => +rawId)
       .filter(id => !isNaN(id));
 
+    const status = ORDER_STATUSES.includes(rawStatus as EOrderStatus) ? rawStatus as EOrderStatus : null;
+
     const newFormValue: IFormMapFilters = {
-      statuses,
+      status,
       courierIds,
       senderIds,
       receiverIds,

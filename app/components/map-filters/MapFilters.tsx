@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type ComponentType, type SyntheticEvent } from 'react';
+import { useEffect, useMemo, type ComponentType, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm, type ControllerRenderProps } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
@@ -12,6 +12,9 @@ import {
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { deepCompare } from 'deep-compare-advanced';
 
 import { EOrderStatus } from '~/constants/order';
 
@@ -37,6 +40,13 @@ const SEARCH_QUERY = {
   itemsPerPage: 5,
 };
 
+const EMPTY_FORM_VALUE = {
+  status: null,
+  courierIds: [],
+  senderIds: [],
+  receiverIds: [],
+};
+
 const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => {
   const {
     sendersStore,
@@ -47,18 +57,22 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     fetchCouriers,
   } = useOrderFilterCtx();
 
-  const { control, register, getValues, reset } = useForm<IFormMapFilters>({
-    defaultValues: formValue ?? {
-      statuses: [],
-      courierIds: [],
-      senderIds: [],
-      receiverIds: [],
-    },
+  const { control, register, getValues, reset, watch } = useForm<IFormMapFilters>({
+    defaultValues: formValue ?? EMPTY_FORM_VALUE,
   });
+
+  const currentFormValue = watch();
 
   const senders = useMemo(() => sendersStore.data?.data, [sendersStore.data]);
   const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
   const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
+
+  const hasValues = useMemo(() => {
+    return currentFormValue.status ||
+      currentFormValue.senderIds?.length ||
+      currentFormValue.courierIds?.length ||
+      currentFormValue.receiverIds?.length;
+  }, [currentFormValue]);
 
   const couriersMap = useMemo(() => {
     return couriers?.reduce((acc, curr) => {
@@ -99,20 +113,27 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     return t('map_filters.options_selected', { count: v.length });
   }
 
-  const fieldStatuses = register('statuses');
+  const fieldStatus = register('status');
 
   const submitHandler = () => {
     if (!onSubmit) {
       return;
     }
 
-    const formValues = getValues();
-    onSubmit(formValues);
+    const submitFormValues = getValues();
+
+    const isChanged = !deepCompare(formValue, submitFormValues)?.status;
+
+    if (!isChanged) {
+      return;
+    }
+
+    onSubmit(submitFormValues);
   }
 
   const submitDebounce = useDebouncedCallback(() => {
     submitHandler();
-  }, 300);
+  }, 2000);
 
   const changeHandler = (
     field: ControllerRenderProps,
@@ -131,31 +152,52 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     submitDebounce();
   }
 
+  const resetHandler = () => {
+    reset(EMPTY_FORM_VALUE);
+    submitHandler();
+  }
+
   useEffect(() => {
     reset(formValue);
   }, [formValue]);
 
   return (
     <Stack gap={2} direction="row">
+      <IconButton
+        sx={{ alignSelf: 'center' }}
+        disabled={!hasValues}
+        color="error"
+        onClick={resetHandler}
+      >
+        <CloseIcon />
+      </IconButton>
       <FormControl>
         <InputLabel size="small">
           {t('map_filters.status')}
         </InputLabel>
-        <Select
-          size="small"
-          sx={{ width: 200 }}
-          label={t('map_filters.status')}
-          multiple={true}
-          defaultValue={[]}
-          {...fieldStatuses}
-          onClose={submitHandler}
-        >
-          {STATUS_OPTIONS.map(status => (
-            <MenuItem value={status} key={status}>
-              {t(`order_status.${status}`)}
-            </MenuItem>
-          ))}
-        </Select>
+        <Controller
+          control={control}
+          name="status"
+          render={({ field }) => (
+            <Select
+              size="small"
+              sx={{ width: 200 }}
+              label={t('map_filters.status')}
+              multiple={false}
+              defaultValue={field.value ?? ''}
+              {...field}
+              value={field.value || ''}
+              onClose={submitHandler}
+            >
+              <MenuItem value="">-</MenuItem>
+              {STATUS_OPTIONS.map(status => (
+                <MenuItem value={status} key={status}>
+                  {t(`order_status.${status}`)}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        />
       </FormControl>
       <FormControl>
         <Controller
@@ -175,6 +217,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchSenders(SEARCH_QUERY)}
+              onClose={submitHandler}
             />
           )}
         />
@@ -197,6 +240,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchReceivers(SEARCH_QUERY)}
+              onClose={submitHandler}
             />
           )}
         />
@@ -219,6 +263,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchCouriers(SEARCH_QUERY)}
+              onClose={submitHandler}
             />
           )}
         />

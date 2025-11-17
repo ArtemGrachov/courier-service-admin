@@ -8,7 +8,7 @@ interface IMapFiltersStoreData {
 
 export class MapFiltersStore implements IMapFiltersStoreData {
   public formValue: IFormMapFilters = {
-    statuses: [],
+    status: null,
     courierIds: [],
     senderIds: [],
     receiverIds: [],
