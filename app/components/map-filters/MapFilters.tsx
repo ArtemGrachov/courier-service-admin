@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type ComponentType, type SyntheticEvent } from 'react';
+import { useEffect, useMemo, type ComponentType, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm, type ControllerRenderProps } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
@@ -12,6 +12,8 @@ import {
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { EOrderStatus } from '~/constants/order';
 
@@ -37,6 +39,13 @@ const SEARCH_QUERY = {
   itemsPerPage: 5,
 };
 
+const EMPTY_FORM_VALUE = {
+  statuses: [],
+  courierIds: [],
+  senderIds: [],
+  receiverIds: [],
+};
+
 const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => {
   const {
     sendersStore,
@@ -47,18 +56,22 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     fetchCouriers,
   } = useOrderFilterCtx();
 
-  const { control, register, getValues, reset } = useForm<IFormMapFilters>({
-    defaultValues: formValue ?? {
-      statuses: [],
-      courierIds: [],
-      senderIds: [],
-      receiverIds: [],
-    },
+  const { control, register, getValues, reset, watch } = useForm<IFormMapFilters>({
+    defaultValues: formValue ?? EMPTY_FORM_VALUE,
   });
+
+  const currentFormValue = watch();
 
   const senders = useMemo(() => sendersStore.data?.data, [sendersStore.data]);
   const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
   const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
+
+  const hasValues = useMemo(() => {
+    return currentFormValue.statuses?.length ||
+      currentFormValue.senderIds?.length ||
+      currentFormValue.courierIds?.length ||
+      currentFormValue.receiverIds?.length;
+  }, [currentFormValue]);
 
   const couriersMap = useMemo(() => {
     return couriers?.reduce((acc, curr) => {
@@ -131,12 +144,25 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     submitDebounce();
   }
 
+  const resetHandler = () => {
+    reset(EMPTY_FORM_VALUE);
+    submitHandler();
+  }
+
   useEffect(() => {
     reset(formValue);
   }, [formValue]);
 
   return (
     <Stack gap={2} direction="row">
+      <IconButton
+        sx={{ alignSelf: 'center' }}
+        disabled={!hasValues}
+        color="error"
+        onClick={resetHandler}
+      >
+        <CloseIcon />
+      </IconButton>
       <FormControl>
         <InputLabel size="small">
           {t('map_filters.status')}
