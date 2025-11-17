@@ -36,6 +36,9 @@ const OrderPreview: ComponentType<IProps> = ({ order }) => {
         </Typography>
         <OrderStatus status={order.status} />
       </Stack>
+      <Typography variant="subtitle1" component="div">
+        {order.description}
+      </Typography>
       <Stack gap={2} direction="row" justifyContent="space-between">
         <Box gap={1}>
           <Typography variant="caption" component="div">
@@ -53,6 +56,32 @@ const OrderPreview: ComponentType<IProps> = ({ order }) => {
             {closedDateFormatted}
           </Typography>
         </Box>
+      </Stack>
+      <Stack gap={2}>
+        <Stack gap={2} direction="row" justifyContent="space-between">
+          <Typography variant="caption" component="div">
+            {t('order_card.weight')}
+          </Typography>
+          <Typography variant="body1" component="div">
+            {order.weight ?? '-'}
+          </Typography>
+        </Stack>
+        <Stack gap={2} direction="row" justifyContent="space-between">
+          <Typography variant="caption" component="div">
+            {t('order_card.size')}
+          </Typography>
+          <Typography variant="body1" component="div">
+            {order.size ?? '-'}
+          </Typography>
+        </Stack>
+        <Stack gap={2} direction="row" justifyContent="space-between">
+          <Typography variant="caption" component="div">
+            {t('order_card.volume')}
+          </Typography>
+          <Typography variant="body1" component="div">
+            {order.volume ?? '-'}
+          </Typography>
+        </Stack>
       </Stack>
     </Stack>
   )

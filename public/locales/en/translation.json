@@ -137,7 +137,10 @@
   "order_card": {
     "id": "Order ID",
     "ordered_at": "Ordered date/time",
-    "closed_at": "Closed date/time"
+    "closed_at": "Closed date/time",
+    "size": "Size",
+    "volume": "Volume",
+    "weight": "Weight"
   },
   "client_card": {
     "receiver_id": "Receiver ID",

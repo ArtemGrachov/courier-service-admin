@@ -137,7 +137,10 @@
   "order_card": {
     "id": "Замовлення ID",
     "ordered_at": "Дата/час замовлення",
-    "closed_at": "Дата/час завершення"
+    "closed_at": "Дата/час завершення",
+    "size": "Розмір",
+    "volume": "Об'єм",
+    "weight": "Вага"
   },
   "client_card": {
     "receiver_id": "Отримувач ID",
