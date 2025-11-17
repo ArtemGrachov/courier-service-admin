@@ -9,7 +9,7 @@ const ContentUA: ComponentType = () => {
       <Typography variant="body1" gutterBottom>
         Створено з демонстративною та навчальною метою
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         🛠️ Технології, функціонал та особливості:
       </Typography>
       <Typography variant="body1" component="ul" gutterBottom>
@@ -44,7 +44,7 @@ const ContentUA: ComponentType = () => {
           💽 Mock дані для симуляції роботи з сервером
         </li>
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         💻 Використання
       </Typography>
       <Typography variant="body1" gutterBottom>
@@ -55,13 +55,13 @@ const ContentUA: ComponentType = () => {
           Вихідний код адмін-панелі - GitHub
         </Link>
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         🤖 AI
       </Typography>
       <Typography variant="body1" gutterBottom>
         Штучний інтелект використано для генерації mock-даних про замовлення, клієнтів та кур'єрів.
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         📋 Проєкт-менеджмент
       </Typography>
       <Typography variant="body1" component="ul" gutterBottom>
