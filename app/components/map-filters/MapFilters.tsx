@@ -41,7 +41,7 @@ const SEARCH_QUERY = {
 };
 
 const EMPTY_FORM_VALUE = {
-  statuses: [],
+  status: null,
   courierIds: [],
   senderIds: [],
   receiverIds: [],
@@ -68,7 +68,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
   const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
 
   const hasValues = useMemo(() => {
-    return currentFormValue.statuses?.length ||
+    return currentFormValue.status ||
       currentFormValue.senderIds?.length ||
       currentFormValue.courierIds?.length ||
       currentFormValue.receiverIds?.length;
@@ -113,7 +113,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     return t('map_filters.options_selected', { count: v.length });
   }
 
-  const fieldStatuses = register('statuses');
+  const fieldStatus = register('status');
 
   const submitHandler = () => {
     if (!onSubmit) {
@@ -175,21 +175,29 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
         <InputLabel size="small">
           {t('map_filters.status')}
         </InputLabel>
-        <Select
-          size="small"
-          sx={{ width: 200 }}
-          label={t('map_filters.status')}
-          multiple={true}
-          defaultValue={[]}
-          {...fieldStatuses}
-          onClose={submitHandler}
-        >
-          {STATUS_OPTIONS.map(status => (
-            <MenuItem value={status} key={status}>
-              {t(`order_status.${status}`)}
-            </MenuItem>
-          ))}
-        </Select>
+        <Controller
+          control={control}
+          name="status"
+          render={({ field }) => (
+            <Select
+              size="small"
+              sx={{ width: 200 }}
+              label={t('map_filters.status')}
+              multiple={false}
+              defaultValue={field.value ?? ''}
+              {...field}
+              value={field.value || ''}
+              onClose={submitHandler}
+            >
+              <MenuItem value="">-</MenuItem>
+              {STATUS_OPTIONS.map(status => (
+                <MenuItem value={status} key={status}>
+                  {t(`order_status.${status}`)}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        />
       </FormControl>
       <FormControl>
         <Controller

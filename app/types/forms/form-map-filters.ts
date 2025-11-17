@@ -1,7 +1,7 @@
 import type { EOrderStatus } from '~/constants/order';
 
 export interface IFormMapFilters {
-  statuses?: EOrderStatus[];
+  status?: EOrderStatus | null;
   courierIds?: number[];
   senderIds?: number[];
   receiverIds?: number[];
