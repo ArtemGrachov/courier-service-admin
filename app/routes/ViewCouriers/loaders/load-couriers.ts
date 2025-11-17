@@ -1,4 +1,4 @@
-import { DEFAULT_COURIER_QUERY } from '../constants/couriers-filters';
+import { DEFAULT_COURIER_QUERY } from '~/constants/couriers';
 import { EStatus } from '~/constants/status';
 
 import { routeQueryToFormValue } from '../providers/couriers-filters/utils';

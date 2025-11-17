@@ -13,7 +13,7 @@ import {
   type GridSortModel,
 } from '@mui/x-data-grid';
 
-import { COURIER_STATUSES, ECourierStatus } from '~/constants/couriers';
+import { COURIER_STATUSES, DEFAULT_COURIER_FILTERS, ECourierStatus } from '~/constants/couriers';
 import type { ESortDirection } from '~/constants/sort';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
@@ -178,10 +178,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       return;
     }
 
-    const payload: IFormCouriersFilter = {
-      page: 1,
-      itemsPerPage: 5,
-    };
+    const payload: IFormCouriersFilter = { ...DEFAULT_COURIER_FILTERS };
 
     const pgMdl = paginationModel.current;
 

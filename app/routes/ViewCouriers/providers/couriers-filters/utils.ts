@@ -1,6 +1,6 @@
 import { createSearchParams, type URLSearchParamsInit } from 'react-router';
 
-import { DEFAULT_COURIER_FILTERS } from '../../constants/couriers-filters';
+import { DEFAULT_COURIER_FILTERS } from '~/constants/couriers';
 import { COURIER_STATUSES } from '~/constants/couriers';
 
 import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';

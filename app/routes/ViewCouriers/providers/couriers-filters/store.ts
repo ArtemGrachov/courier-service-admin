@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import { DEFAULT_COURIER_FILTERS } from '../../constants/couriers-filters';
+import { DEFAULT_COURIER_FILTERS } from '~/constants/couriers';
 
 import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
 
