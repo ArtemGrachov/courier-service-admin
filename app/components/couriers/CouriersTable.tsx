@@ -224,6 +224,11 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       payload.status = status;
     }
 
+    payload.nameSort = null;
+    payload.currentOrdersCountSort = null;
+    payload.totalOrdersCountSort = null;
+    payload.ratingSort = null;
+
     const sortBy = sortModel.current?.[0];
 
     if (sortBy?.sort) {
