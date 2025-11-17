@@ -1,9 +1,10 @@
 import { useState, type ComponentType } from 'react';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, Link as RouterLink } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewClient/+types/ViewClient';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
@@ -13,6 +14,7 @@ import i18n from '~/i18n/config';
 import { EStatus } from '~/constants/status';
 
 import routeLoader from '~/router/route-loader';
+import { ROUTES } from '~/router/routes';
 
 import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
 import { usePageDataService } from '~/providers/page-data/service';
@@ -25,6 +27,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
+import { useRoutePath } from '~/hooks/routing/use-route-path';
 import ClientDetails from '~/components/clients/ClientDetails';
 import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
@@ -39,6 +42,7 @@ const ViewClient: ComponentType = observer(() => {
   const errorSnackbar = useErrorSnackbar();
   const { reload } = usePageDataCtx();
   const [isLoading, setIsLoading] = useState(false);
+  const routePath = useRoutePath();
 
   const { store: clientStore } = useClientCtx();
   const { store: ordersStore } = useOrdersCtx();
@@ -88,6 +92,24 @@ const ViewClient: ComponentType = observer(() => {
               items={ordersStore.data?.data}
               isProcessing={ordersStore.isProcessing}
             />
+            <Stack direction="horizontal" gap={2} marginTop={2}>
+              <Button
+                component={RouterLink}
+                to={routePath(ROUTES.ORDERS, { senders: [client?.id] })}
+                variant="contained"
+                color="success"
+              >
+                {t('view_client.sender_orders')}
+              </Button>
+              <Button
+                component={RouterLink}
+                to={routePath(ROUTES.ORDERS, { receivers: [client?.id] })}
+                variant="contained"
+                color="success"
+              >
+                {t('view_client.receiver_orders')}
+              </Button>
+            </Stack>
           </Box>
         )}
       </Box>

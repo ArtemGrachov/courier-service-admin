@@ -195,7 +195,9 @@
     "title_template": "{{title}} | Courier Service"
   },
   "view_client": {
-    "title": "Client ID {{id}} {{name}}"
+    "title": "Client ID {{id}} {{name}}",
+    "sender_orders": "Sendings",
+    "receiver_orders": "Received"
   },
   "view_clients": {
     "title": "Clients"

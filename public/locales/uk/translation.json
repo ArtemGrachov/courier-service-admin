@@ -195,7 +195,9 @@
     "title_template": "{{title}} | Кур'єрський сервіс"
   },
   "view_client": {
-    "title": "Клієнт ID {{id}} {{name}}"
+    "title": "Клієнт ID {{id}} {{name}}",
+    "sender_orders": "Відправлення",
+    "receiver_orders": "Отримані"
   },
   "view_clients": {
     "title": "Клієнти"
