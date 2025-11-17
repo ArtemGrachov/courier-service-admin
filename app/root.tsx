@@ -71,8 +71,14 @@ export default function App() {
 export function meta() {
   const { t } = i18n;
 
+  let title = '...';
+
+  if (t('meta.title') !== 'meta.title') {
+    title = t('common_meta.title_template', { title: t('meta.title') });
+  }
+
   return [
-    { title: t('common_meta.title_template', { title: t('meta.title') }) },
+    { title },
     { name: 'description', content: t('meta.description') },
   ];
 }
