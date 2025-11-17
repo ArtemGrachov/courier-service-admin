@@ -57,7 +57,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
     fetchCouriers,
   } = useOrderFilterCtx();
 
-  const { control, register, getValues, reset, watch } = useForm<IFormMapFilters>({
+  const { control, getValues, reset, watch } = useForm<IFormMapFilters>({
     defaultValues: formValue ?? EMPTY_FORM_VALUE,
   });
 
@@ -110,10 +110,8 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
   const { t } = useTranslation();
 
   const renderValue = (v: number[]) => {
-    return t('map_filters.options_selected', { count: v.length });
+    return t('common_filters.options_selected', { count: v.length });
   }
-
-  const fieldStatus = register('status');
 
   const submitHandler = () => {
     if (!onSubmit) {

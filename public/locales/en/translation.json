@@ -229,6 +229,18 @@
   },
   "view_about": {
     "main_link": "Return to main page"
+  },
+  "common_filters": {
+    "options_selected": "Selected {{count}}"
+  },
+  "orders_couriers_operator": {
+    "label": "Couriers"
+  },
+  "orders_senders_operator": {
+    "label": "Senders"
+  },
+  "orders_receivers_operator": {
+    "label": "Receivers"
   }
 }
 

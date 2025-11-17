@@ -185,8 +185,7 @@
     "status": "Статус",
     "senders": "Відправники",
     "receivers": "Отримувачі",
-    "couriers": "Кур'єри",
-    "options_selected": "Обрано {{count}}"
+    "couriers": "Кур'єри"
   },
   "meta": {
     "title": "Адмінпанель",
@@ -229,6 +228,18 @@
   },
   "view_about": {
     "main_link": "Повернутися на головну сторінку"
+  },
+  "common_filters": {
+    "options_selected": "Обрано {{count}}"
+  },
+  "orders_couriers_operator": {
+    "label": "Кур'єри"
+  },
+  "orders_senders_operator": {
+    "label": "Відправники"
+  },
+  "orders_receivers_operator": {
+    "label": "Отримувачі"
   }
 }
 
