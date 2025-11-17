@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { deepCompare } from 'deep-compare-advanced';
 
 import { EOrderStatus } from '~/constants/order';
 
@@ -119,8 +120,15 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
       return;
     }
 
-    const formValues = getValues();
-    onSubmit(formValues);
+    const submitFormValues = getValues();
+
+    const isChanged = !deepCompare(formValue, submitFormValues)?.status;
+
+    if (!isChanged) {
+      return;
+    }
+
+    onSubmit(submitFormValues);
   }
 
   const submitDebounce = useDebouncedCallback(() => {
