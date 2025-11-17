@@ -16,7 +16,7 @@ import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
-import CouriersHeader from './components/CouriersHeader';
+import ReloadButton from '~/components/other/ReloadButton';
 import CouriersTable from '~/components/couriers/CouriersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
@@ -60,7 +60,10 @@ const ViewCouriers: ComponentType = observer(() => {
         width="100%"
         boxSizing="border-box"
       >
-        <CouriersHeader />
+        <ReloadButton
+          isProcessing={couriersStore.isProcessing}
+          onReload={reloadPageData}
+        />
         <CouriersTable
           isProcessing={couriersStore.isProcessing}
           items={couriersStore.data?.data}

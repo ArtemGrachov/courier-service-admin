@@ -16,7 +16,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
-import ClientsHeader from './components/ClientsHeader';
+import ReloadButton from '~/components/other/ReloadButton';
 import ClientsTable from '~/components/clients/ClientsTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
@@ -60,7 +60,10 @@ const ViewClients: ComponentType = observer(() => {
         width="100%"
         boxSizing="border-box"
       >
-        <ClientsHeader />
+        <ReloadButton
+          isProcessing={clientsStore.isProcessing}
+          onReload={reloadPageData}
+        />
         <ClientsTable
           isProcessing={clientsStore.isProcessing}
           items={clientsStore.data?.data}
