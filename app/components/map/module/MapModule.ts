@@ -90,3 +90,4 @@ export class MapModule {
     this.mapService.scaleToPoints(positions, options);
   }
 }
+

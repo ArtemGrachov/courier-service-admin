@@ -2,7 +2,7 @@ import { getPagination } from '~/utils/pagination';
 import { timeoutPromise } from '~/utils/timeout-promise'
 
 export const mockRequest = async <T = any, >(data?: T) => {
-  const throwError = Math.random() > 0.97;
+  const throwError = Math.random() > 0.7;
 
   await timeoutPromise(1000);
 

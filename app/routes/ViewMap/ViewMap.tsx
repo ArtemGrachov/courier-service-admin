@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Portal from '@mui/material/Portal';
 import Stack from '@mui/material/Stack';
-import { type ComponentType } from 'react';
+import { useEffect, type ComponentType } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useLoaderData } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import OrderFilterProvider from '~/providers/order-filters';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import MapFilters from '~/components/map-filters/MapFilters';
 import Map from '~/components/map/Map';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
@@ -31,6 +32,8 @@ import { EStatus } from '~/constants/status';
 
 const ViewMap: ComponentType = observer(() => {
   const { t } = useTranslation();
+
+  const errorSnackbar = useErrorSnackbar();
 
   const { store: couriersStore, setProcessing: setCouriersProcessing } = useCouriersCtx();
   const { store: ordersStore, setProcessing: setOrdersProcessing } = useOrdersCtx();
@@ -48,6 +51,14 @@ const ViewMap: ComponentType = observer(() => {
     setCouriersProcessing();
     setOrdersProcessing();
   }
+
+  useEffect(() => {
+    if (!ordersStore.isError) {
+      return;
+    }
+
+    errorSnackbar(ordersStore.getError);
+  }, [ordersStore.isError]);
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
@@ -105,12 +116,14 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
 
   prevRoute.updatePath(url);
 
-  if (ordersState.getStatus === EStatus.ERROR) {
-    throw ordersState.getError;
-  }
+  if (!isSamePath) {
+    if (ordersState.getStatus === EStatus.ERROR) {
+      throw ordersState.getError;
+    }
 
-  if (couriersState.getStatus === EStatus.ERROR) {
-    throw couriersState.getError;
+    if (couriersState.getStatus === EStatus.ERROR) {
+      throw couriersState.getError;
+    }
   }
 
   return {
