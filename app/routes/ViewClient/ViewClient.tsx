@@ -180,7 +180,7 @@ export { ErrorBoundary };
 
 export function meta({ loaderData }: Route.MetaArgs) {
   const { t } = i18n;
-  const client = loaderData.clientState.data;
+  const client = loaderData?.clientState?.data;
 
   return [
     { title: t('common_meta.title_template', { title: t('view_client.title', { id: client?.id, name: client?.name }) }) },

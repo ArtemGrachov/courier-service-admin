@@ -92,10 +92,12 @@ const ViewUpsertCourier: ComponentType = observer(() => {
     await navigate(routePath(ROUTES.COURIER, { courierId: courierId ?? 1 }));
   }
 
+  const title = isEdit ? t('view_upsert_courier.title_edit', { id: courier?.id, name: courier?.name }) : t('view_upsert_courier.title_create');
+
   return (
     <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Portal container={() => titlePortalRef?.current ?? null}>
-        {t('view_upsert_courier.title', { id: courier?.id, name: courier?.name })}
+        {title}
       </Portal>
       <Box padding={3}>
         <Box maxWidth={500} margin="auto">
@@ -138,7 +140,7 @@ interface ILoaderResult {
   courierState: ICourierStoreData
 }
 
-const loader = async (courierId: number) => {
+const loader = async (courierId?: number | null) => {
   const courierState = await loadCourier(courierId);
 
   const hasError = courierState.getStatus === EStatus.ERROR;
@@ -155,7 +157,7 @@ const loader = async (courierId: number) => {
 }
 
 export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
-  const courierId = +params.courierId!;
+  const courierId = params.courierId ? +params.courierId : null;
 
   return routeLoader<ILoaderResult>(request.url, async () => {
     return loader(courierId);
@@ -166,10 +168,11 @@ export { ErrorBoundary };
 
 export function meta({ loaderData }: Route.MetaArgs) {
   const { t } = i18n;
-  const courier = loaderData.courierState.data;
+  const courier = loaderData?.courierState?.data;
+  const title = courier ? t('view_upsert_courier.title_edit', { id: courier?.id, name: courier?.name }) : t('view_upsert_courier.title_create');
 
   return [
-    { title: t('common_meta.title_template', { title: t('view_upsert_courier.title', { id: courier?.id, name: courier?.name }) }) },
+    { title: t('common_meta.title_template', { title }) },
   ];
 }
 

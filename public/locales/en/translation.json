@@ -98,9 +98,7 @@
     "delivering": "Delivering"
   },
   "view_couriers": {
-    "couriers_header": {
-      "add_courier": "Add courier"
-    },
+    "add_courier": "Add courier",
     "title": "Couriers"
   },
   "form_courier": {
