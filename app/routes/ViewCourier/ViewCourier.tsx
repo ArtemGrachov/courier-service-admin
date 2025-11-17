@@ -4,6 +4,7 @@ import type { Route } from '.react-router/types/app/routes/ViewCourier/+types/Vi
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Portal from '@mui/material/Portal';
+import Stack from '@mui/material/Stack';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
@@ -29,6 +30,7 @@ import OrdersTable from '~/components/orders/OrdersTable';
 import CourierDetails from '~/components/couriers/CourierDetails';
 import Map from '~/components/map/Map';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
+import ReloadButton from '~/components/other/ReloadButton';
 
 const ViewCourier: ComponentType = observer(() => {
   const { t } = useTranslation();
@@ -72,7 +74,13 @@ const ViewCourier: ComponentType = observer(() => {
       <ReloadPageProvider reloadFunction={reloadPageData}>
         <Grid container spacing={2}>
           <Grid size={5}>
-            {courier && <CourierDetails courier={courier} />}
+            <Stack gap={2}>
+              <ReloadButton
+                isProcessing={courierStore.isProcessing || ordersStore.isProcessing || activeOrdersStore.isProcessing}
+                onReload={reloadPageData}
+              />
+              {courier && <CourierDetails courier={courier} />}
+            </Stack>
           </Grid>
           <Grid size={7} minHeight={400} display="flex">
             {courier && (
