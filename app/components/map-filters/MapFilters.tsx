@@ -133,7 +133,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
 
   const submitDebounce = useDebouncedCallback(() => {
     submitHandler();
-  }, 300);
+  }, 2000);
 
   const changeHandler = (
     field: ControllerRenderProps,
@@ -209,6 +209,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchSenders(SEARCH_QUERY)}
+              onClose={submitHandler}
             />
           )}
         />
@@ -231,6 +232,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchReceivers(SEARCH_QUERY)}
+              onClose={submitHandler}
             />
           )}
         />
@@ -253,6 +255,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}
               onOpenLoad={() => fetchCouriers(SEARCH_QUERY)}
+              onClose={submitHandler}
             />
           )}
         />
