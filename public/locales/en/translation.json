@@ -186,6 +186,7 @@
     "close_all_windows": "Close all windows"
   },
   "map_filters": {
+    "order_id": "Order ID",
     "status": "Status",
     "senders": "Senders",
     "receivers": "Receivers",

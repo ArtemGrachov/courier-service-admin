@@ -22,6 +22,8 @@ export async function loadOrders(requestUrl: string) {
     statuses.push(EOrderStatus.ORDERED, EOrderStatus.PROCESSING);
   }
 
+  const orderId = searchParams.get('orderId');
+
   const senderIds = searchParams
     .getAll('senders')
     .map(rawId => +rawId);
@@ -35,6 +37,10 @@ export async function loadOrders(requestUrl: string) {
     .map(rawId => +rawId);
 
   const fetchOrdersQuery: IGetOrdersQuery = {};
+
+  if (orderId) {
+    fetchOrdersQuery.id = orderId;
+  }
 
   if (statuses) {
     fetchOrdersQuery.statuses = statuses;

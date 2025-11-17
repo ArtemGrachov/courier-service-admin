@@ -21,7 +21,7 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
   ]);
 
   if (query?.id) {
-    orders = orders.filter(o => o.id.toString().indexOf(query.id as string) !== -1);
+    orders = orders.filter(o => o.id.toString() === query.id as string);
   }
 
   const hasSearch = !!query?.search;

@@ -186,6 +186,7 @@
     "close_all_windows": "Закрити усі вікна"
   },
   "map_filters": {
+    "order_id": "ID замовлення",
     "status": "Статус",
     "senders": "Відправники",
     "receivers": "Отримувачі",

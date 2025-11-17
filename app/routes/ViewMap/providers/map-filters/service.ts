@@ -19,6 +19,10 @@ export const useMapFiltersService = () => {
   const formValueToRouteQuery = useCallback((formValue: IFormMapFilters) => {
     const params: URLSearchParamsInit = {};
 
+    if (formValue.orderId) {
+      params.orderId = formValue.orderId;
+    }
+
     if (formValue.status) {
       params.status = formValue.status;
     }
@@ -39,6 +43,7 @@ export const useMapFiltersService = () => {
   }, []);
 
   const routeQueryToFormValue = useCallback((newSearchParams: URLSearchParams) => {
+    const orderId = newSearchParams.get('orderId');
     const rawStatus = newSearchParams.get('status');
     const courierIds = newSearchParams
       .getAll('couriers')
@@ -56,6 +61,7 @@ export const useMapFiltersService = () => {
     const status = ORDER_STATUSES.includes(rawStatus as EOrderStatus) ? rawStatus as EOrderStatus : null;
 
     const newFormValue: IFormMapFilters = {
+      orderId,
       status,
       courierIds,
       senderIds,
