@@ -345,6 +345,9 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
       rows={items}
       loading={isProcessing}
       showToolbar={true}
+      slots={{
+        quickFilterIcon: () => null,
+      }}
       localeText={localeText}
       pageSizeOptions={[5, 10, 25]}
       initialState={initialState}
