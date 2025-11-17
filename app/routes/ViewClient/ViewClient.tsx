@@ -3,6 +3,7 @@ import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewClient/+types/ViewClient';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
+import Stack from '@mui/material/Stack';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +24,7 @@ import { useTitlePortalCtx } from '~/providers/title-portal';
 import ClientDetails from '~/components/clients/ClientDetails';
 import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
+import RefreshButton from '~/components/other/ReloadButton';
 
 const ViewClient: ComponentType = observer(() => {
   const { t } = useTranslation();
@@ -52,15 +54,23 @@ const ViewClient: ComponentType = observer(() => {
         boxSizing="border-box"
         flexGrow={1}
       >
-      {client && (
-        <ClientDetails client={client} />
-      )}
-      {ordersStore.data && (
-        <OrdersTable
-          items={ordersStore.data?.data}
-          isProcessing={ordersStore.isProcessing}
-        />
-      )}
+        <Stack direction="row" gap={4}>
+          <RefreshButton
+            isProcessing={clientStore.isProcessing || ordersStore.isProcessing}
+            onReload={reloadPageData}
+          />
+          {client && (
+            <Box flex="1 1 auto">
+              <ClientDetails client={client} />
+            </Box>
+          )}
+        </Stack>
+        {ordersStore.data && (
+          <OrdersTable
+            items={ordersStore.data?.data}
+            isProcessing={ordersStore.isProcessing}
+          />
+        )}
       </Box>
     </ReloadPageProvider>
   )
