@@ -94,6 +94,10 @@ const AutocompleteExternal = ({
   }
 
   const inputChangeHandler = (event: SyntheticEvent<Element, Event>, value: string, reason: AutocompleteInputChangeReason) => {
+    if (reason === 'reset') {
+      return;
+    }
+
     if (onInputChange) {
       onInputChange(event, value, reason);
     }
@@ -114,3 +118,4 @@ const AutocompleteExternal = ({
 }
 
 export default AutocompleteExternal;
+
