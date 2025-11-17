@@ -188,6 +188,11 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
       payload.phoneSearch = phoneSearch;
     }
 
+    payload.nameSort = null;
+    payload.currentOrdersCountSort = null;
+    payload.totalOrdersCountSort = null;
+    payload.ratingSort = null;
+
     const sortBy = sortModel.current?.[0];
 
     if (sortBy?.sort) {
