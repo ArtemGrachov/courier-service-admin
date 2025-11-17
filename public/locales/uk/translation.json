@@ -189,11 +189,11 @@
     "options_selected": "Обрано {{count}}"
   },
   "meta": {
-    "title": "Адміністративна панель",
-    "description": "Адміністративна панель демо-проєкту кур'єрського сервісу"
+    "title": "Адмінпанель",
+    "description": "Адмінпанель сервісу кур'єрської доставки"
   },
   "common_meta": {
-    "title_template": "{{title}} | Кур'єрський сервіс"
+    "title_template": "{{title}} | Сервіс кур'єрської доставки"
   },
   "view_client": {
     "title": "Клієнт ID {{id}} {{name}}",

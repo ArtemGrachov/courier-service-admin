@@ -190,10 +190,10 @@
   },
   "meta": {
     "title": "Admin panel",
-    "description": "Courier Service demo app admin panel"
+    "description": "Courier Service app admin panel"
   },
   "common_meta": {
-    "title_template": "{{title}} | Courier Service"
+    "title_template": "{{title}} | Courier Delivery Service"
   },
   "view_client": {
     "title": "Client ID {{id}} {{name}}",
