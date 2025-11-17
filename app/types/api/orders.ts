@@ -14,6 +14,8 @@ export interface IGetOrdersQuery {
   statuses?: EOrderStatus[];
   dateTimeOrderedSort?: ESortDirection | null;
   dateTimeClosedSort?: ESortDirection | null;
+  search?: string | null;
+  id?: string | null;
 }
 
 export interface IGetOrdersResponse {

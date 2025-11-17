@@ -130,6 +130,7 @@
     "receiver": "Отримувач",
     "courier": "Кур'єр",
     "status": "Статус",
+    "description": "Опис",
     "ordered_at": "Дата/час замовлення",
     "closed_at": "Дата/час завершення",
     "details": "Деталі"

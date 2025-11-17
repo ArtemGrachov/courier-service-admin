@@ -130,6 +130,7 @@
     "receiver": "Receiver",
     "courier": "Courier",
     "status": "Status",
+    "description": "Description",
     "ordered_at": "Ordered date/time",
     "closed_at": "Closed date/time",
     "details": "Details"

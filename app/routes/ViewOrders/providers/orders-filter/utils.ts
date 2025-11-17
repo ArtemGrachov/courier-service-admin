@@ -18,8 +18,16 @@ export const formValueToRouteQuery = (formValue: IFormOrdersFilter) => {
     params.itemsPerPage = formValue.itemsPerPage.toString();
   }
 
+  if (formValue.id) {
+    params.id = formValue.id;
+  }
+
   if (formValue.statuses) {
     params.statuses = formValue.statuses;
+  }
+
+  if (formValue.search) {
+    params.search = formValue.search;
   }
 
   if (formValue.senderIds) {
@@ -49,6 +57,8 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   let page = DEFAULT_ORDER_QUERY.page;
   let itemsPerPage = DEFAULT_ORDER_QUERY.itemsPerPage;
 
+  const id = newSearchParams.get('id');
+  const search = newSearchParams.get('search');
   const rawPage = newSearchParams.get('page');
   const rawItemsPerPage = newSearchParams.get('itemsPerPage');
   const rawStatuses = newSearchParams.getAll('statuses');
@@ -86,6 +96,8 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   }
 
   const newFormValue: IFormOrdersFilter = {
+    id,
+    search,
     page,
     itemsPerPage,
     statuses: statuses.length ? statuses : undefined,
