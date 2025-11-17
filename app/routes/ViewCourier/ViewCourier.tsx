@@ -1,10 +1,11 @@
 import { useState, type ComponentType } from 'react';
-import { useLoaderData, useParams } from 'react-router';
+import { useLoaderData, useParams, Link as RouterLink } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewCourier/+types/ViewCourier';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Portal from '@mui/material/Portal';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +14,7 @@ import i18n from '~/i18n/config';
 import { EStatus } from '~/constants/status';
 
 import routeLoader from '~/router/route-loader';
+import { ROUTES } from '~/router/routes';
 
 import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
 import { usePageDataService } from '~/providers/page-data/service';
@@ -28,6 +30,7 @@ import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
+import { useRoutePath } from '~/hooks/routing/use-route-path';
 import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
 import CourierDetails from '~/components/couriers/CourierDetails';
 import Map from '~/components/map/Map';
@@ -44,6 +47,7 @@ const ViewCourier: ComponentType = observer(() => {
   const errorSnackbar = useErrorSnackbar();
   const { reload } = usePageDataCtx();
   const [isLoading, setIsLoading] = useState(false);
+  const routePath = useRoutePath();
 
   const { store: courierStore } = useCourierCtx();
   const { store: ordersStore } = useOrdersCtx();
@@ -103,6 +107,15 @@ const ViewCourier: ComponentType = observer(() => {
               items={ordersStore.data?.data}
               isProcessing={ordersStore.isProcessing}
             />
+            <Button
+              component={RouterLink}
+              to={routePath(ROUTES.ORDERS, { couriers: [courier?.id] })}
+              variant="contained"
+              color="success"
+              sx={{ mt: 2 }}
+            >
+              {t('view_courier.orders')}
+            </Button>
           </Box>
         )}
       </Box>

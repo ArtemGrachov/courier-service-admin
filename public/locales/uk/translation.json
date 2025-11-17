@@ -196,14 +196,15 @@
   },
   "view_client": {
     "title": "Клієнт ID {{id}} {{name}}",
-    "sender_orders": "Відправлення",
-    "receiver_orders": "Отримані"
+    "sender_orders": "Усі відправлення",
+    "receiver_orders": "Усі отримані"
   },
   "view_clients": {
     "title": "Клієнти"
   },
   "view_courier": {
-    "title": "Кур'єр' ID {{id}} {{name}}"
+    "title": "Кур'єр' ID {{id}} {{name}}",
+    "orders": "Усі замовлення"
   },
   "view_map": {
     "title": "Карта"

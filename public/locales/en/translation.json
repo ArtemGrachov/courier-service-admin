@@ -196,14 +196,15 @@
   },
   "view_client": {
     "title": "Client ID {{id}} {{name}}",
-    "sender_orders": "Sendings",
-    "receiver_orders": "Received"
+    "sender_orders": "All sendings",
+    "receiver_orders": "All received"
   },
   "view_clients": {
     "title": "Clients"
   },
-  "view_courier": {
-    "title": "Courier ID {{id}} {{name}}"
+  "view_courier": {1
+    "title": "Courier ID {{id}} {{name}}",
+    "orders": "All orders"
   },
   "view_map": {
     "title": "Map"
