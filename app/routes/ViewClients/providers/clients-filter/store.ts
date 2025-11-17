@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import { DEFAULT_CLIENT_FILTERS } from '../../constants/clients-filter';
+import { DEFAULT_CLIENT_FILTERS } from '~/constants/clients';
 
 import type { IFormClientsFilter } from '~/types/forms/form-clients-filter';
 

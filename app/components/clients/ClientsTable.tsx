@@ -12,6 +12,7 @@ import {
 } from '@mui/x-data-grid';
 
 import type { ESortDirection } from '~/constants/sort';
+import { DEFAULT_CLIENT_FILTERS } from '~/constants/clients';
 
 import { useDataGridLabels } from '~/hooks/i18n/use-data-grid-labels';
 import PhoneCell from '~/components/tables/PhoneCell';
@@ -147,10 +148,7 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
       return;
     }
 
-    const payload: IFormClientsFilter = {
-      page: 1,
-      itemsPerPage: 5,
-    };
+    const payload: IFormClientsFilter = { ...DEFAULT_CLIENT_FILTERS };
 
     const pgMdl = paginationModel.current;
 

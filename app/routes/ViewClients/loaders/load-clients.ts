@@ -1,4 +1,4 @@
-import { DEFAULT_CLIENT_FILTERS } from '../constants/clients-filter';
+import { DEFAULT_CLIENT_FILTERS } from '~/constants/clients';
 import { EStatus } from '~/constants/status';
 
 import { routeQueryToFormValue } from '../providers/clients-filter/utils';

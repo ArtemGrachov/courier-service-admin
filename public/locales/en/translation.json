@@ -42,6 +42,7 @@
     "success_hint": "Your password was resetted successfully. Now you can <Link>log in</Link>."
   },
   "common_errors": {
+    "page_title": "Error",
     "generic": "An error occured",
     "alert_title": "Error"
   },
