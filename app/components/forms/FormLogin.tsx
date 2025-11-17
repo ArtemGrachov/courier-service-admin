@@ -25,7 +25,13 @@ interface IProps {
 
 const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit }) => {
   const { t } = useTranslation();
-  const { formState, register, handleSubmit, reset } = useForm<IFormLogin>({ mode: 'all' });
+  const { formState, register, handleSubmit, reset } = useForm<IFormLogin>({
+    mode: 'all',
+    defaultValues: {
+      email: 'test@test.com',
+      password: 'Password1!',
+    },
+  });
   const errors = formState.errors;
 
   const fieldLogin = register('login', {
