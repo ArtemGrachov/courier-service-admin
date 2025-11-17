@@ -90,11 +90,12 @@ const Wrapper: ComponentType = () => {
   const service = usePageDataService<ILoaderResult>({
     initialData: loaderData,
     loader: () => loader(location.href),
+    updateCondition: newState => newState?.ordersState?.getStatus !== EStatus.ERROR,
   });
 
   return (
     <PageDataContext.Provider value={service}>
-      <OrdersProvider initialData={loaderData.ordersState}>
+      <OrdersProvider initialData={service.state?.ordersState}>
         <OrdersFilterProvider>
           <OrderFilterProvider>
             <ViewOrders />

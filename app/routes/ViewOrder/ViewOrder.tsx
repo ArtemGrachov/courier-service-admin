@@ -98,6 +98,7 @@ const Wrapper: ComponentType = () => {
   const service = usePageDataService<ILoaderResult>({
     initialData: loaderData,
     loader: () => loader(+orderId!),
+    updateCondition: newState => newState?.orderState?.getStatus !== EStatus.ERROR,
   });
 
   return (

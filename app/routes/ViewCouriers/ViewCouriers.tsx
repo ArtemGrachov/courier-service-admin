@@ -83,15 +83,15 @@ const ViewCouriers: ComponentType = observer(() => {
 
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
-
   const service = usePageDataService<ILoaderResult>({
     initialData: loaderData,
     loader: () => loader(location.href),
+    updateCondition: newState => newState?.couriersState?.getStatus !== EStatus.ERROR,
   });
 
   return (
     <PageDataContext.Provider value={service}>
-      <CouriersProvider initialData={loaderData.couriersState}>
+      <CouriersProvider initialData={service.state?.couriersState}>
         <CouriersFiltersProvider>
           <ViewCouriers />
         </CouriersFiltersProvider>

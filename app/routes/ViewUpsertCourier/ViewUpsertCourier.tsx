@@ -117,11 +117,12 @@ const Wrapper = () => {
   const service = usePageDataService<ILoaderResult>({
     initialData: loaderData,
     loader: () => loader(+courerId!),
+    updateCondition: newState => newState?.courierState?.getStatus !== EStatus.ERROR,
   });
 
   return (
     <PageDataContext.Provider value={service}>
-      <CourierProvider initialData={loaderData.courierState}>
+      <CourierProvider initialData={service.state?.courierState}>
         <UpsertCourierProvider>
           <ViewUpsertCourier />
         </UpsertCourierProvider>
