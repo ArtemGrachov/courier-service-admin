@@ -54,7 +54,7 @@ const STRING_OPERATORS = [
 ];
 
 const SELECT_OPERATORS = [
-  getGridSingleSelectOperators().find(o => o.value === 'is')!,
+  getGridSingleSelectOperators().find(o => o.value === 'isAnyOf')!,
 ];
 
 const BASE_COLUMNS: Record<EColumns, GridColDef> = {
@@ -193,7 +193,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       let nameSearch;
       let emailSearch;
       let phoneSearch;
-      let status;
+      let statuses;
 
       for (let i = 0; i < fltrMdl.items.length; i++) {
         const item = fltrMdl.items[i];
@@ -212,7 +212,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
             break;
           }
           case 'status': {
-            status = item.value;
+            statuses = item.value;
             break;
           }
         }
@@ -221,7 +221,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       payload.nameSearch = nameSearch;
       payload.emailSearch = emailSearch;
       payload.phoneSearch = phoneSearch;
-      payload.status = status;
+      payload.statuses = statuses;
     }
 
     payload.nameSort = null;
@@ -321,11 +321,11 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       });
     }
 
-    if (formValue.status) {
+    if (formValue.statuses) {
       items.push({
         field: 'status',
-        operator: 'is',
-        value: formValue.status,
+        operator: 'isAnyOf',
+        value: formValue.statuses,
       });
     }
 

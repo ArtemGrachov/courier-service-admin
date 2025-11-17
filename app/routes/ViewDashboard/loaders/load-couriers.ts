@@ -14,7 +14,7 @@ export async function loadCouriers() {
   };
 
   const fetchCouriersQuery: IGetCouriersQuery = {
-    status: ECourierStatus.DELIVERING,
+    statuses: [ECourierStatus.DELIVERING],
     itemsPerPage: 5,
   };
 

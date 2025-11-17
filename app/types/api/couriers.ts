@@ -15,7 +15,7 @@ export interface IGetCouriersQuery {
   currentOrdersCountSort?: ESortDirection | null;
   totalOrdersCountSort?: ESortDirection | null;
   ratingSort?: ESortDirection | null;
-  status?: ECourierStatus;
+  statuses?: ECourierStatus[] | null;
 }
 
 export interface IGetCouriersResponse {
