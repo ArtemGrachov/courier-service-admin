@@ -80,7 +80,6 @@ const ViewCourier: ComponentType = observer(() => {
         <Grid container spacing={2}>
           <Grid size={5}>
             <Stack gap={2}>
-              [{isLoading ? '+' : '-'}]
               <ReloadButton
                 isProcessing={isLoading}
                 onReload={reloadPageData}
