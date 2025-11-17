@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 
 import { EStatus } from '~/constants/status';
 import i18n from '~/i18n/config';
-import { PrevRoute } from '~/router/prev-route';
-import { Cache } from '~/cache/Cache';
+
+import routeLoader from '~/router/route-loader';
 
 import { ClientsFilterProvider, useClientsFilterCtx } from './providers/clients-filter';
 import { ClientsProvider, useClientsCtx } from '~/providers/clients';
@@ -97,37 +97,20 @@ interface ILoaderResult {
 }
 
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
-  const url = loaderArgs.request.url;
+  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
+    const clientsState = await loadClients(loaderArgs);
+      const hasError = clientsState.getStatus === EStatus.ERROR;
 
-  const cache = Cache.instance;
-  const prevRoute = PrevRoute.instance;
-  const isSamePath = prevRoute.comparePath(url);
-  const isSameUrl = prevRoute.compareUrl(url);
+      if (hasError) {
+        throw clientsState.getError;
+      }
 
-  const cachedData = cache.get<ILoaderResult>(url);
+      const result = {
+        clientsState,
+      };
 
-  if (!isSameUrl && cachedData) {
-    prevRoute.updatePath(url);
-    return cachedData;
-  }
-
-  const clientsState = await loadClients(loaderArgs);
-
-  prevRoute.updatePath(url);
-
-  const hasError = clientsState.getStatus === EStatus.ERROR;
-
-  if (hasError && !isSamePath) {
-    throw clientsState.getError;
-  }
-
-  const result = {
-    clientsState,
-  };
-
-  cache.set(url, result);
-
-  return result;
+      return result;
+  });
 }
 
 export { ErrorBoundary };

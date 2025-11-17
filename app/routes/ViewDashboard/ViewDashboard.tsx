@@ -11,8 +11,7 @@ import { observer } from 'mobx-react-lite';
 import { EStatus } from '~/constants/status';
 
 import { ROUTES } from '~/router/routes';
-import { PrevRoute } from '~/router/prev-route';
-import { Cache } from '~/cache/Cache';
+import routeLoader from '~/router/route-loader';
 
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import type { ICouriersStoreData } from '~/store/couriers.store';
@@ -132,43 +131,27 @@ interface ILoaderResult {
 }
 
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<ILoaderResult> {
-  const url = loaderArgs.request.url;
+  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
+    const [ordersState, couriersState, statsState] = await Promise.all([
+      loadOrders(),
+      loadCouriers(),
+      loadStats(),
+    ]);
 
-  const cache = Cache.instance;
-  const prevRoute = PrevRoute.instance;
-  const isSamePath = prevRoute.comparePath(url);
-  const isSameUrl = prevRoute.compareUrl(url);
+    const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR || statsState.getStatus === EStatus.ERROR;
 
-  const cachedData = cache.get<ILoaderResult>(url);
+    if (hasError) {
+      throw ordersState.getError || couriersState.getError || statsState.getError;
+    }
 
-  if (!isSameUrl && cachedData) {
-    prevRoute.updatePath(url);
-    return cachedData;
-  }
+    const result = {
+      ordersState,
+      couriersState,
+      statsState,
+    };
 
-  const [ordersState, couriersState, statsState] = await Promise.all([
-    loadOrders(),
-    loadCouriers(),
-    loadStats(),
-  ]);
-
-  prevRoute.updatePath(url);
-
-  const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR || statsState.getStatus === EStatus.ERROR;
-
-  if (hasError && !isSamePath) {
-    throw ordersState.getError || couriersState.getError || statsState.getError;
-  }
-
-  const result = {
-    ordersState,
-    couriersState,
-    statsState,
-  };
-
-  cache.set(url, result);
-
-  return result;
+    return result;
+  });
 }
 
 export { ErrorBoundary };

@@ -11,8 +11,7 @@ import i18n from '~/i18n/config';
 
 import { EStatus } from '~/constants/status';
 
-import { PrevRoute } from '~/router/prev-route';
-import { Cache } from '~/cache/Cache';
+import routeLoader from '~/router/route-loader';
 
 import { ClientProvider, useClientCtx } from '~/providers/client';
 import type { IClientStoreData } from '~/providers/client/store';
@@ -109,35 +108,21 @@ interface ILoaderResult {
 }
 
 export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
-  const url = request.url;
+  return routeLoader<ILoaderResult>(request.url, async () => {
+    const clientId = +params.clientId;
 
-  const clientId = +params.clientId;
+    const clientState: IClientStoreData = {
+      getStatus: EStatus.INIT,
+      getError: null,
+      data: null,
+    };
 
-  const cache = Cache.instance;
-  const prevRoute = PrevRoute.instance;
-  const isSamePath = prevRoute.comparePath(url);
-  const isSameUrl = prevRoute.compareUrl(url);
+    const ordersState: IOrdersStoreData = {
+      getStatus: EStatus.INIT,
+      getError: null,
+      data: null,
+    }
 
-  const cachedData = cache.get<ILoaderResult>(url);
-
-  if (!isSameUrl && cachedData) {
-    prevRoute.updatePath(url);
-    return cachedData;
-  }
-
-  const clientState: IClientStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  const ordersState: IOrdersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  }
-
-  if (!isNaN(clientId)) {
     await Promise.all([
       fetchClient(clientId)
         .then(data => {
@@ -150,22 +135,20 @@ export async function clientLoader({ params, request }: Route.ClientLoaderArgs):
           ordersState.getStatus = EStatus.SUCCESS;
         }),
     ]);
-  }
 
-  const hasError = ordersState.getStatus === EStatus.ERROR || clientState.getStatus === EStatus.ERROR;
+    const hasError = ordersState.getStatus === EStatus.ERROR || clientState.getStatus === EStatus.ERROR;
 
-  if (hasError && !isSamePath) {
-    throw ordersState.getError || clientState.getError;
-  }
+    if (hasError) {
+      throw ordersState.getError || clientState.getError;
+    }
 
-  const result = {
-    clientState,
-    ordersState,
-  };
+    const result = {
+      clientState,
+      ordersState,
+    };
 
-  cache.set(url, result);
-
-  return result;
+    return result;
+  });
 }
 
 export { ErrorBoundary };

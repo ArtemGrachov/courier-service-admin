@@ -8,9 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EStatus } from '~/constants/status';
 import i18n from '~/i18n/config';
-
-import { PrevRoute } from '~/router/prev-route';
-import { Cache } from '~/cache/Cache';
+import routeLoader from '~/router/route-loader';
 
 import { CouriersFiltersProvider, useCouriersFiltersCtx } from './providers/couriers-filters';
 import { ReloadPageProvider } from '~/providers/reload-page';
@@ -98,37 +96,21 @@ interface ILoaderResult {
 }
 
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
-  const url = loaderArgs.request.url;
+  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
+    const couriersState = await loadCouriers(loaderArgs);
 
-  const cache = Cache.instance;
-  const prevRoute = PrevRoute.instance;
-  const isSamePath = prevRoute.comparePath(url);
-  const isSameUrl = prevRoute.compareUrl(url);
+    const hasError = couriersState.getStatus === EStatus.ERROR;
 
-  const cachedData = cache.get<ILoaderResult>(url);
+    if (hasError) {
+      throw couriersState.getError;
+    }
 
-  if (!isSameUrl && cachedData) {
-    prevRoute.updatePath(url);
-    return cachedData;
-  }
+    const result = {
+      couriersState,
+    };
 
-  const couriersState = await loadCouriers(loaderArgs);
-
-  prevRoute.updatePath(url);
-
-  const hasError = couriersState.getStatus === EStatus.ERROR;
-
-  if (hasError && !isSamePath) {
-    throw couriersState.getError;
-  }
-
-  const result = {
-    couriersState,
-  };
-
-  cache.set(url, result);
-
-  return result;
+    return result;
+  });
 }
 
 export { ErrorBoundary };

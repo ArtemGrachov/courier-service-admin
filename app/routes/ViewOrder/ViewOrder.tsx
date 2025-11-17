@@ -9,8 +9,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
 import i18n from '~/i18n/config';
-import { PrevRoute } from '~/router/prev-route';
-import { Cache } from '~/cache/Cache';
+import routeLoader from '~/router/route-loader';
 
 import { EStatus } from '~/constants/status';
 
@@ -104,48 +103,34 @@ interface ILoaderResult {
   orderState: IOrderStoreData;
 }
 
-export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
-  const url = request.url;
+export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<ILoaderResult> {
+  return routeLoader<ILoaderResult>(loaderArgs.request.url, async () => {
+    const orderState: IOrderStoreData = {
+      getStatus: EStatus.INIT,
+      getError: null,
+      data: null,
+    };
 
-  const cache = Cache.instance;
-  const prevRoute = PrevRoute.instance;
-  const isSamePath = prevRoute.comparePath(url);
-  const isSameUrl = prevRoute.compareUrl(url);
+    const orderId = +loaderArgs.params.orderId;
 
-  const cachedData = cache.get<ILoaderResult>(url);
+    if (!isNaN(orderId)) {
+      const data = await fetchOrder(orderId);
+      orderState.data = data;
+      orderState.getStatus = EStatus.SUCCESS;
+    }
 
-  if (!isSameUrl && cachedData) {
-    prevRoute.updatePath(url);
-    return cachedData;
-  }
+    const hasError = orderState.getStatus;
 
-  const orderState: IOrderStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
+    if (hasError) {
+      throw orderState.getError;
+    }
 
-  if (params.orderId) {
-    const data = await fetchOrder(+params.orderId!);
-    orderState.data = data;
-    orderState.getStatus = EStatus.SUCCESS;
-  }
+    const result = {
+      orderState,
+    };
 
-  prevRoute.updatePath(url);
-
-  const hasError = orderState.getStatus;
-
-  if (hasError && !isSamePath) {
-    throw orderState.getError;
-  }
-
-  const result = {
-    orderState,
-  };
-
-  cache.set(url, result);
-
-  return result;
+    return result;
+  });
 }
 
 export { ErrorBoundary };
