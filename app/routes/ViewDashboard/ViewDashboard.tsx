@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import Grid from '@mui/material/Grid';
 import type { Route } from '.react-router/types/app/routes/ViewDashboard/+types/ViewDashboard';
 import { useLoaderData } from 'react-router';
@@ -11,14 +11,20 @@ import { observer } from 'mobx-react-lite';
 import { EStatus } from '~/constants/status';
 
 import { ROUTES } from '~/router/routes';
-import { PrevRoute } from '~/router/prev-route';
+import routeLoader from '~/router/route-loader';
 
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
+import type { ICouriersStoreData } from '~/store/couriers.store';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
+import type { IOrdersStoreData } from '~/providers/orders/store';
 import { StatsProvider, useStatsCtx } from '~/providers/stats';
+import type { IStatsStoreData } from '~/providers/stats/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useRoutePath } from '~/hooks/routing/use-route-path';
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import ReloadButton from '~/components/other/ReloadButton';
 import CouriersTablePreview from '~/components/couriers/CouriersTablePreview';
 import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
@@ -32,19 +38,29 @@ import { loadStats } from './loaders/load-stats';
 const ViewDashboard: ComponentType = observer(() => {
   const { t } = useTranslation();
   const routePath = useRoutePath();
+  const errorSnackbar = useErrorSnackbar();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { store: ordersStore, setProcessing: setOrdersProcessing } = useOrdersCtx();
-  const { store: couriersStore, setProcessing: setCouriersProcessing } = useCouriersCtx();
-  const { store: statsStore, setProcessing: setStatsProcessing } = useStatsCtx();
+  const { store: ordersStore } = useOrdersCtx();
+  const { store: couriersStore } = useCouriersCtx();
+  const { store: statsStore } = useStatsCtx();
 
-  const reloadPageData = () => {
-    setOrdersProcessing();
-    setCouriersProcessing();
-    setStatsProcessing();
+  const { reload } = usePageDataCtx();
+
+  const reloadPageData = async () => {
+    setIsLoading(true);
+
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
+    }
+
+    setIsLoading(false);
   }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Box
         flexDirection="column"
         display="flex"
@@ -54,7 +70,7 @@ const ViewDashboard: ComponentType = observer(() => {
         boxSizing="border-box"
       >
         <ReloadButton
-          isProcessing={ordersStore.isProcessing || couriersStore.isProcessing || statsStore.isProcessing}
+          isProcessing={isLoading}
           onReload={reloadPageData}
         />
         <OrdersChart stats={statsStore.data?.stats} />
@@ -98,48 +114,61 @@ const ViewDashboard: ComponentType = observer(() => {
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader,
+    updateCondition: newState => (
+      newState?.statsState?.getStatus !== EStatus.ERROR &&
+      newState?.ordersState?.getStatus !== EStatus.ERROR &&
+      newState?.couriersState?.getStatus !== EStatus.ERROR
+    ),
+  });
+
   return (
-    <CouriersProvider initialData={loaderData.couriersState}>
-      <OrdersProvider initialData={loaderData.ordersState}>
-        <StatsProvider initialData={loaderData.statsState}>
-          <ViewDashboard />
-        </StatsProvider>
-      </OrdersProvider>
-    </CouriersProvider>
+    <PageDataContext value={service}>
+      <CouriersProvider initialData={service.state?.couriersState}>
+        <OrdersProvider initialData={service.state?.ordersState}>
+          <StatsProvider initialData={service.state?.statsState}>
+            <ViewDashboard />
+          </StatsProvider>
+        </OrdersProvider>
+      </CouriersProvider>
+    </PageDataContext>
   )
 }
 
 export default Wrapper;
 
-export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
-  const url = loaderArgs.request.url;
+interface ILoaderResult {
+  couriersState: ICouriersStoreData;
+  ordersState: IOrdersStoreData;
+  statsState: IStatsStoreData;
+}
 
-  const prevRoute = PrevRoute.instance;
-  const isSamePath = prevRoute.comparePath(url);
-
+const loader = async () => {
   const [ordersState, couriersState, statsState] = await Promise.all([
     loadOrders(),
     loadCouriers(),
     loadStats(),
   ]);
 
-  prevRoute.updatePath(url);
+  const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR || statsState.getStatus === EStatus.ERROR;
 
-  if (!isSamePath) {
-    if (ordersState.getStatus === EStatus.ERROR) {
-      throw ordersState.getError;
-    }
-
-    if (couriersState.getStatus === EStatus.ERROR) {
-      throw couriersState.getError;
-    }
+  if (hasError) {
+    throw ordersState.getError || couriersState.getError || statsState.getError;
   }
 
-  return {
+  const result = {
     ordersState,
     couriersState,
     statsState,
   };
+
+  return result;
+}
+
+export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<ILoaderResult> {
+  return routeLoader<ILoaderResult>(loaderArgs.request.url, loader);
 }
 
 export { ErrorBoundary };

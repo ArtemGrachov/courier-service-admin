@@ -1,5 +1,3 @@
-import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMap';
-
 import { DEFAULT_COURIER_QUERY } from '../constants/couriers-filters';
 import { EStatus } from '~/constants/status';
 
@@ -10,8 +8,8 @@ import type { ICouriersStoreData } from '~/store/couriers.store';
 
 import type { IGetCouriersQuery } from '~/types/api/couriers';
 
-export async function loadCouriers({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
+export async function loadCouriers(requestUrl: string) {
+  const url = new URL(requestUrl);
   const searchParams = url.searchParams;
 
   const couriersState: ICouriersStoreData = {

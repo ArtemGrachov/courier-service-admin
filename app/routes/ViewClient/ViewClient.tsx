@@ -1,4 +1,4 @@
-import { type ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewClient/+types/ViewClient';
 import Box from '@mui/material/Box';
@@ -6,42 +6,59 @@ import Portal from '@mui/material/Portal';
 import Stack from '@mui/material/Stack';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 
 import i18n from '~/i18n/config';
 
 import { EStatus } from '~/constants/status';
 
+import routeLoader from '~/router/route-loader';
+
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { ClientProvider, useClientCtx } from '~/providers/client';
 import type { IClientStoreData } from '~/providers/client/store';
-import { fetchClient } from '~/providers/client/data';
 
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
 import type { IOrdersStoreData } from '~/providers/orders/store';
-import { fetchOrders } from '~/data/fetch-orders';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import ClientDetails from '~/components/clients/ClientDetails';
-import OrdersTable from '~/components/orders/OrdersTable';
+import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 import RefreshButton from '~/components/other/ReloadButton';
+
+import { loadClient } from './loaders/load-client';
+import { loadOrders } from './loaders/load-orders';
 
 const ViewClient: ComponentType = observer(() => {
   const { t } = useTranslation();
   const titlePortalRef = useTitlePortalCtx();
+  const errorSnackbar = useErrorSnackbar();
+  const { reload } = usePageDataCtx();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { store: clientStore, setProcessing: setClientProcessing } = useClientCtx();
-  const { store: ordersStore, setProcessing: setOrdersProcessing } = useOrdersCtx();
+  const { store: clientStore } = useClientCtx();
+  const { store: ordersStore } = useOrdersCtx();
 
   const client = clientStore.data;
 
   const reloadPageData = async () => {
-    setClientProcessing();
-    setOrdersProcessing();
+    setIsLoading(true);
+
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
+    }
+
+    setIsLoading(false);
   }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Portal container={() => titlePortalRef?.current ?? null}>
         {t('view_client.title', { id: client?.id, name: client?.name })}
       </Portal>
@@ -56,7 +73,7 @@ const ViewClient: ComponentType = observer(() => {
       >
         <Stack direction="row" gap={4}>
           <RefreshButton
-            isProcessing={clientStore.isProcessing || ordersStore.isProcessing}
+            isProcessing={isLoading}
             onReload={reloadPageData}
           />
           {client && (
@@ -66,10 +83,12 @@ const ViewClient: ComponentType = observer(() => {
           )}
         </Stack>
         {ordersStore.data && (
-          <OrdersTable
-            items={ordersStore.data?.data}
-            isProcessing={ordersStore.isProcessing}
-          />
+          <Box>
+            <OrdersTablePreview
+              items={ordersStore.data?.data}
+              isProcessing={ordersStore.isProcessing}
+            />
+          </Box>
         )}
       </Box>
     </ReloadPageProvider>
@@ -78,52 +97,61 @@ const ViewClient: ComponentType = observer(() => {
 
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
+  const { clientId } = useParams();
+
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader: () => loader(+clientId!),
+    updateCondition: newState => newState?.clientState?.getStatus !== EStatus.ERROR && newState?.ordersState?.getStatus !== EStatus.ERROR,
+  });
 
   return (
-    <OrdersProvider initialData={loaderData.ordersState}>
-      <ClientProvider initialData={loaderData.clientState}>
-        <ViewClient />
-      </ClientProvider>
-    </OrdersProvider>
+    <PageDataContext value={service}>
+      <OrdersProvider initialData={service.state?.ordersState}>
+        <ClientProvider initialData={service.state?.clientState}>
+          <ViewClient />
+        </ClientProvider>
+      </OrdersProvider>
+    </PageDataContext>
   )
 }
 
 export default Wrapper;
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
-  const clientId = +params.clientId;
+interface ILoaderResult {
+  clientState: IClientStoreData;
+  ordersState: IOrdersStoreData;
+}
 
-  const clientState: IClientStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
-
-  const ordersState: IOrdersStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
+const loader = async (clientId: number) => {
+  if (isNaN(clientId)) {
+    throw { status: 404 };
   }
 
-  if (!isNaN(clientId)) {
-    await Promise.all([
-      fetchClient(clientId)
-        .then(data => {
-          clientState.data = data;
-          clientState.getStatus = EStatus.SUCCESS;
-        }),
-      fetchOrders({ clientIds: [clientId] })
-        .then(data => {
-          ordersState.data = data;
-          ordersState.getStatus = EStatus.SUCCESS;
-        }),
-    ]);
+  const [clientState, ordersState] = await Promise.all([
+    loadClient(clientId),
+    loadOrders(clientId),
+  ]);
+
+  const hasError = ordersState.getStatus === EStatus.ERROR || clientState.getStatus === EStatus.ERROR;
+
+  if (hasError) {
+    throw ordersState.getError || clientState.getError;
   }
 
-  return {
+  const result = {
     clientState,
     ordersState,
   };
+
+  return result;
+}
+
+export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
+  return routeLoader<ILoaderResult>(request.url, async () => {
+    const clientId = +params.clientId;
+    return loader(clientId);
+  });
 }
 
 export { ErrorBoundary };

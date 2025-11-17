@@ -1,4 +1,4 @@
-import { useEffect, type ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
 import { observer } from 'mobx-react-lite';
@@ -7,10 +7,12 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from '.react-router/types/app/routes/ViewOrders/+types/ViewOrders';
 
 import i18n from '~/i18n/config';
+import routeLoader from '~/router/route-loader';
 
 import { EStatus } from '~/constants/status';
 
-import { PrevRoute } from '~/router/prev-route';
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { OrdersFilterProvider } from './providers/orders-filter';
 import { useOrdersFilterCtx } from './providers/orders-filter';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
@@ -24,34 +26,37 @@ import ErrorBoundary from '~/components/other/ErrorBoundary';
 import OrderFilterProvider from '~/providers/order-filters';
 
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
+import type { IOrdersStoreData } from '~/providers/orders/store';
 
 import { loadOrders } from './loaders/load-orders';
 
 const ViewOrders: ComponentType = observer(() => {
   const { t } = useTranslation();
-  const { store: ordersStore, setProcessing } = useOrdersCtx();
+  const { store: ordersStore } = useOrdersCtx();
   const errorSnackbar = useErrorSnackbar();
   const titlePortalRef = useTitlePortalCtx();
   const { store: ordersFilterStore, handleUpdate } = useOrdersFilterCtx();
+  const { reload } = usePageDataCtx();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const reloadPageData = () => {
-    setProcessing();
-  }
+  const reloadPageData = async () => {
+    setIsLoading(true);
 
-  useEffect(() => {
-    if (!ordersStore.isError) {
-      return;
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
     }
 
-    errorSnackbar(ordersStore.getError);
-  }, [ordersStore.isError]);
+    setIsLoading(false);
+  }
 
   const tableUpdateHandler = (payload: IFormOrdersFilter) => {
     handleUpdate(payload);
   }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Portal container={() => titlePortalRef?.current ?? null}>
         {t('view_orders.title')}
       </Portal>
@@ -64,7 +69,7 @@ const ViewOrders: ComponentType = observer(() => {
         boxSizing="border-box"
       >
         <ReloadButton
-          isProcessing={ordersStore.isProcessing}
+          isProcessing={isLoading}
           onReload={reloadPageData}
         />
         <OrdersTable
@@ -82,36 +87,50 @@ const ViewOrders: ComponentType = observer(() => {
 const Wrapper: ComponentType = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
 
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader: () => loader(location.href),
+    updateCondition: newState => newState?.ordersState?.getStatus !== EStatus.ERROR,
+  });
+
   return (
-    <OrdersProvider initialData={loaderData.ordersState}>
-      <OrdersFilterProvider>
-        <OrderFilterProvider>
-          <ViewOrders />
-        </OrderFilterProvider>
-      </OrdersFilterProvider>
-    </OrdersProvider>
+    <PageDataContext value={service}>
+      <OrdersProvider initialData={service.state?.ordersState}>
+        <OrdersFilterProvider>
+          <OrderFilterProvider>
+            <ViewOrders />
+          </OrderFilterProvider>
+        </OrdersFilterProvider>
+      </OrdersProvider>
+    </PageDataContext>
   )
 }
 
 export default Wrapper;
 
-export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
-  const url = loaderArgs.request.url;
+interface ILoaderResult {
+  ordersState: IOrdersStoreData;
+}
 
-  const prevRoute = PrevRoute.instance;
-  const isSamePath = prevRoute.comparePath(url);
+const loader = async (url: string) => {
+  const ordersState = await loadOrders(url);
 
-  const ordersState = await loadOrders(loaderArgs);
+  const hasError = ordersState.getStatus === EStatus.ERROR;
 
-  prevRoute.updatePath(url);
-
-  if (!isSamePath && ordersState.getStatus === EStatus.ERROR) {
+  if (hasError) {
     throw ordersState.getError;
   }
 
-  return {
+  const result = {
     ordersState,
   };
+
+  return result;
+}
+
+export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
+  const url = loaderArgs.request.url;
+  return routeLoader<ILoaderResult>(url, async () => loader(url));
 }
 
 export { ErrorBoundary };

@@ -1,27 +1,22 @@
 import { DEFAULT_ORDER_FILTERS } from '../constants/orders-filter';
 import { EStatus } from '~/constants/status';
+import { EOrderStatus } from '~/constants/order';
 
-import { routeQueryToFormValue } from '../providers/orders-filter/utils';
 import type { IOrdersStoreData } from '~/providers/orders/store';
 import { fetchOrders } from '~/data/fetch-orders';
 
 import type { IGetOrdersQuery } from '~/types/api/orders';
 
-export async function loadOrders(requestUrl: string) {
-  const url = new URL(requestUrl);
-  const searchParams = url.searchParams;
-
+export async function loadActiveOrders(courierId: number) {
   const ordersState: IOrdersStoreData = {
     getStatus: EStatus.INIT,
     getError: null,
     data: null,
   };
 
-  const formValue = routeQueryToFormValue(searchParams);
-
   const fetchOrdersQuery: IGetOrdersQuery = DEFAULT_ORDER_FILTERS;
 
-  Object.assign(fetchOrdersQuery, formValue);
+  Object.assign(fetchOrdersQuery, { courierId: [courierId], statuses: [EOrderStatus.PROCESSING]  });
 
   try {
     const data = await fetchOrders(fetchOrdersQuery);
@@ -34,3 +29,4 @@ export async function loadOrders(requestUrl: string) {
 
   return ordersState;
 }
+

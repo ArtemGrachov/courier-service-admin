@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Portal from '@mui/material/Portal';
-import { useMemo, type ComponentType } from 'react';
+import { useMemo, useState, type ComponentType } from 'react';
 import { useLoaderData, useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
@@ -8,13 +8,15 @@ import type { Route } from '.react-router/types/app/routes/ViewUpsertCourier/+ty
 
 import i18n from '~/i18n/config';
 
+import { EStatus } from '~/constants/status';
 import { ROUTES } from '~/router/routes';
 
-import { EStatus } from '~/constants/status';
+import routeLoader from '~/router/route-loader';
 
+import { PageDataContext, usePageDataCtx } from '~/providers/page-data';
+import { usePageDataService } from '~/providers/page-data/service';
 import { UpsertCourierProvider, useUpsertCourierCtx } from './providers/upsert-courier';
 import { CourierProvider, useCourierCtx } from '~/providers/courier';
-import { fetchCourier } from '~/providers/courier/data';
 import type { ICourierStoreData } from '~/providers/courier/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
@@ -27,9 +29,11 @@ import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 import type { IFormCourier } from '~/types/forms/form-courier';
 
+import { loadCourier } from './loaders/load-courier';
+
 const ViewUpsertCourier: ComponentType = observer(() => {
   const { store: upsertCourierStore, submitCreate: submit } = useUpsertCourierCtx();
-  const { store: courierStore, setProcessing } = useCourierCtx();
+  const { store: courierStore } = useCourierCtx();
   const { t } = useTranslation();
   const errorSnackbar = useErrorSnackbar();
   const successSnackbar = useSuccessSnackbar();
@@ -38,6 +42,8 @@ const ViewUpsertCourier: ComponentType = observer(() => {
   const isEdit = !!courierId;
   const titlePortalRef = useTitlePortalCtx();
   const routePath = useRoutePath();
+  const { reload } = usePageDataCtx();
+  const [_isLoading, setIsLoading] = useState(false);
 
   const courier = courierStore.data;
 
@@ -49,8 +55,16 @@ const ViewUpsertCourier: ComponentType = observer(() => {
     return courierStore.isSuccess;
   }, [isEdit, courierStore.isSuccess]);
 
-  const reloadPageData = () => {
-    setProcessing();
+  const reloadPageData = async () => {
+    setIsLoading(true);
+
+    try {
+      await reload();
+    } catch (err) {
+      errorSnackbar(err);
+    }
+
+    setIsLoading(false);
   }
 
   const submitHandler = async (formValue: IFormCourier) => {
@@ -79,7 +93,7 @@ const ViewUpsertCourier: ComponentType = observer(() => {
   }
 
   return (
-    <ReloadPageProvider reloadFunction={reloadPageData}>
+    <ReloadPageProvider reloadFunction={reloadPageData} isDefaultReload={false}>
       <Portal container={() => titlePortalRef?.current ?? null}>
         {t('view_upsert_courier.title', { id: courier?.id, name: courier?.name })}
       </Portal>
@@ -99,36 +113,53 @@ const ViewUpsertCourier: ComponentType = observer(() => {
 
 const Wrapper = () => {
   const loaderData = useLoaderData<Awaited<ReturnType<typeof clientLoader>>>();
+  const { courerId } = useParams();
+
+  const service = usePageDataService<ILoaderResult>({
+    initialData: loaderData,
+    loader: () => loader(+courerId!),
+    updateCondition: newState => newState?.courierState?.getStatus !== EStatus.ERROR,
+  });
 
   return (
-    <CourierProvider initialData={loaderData.courierState}>
-      <UpsertCourierProvider>
-        <ViewUpsertCourier />
-      </UpsertCourierProvider>
-    </CourierProvider>
+    <PageDataContext value={service}>
+      <CourierProvider initialData={service.state?.courierState}>
+        <UpsertCourierProvider>
+          <ViewUpsertCourier />
+        </UpsertCourierProvider>
+      </CourierProvider>
+    </PageDataContext>
   )
 }
 
 export default Wrapper;
 
-export async function clientLoader({
-  params,
-}: Route.ClientLoaderArgs) {
-  const courierState: ICourierStoreData = {
-    getStatus: EStatus.INIT,
-    getError: null,
-    data: null,
-  };
+interface ILoaderResult {
+  courierState: ICourierStoreData
+}
 
-  if (params.courierId) {
-    const data = await fetchCourier(+params.courierId!);
-    courierState.data = data;
-    courierState.getStatus = EStatus.SUCCESS;
+const loader = async (courierId: number) => {
+  const courierState = await loadCourier(courierId);
+
+  const hasError = courierState.getStatus === EStatus.ERROR;
+
+  if (hasError) {
+    throw courierState.getError;
   }
 
-  return {
+  const result = {
     courierState,
   };
+
+  return result;
+}
+
+export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
+  const courierId = +params.courierId!;
+
+  return routeLoader<ILoaderResult>(request.url, async () => {
+    return loader(courierId);
+  });
 }
 
 export { ErrorBoundary };

@@ -1,5 +1,3 @@
-import type { Route } from '.react-router/types/app/routes/ViewClients/+types/ViewClients';
-
 import { DEFAULT_CLIENT_FILTERS } from '../constants/clients-filter';
 import { EStatus } from '~/constants/status';
 
@@ -10,8 +8,8 @@ import type { IGetClientsQuery } from '~/types/api/clients';
 
 import { fetchClients } from '~/data/fetch-clients';
 
-export async function loadClients({ request }: Route.ClientLoaderArgs) {
-  const url = new URL(request.url);
+export async function loadClients(requestUrl: string) {
+  const url = new URL(requestUrl);
   const searchParams = url.searchParams;
 
   const clientsState: IClientsStoreData = {
