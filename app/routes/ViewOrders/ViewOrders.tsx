@@ -7,10 +7,11 @@ import { useTranslation } from 'react-i18next';
 import type { Route } from '.react-router/types/app/routes/ViewOrders/+types/ViewOrders';
 
 import i18n from '~/i18n/config';
+import { PrevRoute } from '~/router/prev-route';
+import { Cache } from '~/cache/Cache';
 
 import { EStatus } from '~/constants/status';
 
-import { PrevRoute } from '~/router/prev-route';
 import { OrdersFilterProvider } from './providers/orders-filter';
 import { useOrdersFilterCtx } from './providers/orders-filter';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
@@ -24,6 +25,7 @@ import ErrorBoundary from '~/components/other/ErrorBoundary';
 import OrderFilterProvider from '~/providers/order-filters';
 
 import type { IFormOrdersFilter } from '~/types/forms/form-orders-filter';
+import type { IOrdersStoreData } from '~/providers/orders/store';
 
 import { loadOrders } from './loaders/load-orders';
 
@@ -95,23 +97,42 @@ const Wrapper: ComponentType = () => {
 
 export default Wrapper;
 
+interface ILoaderResult {
+  ordersState: IOrdersStoreData;
+}
+
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
   const url = loaderArgs.request.url;
 
+  const cache = Cache.instance;
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
+  const isSameUrl = prevRoute.compareUrl(url);
+
+  const cachedData = cache.get<ILoaderResult>(url);
+
+  if (!isSameUrl && cachedData) {
+    prevRoute.updatePath(url);
+    return cachedData;
+  }
 
   const ordersState = await loadOrders(loaderArgs);
 
   prevRoute.updatePath(url);
 
-  if (!isSamePath && ordersState.getStatus === EStatus.ERROR) {
+  const hasError = ordersState.getStatus === EStatus.ERROR;
+
+  if (hasError && !isSamePath) {
     throw ordersState.getError;
   }
 
-  return {
+  const result = {
     ordersState,
   };
+
+  cache.set(url, result);
+
+  return result;
 }
 
 export { ErrorBoundary };

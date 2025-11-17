@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import { useEffect, type ComponentType } from 'react';
 import Grid from '@mui/material/Grid';
 import type { Route } from '.react-router/types/app/routes/ViewDashboard/+types/ViewDashboard';
 import { useLoaderData } from 'react-router';
@@ -23,6 +23,7 @@ import type { IStatsStoreData } from '~/providers/stats/store';
 import { ReloadPageProvider } from '~/providers/reload-page';
 
 import { useRoutePath } from '~/hooks/routing/use-route-path';
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import ReloadButton from '~/components/other/ReloadButton';
 import CouriersTablePreview from '~/components/couriers/CouriersTablePreview';
 import OrdersTablePreview from '~/components/orders/OrdersTablePreview';
@@ -36,6 +37,7 @@ import { loadStats } from './loaders/load-stats';
 const ViewDashboard: ComponentType = observer(() => {
   const { t } = useTranslation();
   const routePath = useRoutePath();
+  const errorSnackbar = useErrorSnackbar();
 
   const { store: ordersStore, setProcessing: setOrdersProcessing } = useOrdersCtx();
   const { store: couriersStore, setProcessing: setCouriersProcessing } = useCouriersCtx();
@@ -46,6 +48,14 @@ const ViewDashboard: ComponentType = observer(() => {
     setCouriersProcessing();
     setStatsProcessing();
   }
+
+  useEffect(() => {
+    if (!ordersStore.isError && !couriersStore.isError && !statsStore.isError) {
+      return;
+    }
+
+    errorSnackbar(ordersStore.getError || couriersStore.getError || statsStore.getError);
+  }, [ordersStore.isError, couriersStore.isError, statsStore.isError]);
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
@@ -127,10 +137,12 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<
   const cache = Cache.instance;
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
+  const isSameUrl = prevRoute.compareUrl(url);
 
   const cachedData = cache.get<ILoaderResult>(url);
 
-  if (cachedData) {
+  if (!isSameUrl && cachedData) {
+    prevRoute.updatePath(url);
     return cachedData;
   }
 
@@ -144,10 +156,8 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<
 
   const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR || statsState.getStatus === EStatus.ERROR;
 
-  if (hasError) {
-    if (!isSamePath) {
-      throw ordersState.getError || couriersState.getError || statsState.getError;
-    }
+  if (hasError && !isSamePath) {
+    throw ordersState.getError || couriersState.getError || statsState.getError;
   }
 
   const result = {

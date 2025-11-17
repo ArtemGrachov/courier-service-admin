@@ -1,4 +1,4 @@
-import { type ComponentType } from 'react';
+import { useEffect, type ComponentType } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewOrder/+types/ViewOrder';
 import Box from '@mui/material/Box';
@@ -9,6 +9,8 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
 import i18n from '~/i18n/config';
+import { PrevRoute } from '~/router/prev-route';
+import { Cache } from '~/cache/Cache';
 
 import { EStatus } from '~/constants/status';
 
@@ -18,6 +20,7 @@ import { fetchOrder } from '~/providers/order/data';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import OrderCard from '~/components/orders/OrderCard';
 import ClientCard from '~/components/clients/ClientCard';
 import CourierCard from '~/components/couriers/CourierCard';
@@ -29,12 +32,21 @@ const ViewOrder: ComponentType = observer(() => {
   const { t } = useTranslation();
   const { store: orderStore, setProcessing } = useOrderCtx();
   const titlePortalRef = useTitlePortalCtx();
+  const errorSnackbar = useErrorSnackbar();
 
   const order = orderStore.data;
 
   const reloadPageData = () => {
     setProcessing();
   }
+
+  useEffect(() => {
+    if (!orderStore.isError) {
+      return;
+    }
+
+    errorSnackbar(orderStore.getError);
+  }, [orderStore.isError]);
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
@@ -88,9 +100,25 @@ const Wrapper: ComponentType = () => {
 
 export default Wrapper;
 
-export async function clientLoader({
-  params,
-}: Route.ClientLoaderArgs) {
+interface ILoaderResult {
+  orderState: IOrderStoreData;
+}
+
+export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
+  const url = request.url;
+
+  const cache = Cache.instance;
+  const prevRoute = PrevRoute.instance;
+  const isSamePath = prevRoute.comparePath(url);
+  const isSameUrl = prevRoute.compareUrl(url);
+
+  const cachedData = cache.get<ILoaderResult>(url);
+
+  if (!isSameUrl && cachedData) {
+    prevRoute.updatePath(url);
+    return cachedData;
+  }
+
   const orderState: IOrderStoreData = {
     getStatus: EStatus.INIT,
     getError: null,
@@ -103,9 +131,21 @@ export async function clientLoader({
     orderState.getStatus = EStatus.SUCCESS;
   }
 
-  return {
+  prevRoute.updatePath(url);
+
+  const hasError = orderState.getStatus;
+
+  if (hasError && !isSamePath) {
+    throw orderState.getError;
+  }
+
+  const result = {
     orderState,
   };
+
+  cache.set(url, result);
+
+  return result;
 }
 
 export { ErrorBoundary };

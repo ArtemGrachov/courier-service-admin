@@ -1,4 +1,4 @@
-import { type ComponentType } from 'react';
+import { useEffect, type ComponentType } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewCourier/+types/ViewCourier';
 import Box from '@mui/material/Box';
@@ -12,6 +12,8 @@ import i18n from '~/i18n/config';
 
 import { EStatus } from '~/constants/status';
 import { EOrderStatus } from '~/constants/order';
+import { PrevRoute } from '~/router/prev-route';
+import { Cache } from '~/cache/Cache';
 
 import { CourierProvider, useCourierCtx } from '~/providers/courier';
 import type { ICourierStoreData } from '~/providers/courier/store';
@@ -26,6 +28,7 @@ import { ActiveOrdersProvider, useActiveOrdersCtx } from './providers/active-ord
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import OrdersTable from '~/components/orders/OrdersTable';
 import CourierDetails from '~/components/couriers/CourierDetails';
 import Map from '~/components/map/Map';
@@ -34,6 +37,7 @@ import ReloadButton from '~/components/other/ReloadButton';
 
 const ViewCourier: ComponentType = observer(() => {
   const { t } = useTranslation();
+  const errorSnackbar = useErrorSnackbar();
 
   const {
     store: courierStore,
@@ -57,6 +61,14 @@ const ViewCourier: ComponentType = observer(() => {
     setOrdersProcessing();
     setActiveOrdersProcessing();
   }
+
+  useEffect(() => {
+    if (!ordersStore.isError && !courierStore.isError && !activeOrdersStore.isError) {
+      return;
+    }
+
+    errorSnackbar(ordersStore.getError || courierStore.getError || activeOrdersStore.getError);
+  }, [ordersStore.isError, courierStore.isError, activeOrdersStore.isError]);
 
   return (
     <Box
@@ -119,9 +131,27 @@ const Wrapper: ComponentType = () => {
 
 export default Wrapper;
 
-export async function clientLoader({
-  params,
-}: Route.ClientLoaderArgs) {
+interface ILoaderResult {
+  courierState: ICourierStoreData
+  ordersState: IOrdersStoreData
+  activeOrdersState: IOrdersStoreData
+}
+
+export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
+  const url = request.url;
+
+  const cache = Cache.instance;
+  const prevRoute = PrevRoute.instance;
+  const isSamePath = prevRoute.comparePath(url);
+  const isSameUrl = prevRoute.compareUrl(url);
+
+  const cachedData = cache.get<ILoaderResult>(url);
+
+  if (!isSameUrl && cachedData) {
+    prevRoute.updatePath(url);
+    return cachedData;
+  }
+
   const courierId = +params.courierId;
 
   const courierState: ICourierStoreData = {
@@ -162,11 +192,40 @@ export async function clientLoader({
     ]);
   }
 
-  return {
+  const hasError = ordersState.getStatus === EStatus.ERROR || courierState.getStatus === EStatus.ERROR || activeOrdersState.getStatus === EStatus.ERROR;
+
+  if (hasError) {
+    if (!isSamePath) {
+      throw ordersState.getError || courierState.getError || activeOrdersState.getError;
+    }
+
+    if (cachedData) {
+      return {
+        ordersState: {
+          ...ordersState,
+          data: cachedData.ordersState.data,
+        },
+        courierState: {
+          ...courierState,
+          data: cachedData.courierState.data,
+        },
+        activeOrdersState: {
+          ...activeOrdersState,
+          data: cachedData.activeOrdersState.data,
+        },
+      };
+    }
+  }
+
+  const result = {
     courierState,
     ordersState,
     activeOrdersState,
   };
+
+  cache.set(url, result);
+
+  return result;
 }
 
 export { ErrorBoundary };

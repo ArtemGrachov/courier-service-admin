@@ -1,4 +1,4 @@
-import { type ComponentType } from 'react';
+import { useEffect, type ComponentType } from 'react';
 import { useLoaderData } from 'react-router';
 import type { Route } from '.react-router/types/app/routes/ViewClient/+types/ViewClient';
 import Box from '@mui/material/Box';
@@ -11,6 +11,9 @@ import i18n from '~/i18n/config';
 
 import { EStatus } from '~/constants/status';
 
+import { PrevRoute } from '~/router/prev-route';
+import { Cache } from '~/cache/Cache';
+
 import { ClientProvider, useClientCtx } from '~/providers/client';
 import type { IClientStoreData } from '~/providers/client/store';
 import { fetchClient } from '~/providers/client/data';
@@ -21,6 +24,7 @@ import { fetchOrders } from '~/data/fetch-orders';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { useTitlePortalCtx } from '~/providers/title-portal';
 
+import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 import ClientDetails from '~/components/clients/ClientDetails';
 import OrdersTable from '~/components/orders/OrdersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
@@ -29,6 +33,7 @@ import RefreshButton from '~/components/other/ReloadButton';
 const ViewClient: ComponentType = observer(() => {
   const { t } = useTranslation();
   const titlePortalRef = useTitlePortalCtx();
+  const errorSnackbar = useErrorSnackbar();
 
   const { store: clientStore, setProcessing: setClientProcessing } = useClientCtx();
   const { store: ordersStore, setProcessing: setOrdersProcessing } = useOrdersCtx();
@@ -39,6 +44,14 @@ const ViewClient: ComponentType = observer(() => {
     setClientProcessing();
     setOrdersProcessing();
   }
+
+  useEffect(() => {
+    if (!ordersStore.isError && !clientStore.isError) {
+      return;
+    }
+
+    errorSnackbar(ordersStore.getError || clientStore.getError);
+  }, [ordersStore.isError, clientStore.isError]);
 
   return (
     <ReloadPageProvider reloadFunction={reloadPageData}>
@@ -90,8 +103,27 @@ const Wrapper: ComponentType = () => {
 
 export default Wrapper;
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+interface ILoaderResult {
+  clientState: IClientStoreData;
+  ordersState: IOrdersStoreData;
+}
+
+export async function clientLoader({ params, request }: Route.ClientLoaderArgs): Promise<ILoaderResult> {
+  const url = request.url;
+
   const clientId = +params.clientId;
+
+  const cache = Cache.instance;
+  const prevRoute = PrevRoute.instance;
+  const isSamePath = prevRoute.comparePath(url);
+  const isSameUrl = prevRoute.compareUrl(url);
+
+  const cachedData = cache.get<ILoaderResult>(url);
+
+  if (!isSameUrl && cachedData) {
+    prevRoute.updatePath(url);
+    return cachedData;
+  }
 
   const clientState: IClientStoreData = {
     getStatus: EStatus.INIT,
@@ -120,10 +152,20 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     ]);
   }
 
-  return {
+  const hasError = ordersState.getStatus === EStatus.ERROR || clientState.getStatus === EStatus.ERROR;
+
+  if (hasError && !isSamePath) {
+    throw ordersState.getError || clientState.getError;
+  }
+
+  const result = {
     clientState,
     ordersState,
   };
+
+  cache.set(url, result);
+
+  return result;
 }
 
 export { ErrorBoundary };

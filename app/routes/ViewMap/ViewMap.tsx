@@ -11,6 +11,8 @@ import type { Route } from '.react-router/types/app/routes/ViewMap/+types/ViewMa
 import i18n from '~/i18n/config';
 
 import { PrevRoute } from '~/router/prev-route';
+import { Cache } from '~/cache/Cache';
+
 import { MapFiltersProvider, useMapFiltersCtx } from './providers/map-filters';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
 import { OrdersProvider, useOrdersCtx } from '~/providers/orders';
@@ -25,6 +27,8 @@ import ErrorBoundary from '~/components/other/ErrorBoundary';
 import ReloadButton from '~/components/other/ReloadButton';
 
 import type { IFormMapFilters } from '~/types/forms/form-map-filters';
+import type { IOrdersStoreData } from '~/providers/orders/store';
+import type { ICouriersStoreData } from '~/store/couriers.store';
 
 import { loadOrders } from './loaders/load-orders';
 import { loadCouriers } from './loaders/load-couriers';
@@ -103,11 +107,25 @@ const Wrapper: ComponentType = () => {
 
 export default Wrapper;
 
-export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
+interface ILoaderResult {
+  ordersState: IOrdersStoreData;
+  couriersState: ICouriersStoreData;
+}
+
+export async function clientLoader(loaderArgs: Route.ClientLoaderArgs): Promise<ILoaderResult> {
   const url = loaderArgs.request.url;
 
+  const cache = Cache.instance;
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
+  const isSameUrl = prevRoute.compareUrl(url);
+
+  const cachedData = cache.get<ILoaderResult>(url);
+
+  if (!isSameUrl && cachedData) {
+    prevRoute.updatePath(url);
+    return cachedData;
+  }
 
   const [ordersState, couriersState] = await Promise.all([
     loadOrders(loaderArgs),
@@ -116,20 +134,20 @@ export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
 
   prevRoute.updatePath(url);
 
-  if (!isSamePath) {
-    if (ordersState.getStatus === EStatus.ERROR) {
-      throw ordersState.getError;
-    }
+  const hasError = ordersState.getStatus === EStatus.ERROR || couriersState.getStatus === EStatus.ERROR;
 
-    if (couriersState.getStatus === EStatus.ERROR) {
-      throw couriersState.getError;
-    }
+  if (hasError && !isSamePath) {
+    throw ordersState.getError || couriersState.getError;
   }
 
-  return {
+  const result = {
     ordersState,
     couriersState,
   };
+
+  cache.set(url, result);
+
+  return result;
 }
 
 export { ErrorBoundary };

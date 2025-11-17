@@ -10,6 +10,8 @@ import { EStatus } from '~/constants/status';
 import i18n from '~/i18n/config';
 
 import { PrevRoute } from '~/router/prev-route';
+import { Cache } from '~/cache/Cache';
+
 import { CouriersFiltersProvider, useCouriersFiltersCtx } from './providers/couriers-filters';
 import { ReloadPageProvider } from '~/providers/reload-page';
 import { CouriersProvider, useCouriersCtx } from '~/providers/couriers';
@@ -21,6 +23,7 @@ import CouriersTable from '~/components/couriers/CouriersTable';
 import ErrorBoundary from '~/components/other/ErrorBoundary';
 
 import type { IFormCouriersFilter } from '~/types/forms/form-couriers-filter';
+import type { ICouriersStoreData } from '~/store/couriers.store';
 
 import { loadCouriers } from './loaders/load-couriers';
 
@@ -90,23 +93,42 @@ const Wrapper: ComponentType = () => {
 
 export default Wrapper;
 
+interface ILoaderResult {
+  couriersState: ICouriersStoreData;
+}
+
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {
   const url = loaderArgs.request.url;
 
+  const cache = Cache.instance;
   const prevRoute = PrevRoute.instance;
   const isSamePath = prevRoute.comparePath(url);
+  const isSameUrl = prevRoute.compareUrl(url);
+
+  const cachedData = cache.get<ILoaderResult>(url);
+
+  if (!isSameUrl && cachedData) {
+    prevRoute.updatePath(url);
+    return cachedData;
+  }
 
   const couriersState = await loadCouriers(loaderArgs);
 
   prevRoute.updatePath(url);
 
-  if (!isSamePath && couriersState.getStatus === EStatus.ERROR) {
+  const hasError = couriersState.getStatus === EStatus.ERROR;
+
+  if (hasError && !isSamePath) {
     throw couriersState.getError;
   }
 
-  return {
+  const result = {
     couriersState,
   };
+
+  cache.set(url, result);
+
+  return result;
 }
 
 export { ErrorBoundary };

@@ -26,5 +26,9 @@ export class PrevRoute {
 
     return comparePaths(path, this._path);
   }
+
+  public compareUrl(url: string) {
+    return url === this._path;
+  }
 }
 
