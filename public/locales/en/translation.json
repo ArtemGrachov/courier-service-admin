@@ -14,7 +14,7 @@
     "uk": "Ukrainian / Українська"
   },
   "form_login": {
-    "login": "Email / Phone number",
+    "email": "Email",
     "submit": "Log in"
   },
   "view_login": {
