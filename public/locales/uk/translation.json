@@ -14,7 +14,7 @@
     "uk": "Українська"
   },
   "form_login": {
-    "login": "Email / Номер телефону",
+    "email": "Email",
     "submit": "Увійти"
   },
   "view_login": {

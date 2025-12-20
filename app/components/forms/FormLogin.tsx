@@ -28,13 +28,13 @@ const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit 
   const { formState, register, handleSubmit, reset } = useForm<IFormLogin>({
     mode: 'all',
     defaultValues: {
-      login: 'test@test.com',
+      email: 'admin@test.com',
       password: 'Password1!',
     },
   });
   const errors = formState.errors;
 
-  const fieldLogin = register('login', {
+  const fieldEmail = register('email', {
     required: true,
   });
   const fieldPassword = register('password', {
@@ -70,19 +70,19 @@ const FormLogin: ComponentType<IProps> = ({ submitStatus, submitError, onSubmit 
     >
       <FormControl>
         <FormLabel
-          htmlFor="login"
-          error={!!errors.login}
+          htmlFor="email"
+          error={!!errors.email}
         >
-          {t('form_login.login')}
+          {t('form_login.email')}
         </FormLabel>
         <TextField
-          id="login"
-          {...fieldLogin}
-          error={!!errors.login}
+          id="email"
+          {...fieldEmail}
+          error={!!errors.email}
           disabled={isProcessing}
         />
         <FieldClientErrors
-          error={errors.login}
+          error={errors.email}
         />
       </FormControl>
       <FormControl>
