@@ -1,11 +1,12 @@
 import { useRef } from 'react';
-import Axios, { type AxiosInstance } from 'axios';
+import { type AxiosInstance } from 'axios';
+import { HttpClient } from './http-client';
 
 export const useHttpClientService = () => {
   const httpClientRef = useRef<AxiosInstance>(null as unknown as AxiosInstance);
 
   if (!httpClientRef.current) {
-    httpClientRef.current = Axios.create({ baseURL: import.meta.env.VITE_API_URL });
+    httpClientRef.current = HttpClient.instance.httpClient;
   }
 
   return httpClientRef.current;
