@@ -160,6 +160,7 @@
     "id": "ID",
     "name": "Ім'я",
     "current_orders_count": "Активних замовлень",
+    "completed_orders_count": "Завершених замовлень",
     "total_orders_count": "Замовлень загалом",
     "phone": "Номер телефону",
     "email": "Email",

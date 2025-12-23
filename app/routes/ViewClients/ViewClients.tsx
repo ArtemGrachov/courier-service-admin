@@ -72,7 +72,7 @@ const ViewClients: ComponentType = observer(() => {
         />
         <ClientsTable
           isProcessing={clientsStore.isProcessing}
-          items={clientsStore.data?.data}
+          items={clientsStore.data?.items}
           pagination={clientsStore.data?.pagination}
           formValue={clientsFilterStore.formValue}
           onUpdate={tableUpdateHandler}

@@ -160,6 +160,7 @@
     "id": "ID",
     "name": "Name",
     "current_orders_count": "Active orders",
+    "completed_orders_count": "Completed orders",
     "total_orders_count": "Total orders",
     "phone": "Phone number",
     "email": "Email",
