@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import type { AxiosInstance } from 'axios';
+import { useNavigate } from 'react-router';
 
 import { STORAGE_AUTH_TOKEN_KEY } from '~/constants/auth';
 
@@ -10,6 +12,7 @@ export const useAuthService = () => {
   const authStore = useRef<AuthStore>(null as unknown as AuthStore);
   const storage = useStorageCtx();
   const httpClientCtx = useHttpClientCtx();
+  const navigate = useNavigate();
 
   if (!authStore.current) {
     authStore.current = new AuthStore();
@@ -37,9 +40,20 @@ export const useAuthService = () => {
     delete httpClientCtx.defaults.headers.Authorization;
   }
 
+  const setupInterceptor = (httpClient: AxiosInstance) => {
+    httpClient.interceptors.response.use(
+      res => res,
+      () => {
+        unauthorize();
+        navigate('/login');
+      }
+    )
+  }
+
   useEffect(() => {
     init();
     authStore.current.initialize();
+    setupInterceptor(httpClientCtx);
   }, []);
 
   return {
