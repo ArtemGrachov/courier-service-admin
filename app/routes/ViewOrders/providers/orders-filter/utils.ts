@@ -43,11 +43,11 @@ export const formValueToRouteQuery = (formValue: IFormOrdersFilter) => {
   }
 
   if (formValue.dateTimeOrderedSort) {
-    params.dateTimeOrderedSort = formValue.dateTimeOrderedSort;
+    params.orderedAt = formValue.dateTimeOrderedSort;
   }
 
   if (formValue.dateTimeClosedSort) {
-    params.dateTimeClosedSort = formValue.dateTimeClosedSort;
+    params.closedAt = formValue.dateTimeClosedSort;
   }
 
   return createSearchParams(params);
@@ -63,8 +63,8 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   const rawItemsPerPage = newSearchParams.get('itemsPerPage');
   const rawStatuses = newSearchParams.getAll('statuses');
   const rawStatusesSet = new Set(rawStatuses);
-  const dateTimeOrderedSort = validateSort(newSearchParams.get('dateTimeOrderedSort'));
-  const dateTimeClosedSort = validateSort(newSearchParams.get('dateTimeClosedSort'));
+  const dateTimeOrderedSort = validateSort(newSearchParams.get('orderedAt'));
+  const dateTimeClosedSort = validateSort(newSearchParams.get('closedAt'));
   const statuses = ORDER_STATUSES.filter(s => rawStatusesSet.has(s));
   const courierIds = newSearchParams
     .getAll('couriers')

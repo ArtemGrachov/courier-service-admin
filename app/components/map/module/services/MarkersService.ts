@@ -13,22 +13,28 @@ import { getCourierKey, getReceiverKey, getSenderKey } from '../../utils';
 export class MarkersService {
   public getOrderMarkersData(order: IOrder) {
     const markersData: MarkerData[] = [];
-    const { senderGeoPos, receiverGeoPos, courier } = order;
+    const { sender_lat: senderLat, sender_lng: senderLng, receiver_lat: receiverLat, receiver_lng: receiverLng, courier } = order;
 
-    if (senderGeoPos && order.sender) {
+    if (senderLat && senderLng && order.sender) {
       markersData.push({
         key: getSenderKey(order.id),
-        location: senderGeoPos,
+        location: {
+          lat: senderLat,
+          lng: senderLng,
+        },
         type: EMarkerTypes.SENDER,
         data: order.sender,
         order,
       });
     }
 
-    if (receiverGeoPos && order.receiver) {
+    if (receiverLat && receiverLng && order.receiver) {
       markersData.push({
         key: getReceiverKey(order.id),
-        location: receiverGeoPos,
+        location: {
+          lat: receiverLat,
+          lng: receiverLng,
+        },
         type: EMarkerTypes.RECEIVER,
         data: order.receiver,
         order,

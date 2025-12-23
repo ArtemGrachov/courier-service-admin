@@ -190,7 +190,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     filterable: true,
   },
   [EColumns.ORDERED_AT]: {
-    field: 'dateTimeOrdered',
+    field: 'ordered_at',
     type: 'dateTime',
     headerName: 'orders_table.ordered_at',
     flex: 1,
@@ -200,7 +200,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     filterable: false,
   },
   [EColumns.CLOSED_AT]: {
-    field: 'dateTimeClosed',
+    field: 'completed_at',
     type: 'dateTime',
     headerName: 'orders_table.closed_at',
     flex: 1,
@@ -320,11 +320,11 @@ const OrdersTable: ComponentType<IProps> = ({ isProcessing, items, pagination, f
 
     if (sortBy?.sort) {
       switch (sortBy.field) {
-        case 'dateTimeOrdered': {
+        case 'ordered_at': {
           payload.dateTimeOrderedSort = sortBy.sort as ESortDirection;
           break;
         }
-        case 'dateTimeClosed': {
+        case 'completed_at': {
           payload.dateTimeClosedSort = sortBy.sort as ESortDirection;
           break;
         }

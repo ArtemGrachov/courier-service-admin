@@ -96,7 +96,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     filterable: false,
   } as GridSingleSelectColDef,
   [EColumns.ORDERED_AT]: {
-    field: 'dateTimeOrdered',
+    field: 'ordered_at',
     type: 'dateTime',
     headerName: 'orders_table.ordered_at',
     flex: 1,
@@ -106,7 +106,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     filterable: false,
   },
   [EColumns.CLOSED_AT]: {
-    field: 'dateTimeClosed',
+    field: 'completed_at',
     type: 'dateTime',
     headerName: 'orders_table.closed_at',
     flex: 1,

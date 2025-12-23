@@ -89,7 +89,7 @@ const ViewClient: ComponentType = observer(() => {
         {ordersStore.data && (
           <Box>
             <OrdersTablePreview
-              items={ordersStore.data?.data}
+              items={ordersStore.data?.items}
               isProcessing={ordersStore.isProcessing}
             />
             <Stack direction="row" gap={2} marginTop={2}>
