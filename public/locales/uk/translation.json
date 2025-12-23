@@ -209,7 +209,7 @@
     "title": "Клієнти"
   },
   "view_courier": {
-    "title": "Кур'єр' ID {{id}} {{name}}",
+    "title": "Кур'єр ID {{id}} {{name}}",
     "orders": "Усі замовлення"
   },
   "view_map": {
