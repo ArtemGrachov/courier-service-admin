@@ -217,7 +217,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
             emailSearch = item.value;
             break;
           }
-          case 'phoneNumber': {
+          case 'phone': {
             phoneSearch = item.value;
             break;
           }
@@ -228,9 +228,9 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
         }
       }
 
-      payload.nameSearch = nameSearch;
-      payload.emailSearch = emailSearch;
-      payload.phoneSearch = phoneSearch;
+      payload.nameSearch = (nameSearch?.length ?? 0) >= 3 ? nameSearch : undefined;
+      payload.emailSearch = (emailSearch?.length ?? 0) >= 3 ? emailSearch : undefined;
+      payload.phoneSearch = (phoneSearch?.length ?? 0) >= 3 ? phoneSearch : undefined;
       payload.statuses = statuses;
     }
 
@@ -414,6 +414,7 @@ const CouriersTable: ComponentType<IProps> = ({ isProcessing, items, pagination,
       slots={{
         quickFilterIcon: () => null,
       }}
+      columnFilterDebounceMs={300}
       localeText={localeText}
       pageSizeOptions={[5, 10, 25]}
       initialState={initialState}

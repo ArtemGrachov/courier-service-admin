@@ -7,7 +7,10 @@ export const fetchCouriers = async (query?: IGetCouriersQuery) => {
 
   let sortBy, sortOrder;
 
-  if (query?.ratingSort) {
+  if (query?.nameSort) {
+    sortBy = 'name';
+    sortOrder = query.nameSort;
+  } else if (query?.ratingSort) {
     sortBy = 'rating';
     sortOrder = query.ratingSort;
   } else if (query?.activeOrdersCountSort) {
@@ -21,15 +24,21 @@ export const fetchCouriers = async (query?: IGetCouriersQuery) => {
     sortOrder = query.totalOrdersCountSort;
   }
 
-  const { data } = await httpClient.get<IGetCouriersResponse>('/courier', {
-    params: {
-      page: query?.page,
-      itemsPerPage: query?.itemsPerPage,
-      status: query?.statuses,
-      sortBy,
-      sortOrder,
-    },
-  });
+  const { nameSearch, emailSearch, phoneSearch } = query ?? {};
+
+  const params = {
+    page: query?.page,
+    itemsPerPage: query?.itemsPerPage,
+    name: (nameSearch?.length ?? 0) >= 3 ? nameSearch : undefined,
+    email: (emailSearch?.length ?? 0) >= 3 ? emailSearch : undefined,
+    phone: (phoneSearch?.length ?? 0) >= 3 ? phoneSearch : undefined,
+    search: query?.search,
+    status: query?.statuses,
+    sortBy,
+    sortOrder,
+  };
+
+  const { data } = await httpClient.get<IGetCouriersResponse>('/courier', { params });
 
   return data;
 }
