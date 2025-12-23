@@ -21,11 +21,11 @@ const OrderPreview: ComponentType<IProps> = ({ order }) => {
   const { t } = useTranslation();
 
   const orderedDateFormatted = useMemo(() => {
-    return order.dateTimeOrdered ?  dayjs(order.dateTimeOrdered).format(DATE_TIME_FORMAT) : '-';
+    return order.ordered_at ? dayjs(order.ordered_at).format(DATE_TIME_FORMAT) : '-';
   }, [order]);
 
   const closedDateFormatted = useMemo(() => {
-    return order.dateTimeClosed ?  dayjs(order.dateTimeClosed).format(DATE_TIME_FORMAT) : '-';
+    return order.completed_at ? dayjs(order.completed_at).format(DATE_TIME_FORMAT) : '-';
   }, [order]);
 
   return (

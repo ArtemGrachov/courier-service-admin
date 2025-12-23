@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const ClientDetails: ComponentType<IProps> = ({ client }) => {
-  const { phoneNumber, email } = client;
+  const { phone, email } = client;
   const { t } = useTranslation();
 
   return (
@@ -41,12 +41,12 @@ const ClientDetails: ComponentType<IProps> = ({ client }) => {
             <Typography variant="subtitle1" component="div">
               {t('client_details.phone')}
             </Typography>
-            {phoneNumber ? (<Link
+            {phone ? (<Link
               component="a"
-              href={`tel:${phoneNumber}`}
+              href={`tel:${phone}`}
               target="_blank"
             >
-              {phoneNumber}
+              {phone}
             </Link>) : '-'}
           </Box>
           <Box gap={1}>

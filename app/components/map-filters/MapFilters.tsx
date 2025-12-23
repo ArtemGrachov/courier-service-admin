@@ -224,6 +224,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               disableCloseOnSelect={true}
               renderValue={renderValue}
               label={t('map_filters.senders')}
+              searchMin={3}
               {...field}
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
@@ -247,6 +248,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               disableCloseOnSelect={true}
               renderValue={renderValue}
               label={t('map_filters.receivers')}
+              searchMin={3}
               {...field}
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
@@ -270,6 +272,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               disableCloseOnSelect={true}
               renderValue={renderValue}
               label={t('map_filters.couriers')}
+              searchMin={3}
               {...field}
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}

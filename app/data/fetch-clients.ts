@@ -24,7 +24,7 @@ export const fetchClients = async (query?: IGetClientsQuery) => {
     sortOrder = query.totalOrdersCountSort;
   }
 
-  const { nameSearch, emailSearch, phoneSearch } = query ?? {};
+  const { nameSearch, emailSearch, phoneSearch, search } = query ?? {};
 
   const params = {
     page: query?.page,
@@ -32,7 +32,7 @@ export const fetchClients = async (query?: IGetClientsQuery) => {
     name: (nameSearch?.length ?? 0) >= 3 ? nameSearch : undefined,
     email: (emailSearch?.length ?? 0) >= 3 ? emailSearch : undefined,
     phone: (phoneSearch?.length ?? 0) >= 3 ? phoneSearch : undefined,
-    search: query?.search,
+    search: (search?.length ?? 0) >= 3 ? search : undefined,
     sortBy,
     sortOrder,
   };

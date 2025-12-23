@@ -3,12 +3,14 @@ import { EOrderStatus } from '~/constants/order';
 import type { IOrder } from '~/types/models/order';
 import type { IStatsRecord } from '~/types/models/stats';
 
+// TODO
 export const fetchStats = async () => {
-  const orders = await import('~/mock-data/orders.json').then(m => m.default as IOrder[]);
+  const orders = await import('~/mock-data/orders.json').then(m => m.default as unknown as IOrder[]);
 
   const stats = orders.reduce((acc, curr) => {
-    const { dateTimeClosed, status } = curr;
+    const { /*dateTimeClosed,*/ status } = curr;
 
+    /*
     if (dateTimeClosed) {
       const closedDay = dayjs(dateTimeClosed).format('YYYY.MM.DD');
       const closedDayData = acc[closedDay] || (acc[closedDay] = {});
@@ -24,6 +26,7 @@ export const fetchStats = async () => {
         }
       }
     }
+    */
 
     return acc;
   }, {} as Record<string, IStatsRecord>);

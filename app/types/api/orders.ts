@@ -19,7 +19,7 @@ export interface IGetOrdersQuery {
 }
 
 export interface IGetOrdersResponse {
-  data: IOrder[];
+  items: IOrder[];
   pagination: IPagination;
 }
 

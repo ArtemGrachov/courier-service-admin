@@ -11,6 +11,7 @@ import Autocomplete, {
 import { useErrorSnackbar } from '~/hooks/other/use-error-snackbar';
 
 interface IProps {
+  searchMin?: number;
   label?: ReactNode;
   onOpenLoad?: () => any;
   onSearchLoad?: (query: string) => any;
@@ -21,11 +22,12 @@ type AutocompleExternalProps = Omit<AutocompleteProps<any, any, any, any>, 'rend
   renderInput?: (params: AutocompleteRenderInputParams) => React.ReactNode;
 };
 
-const DEFAULT_SEARCH_TIMEOUT_MS = 300;
+const DEFAULT_SEARCH_TIMEOUT_MS = 500;
 
 const AutocompleteExternal = ({
   label,
   searchTimeoutMs,
+  searchMin,
   onSearchLoad,
   onOpenLoad,
   onOpen,
@@ -40,10 +42,16 @@ const AutocompleteExternal = ({
 
   const searchLoadDebounce = useDebouncedCallback(async () => {
     if (onSearchLoad) {
+      const value = inputValueRef.current;
+
+      if (searchMin && value && value.length < searchMin) {
+        return;
+      }
+
       setIsProcessing(true);
 
       try {
-        await onSearchLoad(inputValueRef.current);
+        await onSearchLoad(value);
       } catch (err) {
         errorSnackbar(err);
       }

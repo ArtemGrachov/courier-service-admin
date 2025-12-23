@@ -50,6 +50,10 @@ export class ClientsStore implements IClientsStoreData {
     return this.getStatus === EStatus.PROCESSING;
   }
 
+  public get isSuccess() {
+    return this.getStatus === EStatus.SUCCESS;
+  }
+
   public get isError() {
     return this.getStatus === EStatus.ERROR;
   }

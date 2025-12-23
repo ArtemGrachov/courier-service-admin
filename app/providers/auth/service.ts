@@ -43,9 +43,11 @@ export const useAuthService = () => {
   const setupInterceptor = (httpClient: AxiosInstance) => {
     httpClient.interceptors.response.use(
       res => res,
-      () => {
-        unauthorize();
-        navigate('/login');
+      error => {
+        if (error?.status === 401) {
+          unauthorize();
+          navigate('/login');
+        }
       }
     )
   }

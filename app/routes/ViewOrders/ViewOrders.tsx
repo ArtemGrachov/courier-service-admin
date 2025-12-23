@@ -74,7 +74,7 @@ const ViewOrders: ComponentType = observer(() => {
         />
         <OrdersTable
           isProcessing={ordersStore.isProcessing}
-          items={ordersStore.data?.data}
+          items={ordersStore.data?.items}
           pagination={ordersStore.data?.pagination}
           formValue={ordersFilterStore.formValue}
           onUpdate={tableUpdateHandler}

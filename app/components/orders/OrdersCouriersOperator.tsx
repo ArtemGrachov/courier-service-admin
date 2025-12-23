@@ -61,6 +61,7 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
       disableCloseOnSelect={true}
       renderValue={renderValue}
       label={t('orders_couriers_operator.label')}
+      searchMin={3}
       value={item.value ?? []}
       onChange={changeHandler}
       onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}

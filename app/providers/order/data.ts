@@ -5,16 +5,19 @@ import type { IOrder } from '~/types/models/order';
 
 import { mockRequest } from '~/utils/mock-request';
 
+// TODO
 export const fetchOrder = async (orderId: number) => {
   const [
     orders,
     couriers,
     clients,
   ] = await Promise.all([
-    import('~/mock-data/orders.json').then(m => m.default as IOrder[]),
+    // TODO
+    import('~/mock-data/orders.json').then(m => m.default as unknown as IOrder[]),
     // TODO
     import('~/mock-data/couriers.json').then(m => m.default as unknown as ICourier[]),
-    import('~/mock-data/clients.json').then(m => m.default as IClient[]),
+    // TODO
+    import('~/mock-data/clients.json').then(m => m.default as unknown as IClient[]),
   ]);
 
   const order = orders.find(o => o.id === orderId);
@@ -34,9 +37,9 @@ export const fetchOrder = async (orderId: number) => {
     return acc;
   }, {} as Record<number, IClient>);
 
-  data.courier = couriersMap[data.courierId];
-  data.sender = clientsMap[data.senderId];
-  data.receiver = clientsMap[data.receiverId];
+  data.courier = couriersMap[data.courier_id];
+  data.sender = clientsMap[data.sender_id];
+  data.receiver = clientsMap[data.receiver_id];
 
   return data!;
 }
