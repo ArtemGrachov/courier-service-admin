@@ -32,6 +32,7 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     couriers: query?.courierIds,
     senders: query?.senderIds,
     receivers: query?.receiverIds,
+    clients: query?.clientIds,
     sortBy,
     sortOrder,
   };

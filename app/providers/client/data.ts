@@ -1,15 +1,12 @@
+import { HttpClient } from '~/providers/http-client/http-client';
+
 import type { IClient } from '~/types/models/client';
-import { mockRequest } from '~/utils/mock-request';
 
-// TODO
 export const fetchClient = async (clientId: number) => {
-  const clients = await import('~/mock-data/clients.json').then(m => m.default as unknown as IClient[]);
-  const client = clients.find(c => c.id === clientId);
-  const data = await mockRequest(client);
+  const httpClient = HttpClient.instance.httpClient;
 
-  if (!data) {
-    throw new Error('404');
-  }
+  const { data } = await httpClient.get<IClient>(`/client/${clientId}`);
 
   return data;
 }
+
