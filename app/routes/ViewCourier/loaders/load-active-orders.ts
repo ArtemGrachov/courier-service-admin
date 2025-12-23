@@ -16,7 +16,7 @@ export async function loadActiveOrders(courierId: number) {
 
   const fetchOrdersQuery: IGetOrdersQuery = DEFAULT_ORDER_FILTERS;
 
-  Object.assign(fetchOrdersQuery, { courierId: [courierId], statuses: [EOrderStatus.PROCESSING]  });
+  Object.assign(fetchOrdersQuery, { courierIds: [courierId], statuses: [EOrderStatus.PROCESSING]  });
 
   try {
     const data = await fetchOrders(fetchOrdersQuery);

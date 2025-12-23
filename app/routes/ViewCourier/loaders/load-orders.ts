@@ -15,7 +15,7 @@ export async function loadOrders(courierId: number) {
 
   const fetchOrdersQuery: IGetOrdersQuery = DEFAULT_ORDER_FILTERS;
 
-  Object.assign(fetchOrdersQuery, { courierId: [courierId] });
+  Object.assign(fetchOrdersQuery, { courierIds: [courierId] });
 
   try {
     const data = await fetchOrders(fetchOrdersQuery);
