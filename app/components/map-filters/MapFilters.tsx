@@ -67,7 +67,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
   const currentFormValue = watch();
 
   const senders = useMemo(() => sendersStore.data?.data, [sendersStore.data]);
-  const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
+  const couriers = useMemo(() => couriersStore.data?.items, [couriersStore.data]);
   const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
 
   const hasValues = useMemo(() => {

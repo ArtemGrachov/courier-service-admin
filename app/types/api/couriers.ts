@@ -12,14 +12,15 @@ export interface IGetCouriersQuery {
   emailSearch?: string | null;
   phoneSearch?: string | null;
   nameSort?: ESortDirection | null;
-  currentOrdersCountSort?: ESortDirection | null;
+  activeOrdersCountSort?: ESortDirection | null;
+  completedOrdersCountSort?: ESortDirection | null;
   totalOrdersCountSort?: ESortDirection | null;
   ratingSort?: ESortDirection | null;
   statuses?: ECourierStatus[] | null;
 }
 
 export interface IGetCouriersResponse {
-  data: ICourier[];
+  items: ICourier[];
   pagination: IPagination;
 }
 

@@ -25,7 +25,7 @@ interface IProps {
 }
 
 const CourierDetails: ComponentType<IProps> = ({ courier }) => {
-  const { phoneNumber, email } = courier;
+  const { phone, email } = courier;
   const { t } = useTranslation();
   const routePath = useRoutePath();
 
@@ -75,12 +75,12 @@ const CourierDetails: ComponentType<IProps> = ({ courier }) => {
                 <Typography variant="subtitle1" component="div">
                   {t('courier_details.phone')}
                 </Typography>
-                {phoneNumber ? (<Link
+                {phone ? (<Link
                   component="a"
-                  href={`tel:${phoneNumber}`}
+                  href={`tel:${phone}`}
                   target="_blank"
                 >
-                  {phoneNumber}
+                  {phone}
                 </Link>) : '-'}
               </Box>
             </Grid>
@@ -106,7 +106,17 @@ const CourierDetails: ComponentType<IProps> = ({ courier }) => {
                   {t('courier_details.current_orders_count')}
                 </Typography>
                 <Typography variant="h5" component="div" color="warning">
-                  {courier.currentOrdersCount}
+                  {courier.active_orders_count}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid size={6} gap={2}>
+              <Box gap={1}>
+                <Typography variant="subtitle1" component="div" color="warning">
+                  {t('courier_details.completed_orders_count')}
+                </Typography>
+                <Typography variant="h5" component="div" color="warning">
+                  {courier.completed_orders_count}
                 </Typography>
               </Box>
             </Grid>
@@ -116,7 +126,7 @@ const CourierDetails: ComponentType<IProps> = ({ courier }) => {
                   {t('courier_details.total_orders_count')}
                 </Typography>
                 <Typography variant="h5" component="div">
-                  {courier.totalOrdersCount}
+                  {courier.total_orders_count}
                 </Typography>
               </Box>
             </Grid>

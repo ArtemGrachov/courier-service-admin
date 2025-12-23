@@ -88,6 +88,7 @@
     "email": "Email",
     "status": "Статус",
     "current_orders_count": "Активних замовлень",
+    "completed_orders_count": "Виконаних замовлень",
     "total_orders_count": "Замовлень загалом",
     "rating": "Рейтинг",
     "details": "Деталі"
@@ -176,6 +177,7 @@
     "rating": "Рейтинг",
     "status": "Статус",
     "current_orders_count": "Активних замовлень",
+    "completed_orders_count": "Виконаних замовлень",
     "total_orders_count": "Замовлень загалом",
     "phone": "Номер телефону",
     "email": "Email"

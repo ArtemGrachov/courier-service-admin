@@ -3,12 +3,15 @@ import type { IGeoPos } from '~/types/models/geo-pos';
 
 export interface ICourier {
   id: number;
-  name: string;
   email: string;
-  phoneNumber: string;
   status: ECourierStatus;
-  currentOrdersCount: number;
-  totalOrdersCount: number;
+  name: string;
+  phone: string;
+  position_id: number;
+  position?: IGeoPos;
+  active_orders_count: number;
+  completed_orders_count: number;
+  total_orders_count: number;
   rating: number;
-  location: IGeoPos;
+  rating_count: number;
 }

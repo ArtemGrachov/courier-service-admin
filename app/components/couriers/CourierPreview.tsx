@@ -21,7 +21,7 @@ export interface IProps {
 const CourierPreview: ComponentType<IProps> = ({ courier }) => {
   const { t } = useTranslation();
   const routePath = useRoutePath();
-  const { id, name, rating, status, currentOrdersCount, phoneNumber, email } = courier;
+  const { id, name, rating, status, active_orders_count, phone, email } = courier;
 
   return (
     <Stack gap={2}>
@@ -47,7 +47,7 @@ const CourierPreview: ComponentType<IProps> = ({ courier }) => {
             {t('courier_card.current_orders_count')}
           </Typography>
           <Typography variant="h5" component="div" color="warning">
-            {currentOrdersCount}
+            {active_orders_count}
           </Typography>
         </Box>
         <Box gap={1}>
@@ -56,13 +56,13 @@ const CourierPreview: ComponentType<IProps> = ({ courier }) => {
       </Stack>
       <Stack direction="row" gap={2} justifyContent="space-between" alignItems="flex-end">
         <Stack gap={2}>
-          {phoneNumber && <Box>
+          {phone && <Box>
             <Link
               component="a"
-              href={`tel:${phoneNumber}`}
+              href={`tel:${phone}`}
               target="_blank"
             >
-              {phoneNumber}
+              {phone}
             </Link>
           </Box>}
           {email && <Box>

@@ -25,7 +25,7 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
     fetchCouriers,
   } = useOrderFilterCtx();
 
-  const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
+  const couriers = useMemo(() => couriersStore.data?.items, [couriersStore.data]);
 
   const couriersMap = useMemo(() => {
     return couriers?.reduce((acc, curr) => {

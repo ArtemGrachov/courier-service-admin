@@ -102,7 +102,7 @@ const ViewUpsertCourier: ComponentType = observer(() => {
       <Box padding={3}>
         <Box maxWidth={500} margin="auto">
           {showForm && <FormCourier
-            initialValue={courier!}
+            initialValue={courier as any /* TODO */}
             submitStatus={upsertCourierStore.submitStatus}
             submitError={upsertCourierStore.submitError}
             onSubmit={submitHandler}

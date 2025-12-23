@@ -84,7 +84,7 @@ const ViewMap: ComponentType = observer(() => {
           </Stack>
         </Card>
         <Map
-          couriers={couriersStore.data?.data}
+          couriers={couriersStore.data?.items}
           orders={orders}
           showPopupOrderData={true}
         />

@@ -35,10 +35,10 @@ export class MarkersService {
       });
     }
 
-    if ((order.status === EOrderStatus.PROCESSING || order.status === EOrderStatus.ORDERED) && courier?.location) {
+    if ((order.status === EOrderStatus.PROCESSING || order.status === EOrderStatus.ORDERED) && courier?.position) {
       markersData.push({
         key: getCourierKey(courier.id),
-        location: courier.location,
+        location: courier.position,
         type: EMarkerTypes.COURIER,
         data: courier,
       });
@@ -48,13 +48,13 @@ export class MarkersService {
   }
 
   public getCourierMarkerData(courier: ICourier) {
-    if (!courier?.location) {
+    if (!courier?.position) {
       return null;
     }
 
     return {
       key: getCourierKey(courier.id),
-      location: courier.location,
+      location: courier.position,
       type: EMarkerTypes.COURIER,
       data: courier,
     };
