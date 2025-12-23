@@ -36,8 +36,6 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     sortOrder,
   };
 
-  console.log(params);
-
   const { data } = await httpClient.get<IGetOrdersResponse>('/orders', { params });
 
   return data;
