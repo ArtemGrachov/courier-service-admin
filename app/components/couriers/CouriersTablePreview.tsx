@@ -56,7 +56,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     sortable: false,
   },
   [EColumns.PHONE]: {
-    field: 'phoneNumber',
+    field: 'phone',
     type: 'string',
     headerName: 'couriers_table.phone',
     flex: 1,
@@ -85,7 +85,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     getOptionValue: o => (o as unknown as any)?.value,
   } as GridSingleSelectColDef,
   [EColumns.CURRENT_ORDERS_COUNT]: {
-    field: 'currentOrdersCount',
+    field: 'active_orders_count',
     type: 'number',
     headerName: 'couriers_table.current_orders_count',
     flex: 1,
@@ -93,7 +93,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     filterable: false,
   },
   [EColumns.TOTAL_ORDERS_COUNT]: {
-    field: 'totalOrdersCount',
+    field: 'total_orders_count',
     type: 'number',
     headerName: 'couriers_table.total_orders_count',
     flex: 1,

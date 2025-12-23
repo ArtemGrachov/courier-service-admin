@@ -16,7 +16,8 @@ export const fetchOrders = async (query?: IGetOrdersQuery) => {
     clients,
   ] = await Promise.all([
     import('~/mock-data/orders.json').then(m => m.default as IOrder[]),
-    import('~/mock-data/couriers.json').then(m => m.default as ICourier[]),
+    // TODO
+    import('~/mock-data/couriers.json').then(m => m.default as unknown as ICourier[]),
     import('~/mock-data/clients.json').then(m => m.default as IClient[]),
   ]);
 

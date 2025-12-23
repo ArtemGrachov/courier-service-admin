@@ -38,8 +38,12 @@ export const formValueToRouteQuery = (formValue: IFormCouriersFilter) => {
     params.ratingSort = formValue.ratingSort;
   }
 
-  if (formValue.currentOrdersCountSort) {
-    params.currentOrdersCountSort = formValue.currentOrdersCountSort;
+  if (formValue.activeOrdersCountSort) {
+    params.activeOrdersCountSort = formValue.activeOrdersCountSort;
+  }
+
+  if (formValue.completedOrdersCountSort) {
+    params.completedOrdersCountSort = formValue.completedOrdersCountSort;
   }
 
   if (formValue.totalOrdersCountSort) {
@@ -65,7 +69,8 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
   const emailSearch = newSearchParams.get('emailSearch');
   const phoneSearch = newSearchParams.get('phoneSearch');
   const nameSort = validateSort(newSearchParams.get('nameSort'));
-  const currentOrdersCountSort = validateSort(newSearchParams.get('currentOrdersCountSort'));
+  const activeOrdersCountSort = validateSort(newSearchParams.get('activeOrdersCountSort'));
+  const completedOrdersCountSort = validateSort(newSearchParams.get('completedOrdersCountSort'));
   const totalOrdersCountSort = validateSort(newSearchParams.get('totalOrdersCountSort'));
   const ratingSort = validateSort(newSearchParams.get('ratingSort'));
   const statuses = COURIER_STATUSES.filter(s => rawStatusesSet.has(s));
@@ -94,7 +99,8 @@ export const routeQueryToFormValue = (newSearchParams: URLSearchParams) => {
     phoneSearch,
     statuses,
     nameSort,
-    currentOrdersCountSort,
+    activeOrdersCountSort,
+    completedOrdersCountSort,
     totalOrdersCountSort,
     ratingSort,
   };

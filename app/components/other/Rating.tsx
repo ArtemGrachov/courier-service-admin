@@ -18,8 +18,12 @@ const Rating: ComponentType<IProps> = ({ rating }) => {
     }
   }, [rating]);
 
+  const ratingFormatted = useMemo(() => {
+    return rating?.toFixed(2);
+  }, [rating]);
+
   return (
-    <Chip label={rating} color={color} />
+    <Chip label={ratingFormatted} color={color} />
   )
 }
 

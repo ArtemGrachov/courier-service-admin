@@ -86,7 +86,7 @@ const ViewCouriers: ComponentType = observer(() => {
         </Stack>
         <CouriersTable
           isProcessing={couriersStore.isProcessing}
-          items={couriersStore.data?.data}
+          items={couriersStore.data?.items}
           pagination={couriersStore.data?.pagination}
           formValue={couriersFiltersStore.formValue}
           onUpdate={tableUpdateHandler}

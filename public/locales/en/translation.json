@@ -88,6 +88,7 @@
     "email": "Email",
     "status": "Status",
     "current_orders_count": "Active orders",
+    "completed_orders_count": "Completed orders",
     "total_orders_count": "Total orders",
     "rating": "Rating",
     "details": "Details"
@@ -176,6 +177,7 @@
     "rating": "Rating",
     "status": "Status",
     "current_orders_count": "Active orders",
+    "completed_orders_count": "Completed orders",
     "total_orders_count": "Total orders",
     "phone": "Phone number",
     "email": "Email"

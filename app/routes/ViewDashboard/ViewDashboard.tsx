@@ -78,7 +78,7 @@ const ViewDashboard: ComponentType = observer(() => {
           <Grid size={6} gap={2}>
             <CouriersTablePreview
               isProcessing={couriersStore.isProcessing}
-              items={couriersStore.data?.data}
+              items={couriersStore.data?.items}
             />
             <Button
               sx={{ mt: 2 }}
