@@ -32,7 +32,7 @@ const OrdersSendersOperator: ComponentType<GridFilterInputValueProps> = observer
       acc[curr.id] = curr;
       return acc;
     }, {} as Record<number, IClient>) ?? {};
-  }, []);
+  }, [senders]);
 
   const senderOptions = useMemo(() => {
     return senders?.map(s => s.id) ?? [];
@@ -62,6 +62,7 @@ const OrdersSendersOperator: ComponentType<GridFilterInputValueProps> = observer
       renderValue={renderValue}
       label={t('orders_senders_operator.label')}
       value={item.value ?? []}
+      searchMin={3}
       onChange={changeHandler}
       onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
       onOpenLoad={() => fetchSenders(SEARCH_QUERY)}

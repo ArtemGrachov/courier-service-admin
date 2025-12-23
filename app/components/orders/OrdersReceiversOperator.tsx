@@ -62,6 +62,7 @@ const OrderReceiversOperator: ComponentType<GridFilterInputValueProps> = observe
       renderValue={renderValue}
       label={t('orders_receivers_operator.label')}
       value={item.value ?? []}
+      searchMin={3}
       onChange={changeHandler}
       onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
       onOpenLoad={() => fetchReceivers(SEARCH_QUERY)}
