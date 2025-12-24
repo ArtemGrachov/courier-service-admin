@@ -1,4 +1,4 @@
-import type { ComponentType, MouseEventHandler, ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { Link, type To } from 'react-router';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
