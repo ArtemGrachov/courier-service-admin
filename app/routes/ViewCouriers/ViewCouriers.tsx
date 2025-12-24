@@ -122,19 +122,19 @@ interface ILoaderResult {
 }
 
 const loader = async (url: string) => {
-    const couriersState = await loadCouriers(url);
+  const couriersState = await loadCouriers(url);
 
-    const hasError = couriersState.getStatus === EStatus.ERROR;
+  const hasError = couriersState.getStatus === EStatus.ERROR;
 
-    if (hasError) {
-      throw couriersState.getError;
-    }
+  if (hasError) {
+    throw couriersState.getError;
+  }
 
-    const result = {
-      couriersState,
-    };
+  const result = {
+    couriersState,
+  };
 
-    return result;
+  return result;
 }
 
 export async function clientLoader(loaderArgs: Route.ClientLoaderArgs) {

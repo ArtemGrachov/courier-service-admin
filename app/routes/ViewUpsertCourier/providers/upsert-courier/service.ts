@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 
+import { Cache } from '~/cache/Cache';
 import { UpsertCourierStore } from './store';
 
 import { useHttpClientCtx } from '~/providers/http-client';
@@ -19,6 +20,7 @@ export const useUpsertCourierService = () => {
       upsertCourierStore.current.doSubmitInit();
       await httpClientCtx.post('/courier', formValue);
       upsertCourierStore.current.doSubmitSuccess();
+      Cache.instance.clear();
     } catch (err) {
       upsertCourierStore.current.doSubmitError(err);
       throw err;
@@ -30,6 +32,7 @@ export const useUpsertCourierService = () => {
       upsertCourierStore.current.doSubmitInit();
       await httpClientCtx.patch(`/courier/${courierId}`, formValue);
       upsertCourierStore.current.doSubmitSuccess();
+      Cache.instance.clear();
     } catch (err) {
       upsertCourierStore.current.doSubmitError(err);
       throw err;
