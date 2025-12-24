@@ -73,7 +73,7 @@ const ViewDashboard: ComponentType = observer(() => {
           isProcessing={isLoading}
           onReload={reloadPageData}
         />
-        <OrdersChart stats={statsStore.data?.stats} />
+        <OrdersChart stats={statsStore.data?.statistic} />
         <Grid container spacing={2}>
           <Grid size={6} gap={2}>
             <CouriersTablePreview
