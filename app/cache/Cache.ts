@@ -46,5 +46,14 @@ export class Cache {
 
     this._cacheData.set(key, record);
   }
+
+  public clear(key?: any) {
+    if (key) {
+      this._cacheData.delete(key);
+      return;
+    }
+
+    this._cacheData.clear();
+  }
 }
 

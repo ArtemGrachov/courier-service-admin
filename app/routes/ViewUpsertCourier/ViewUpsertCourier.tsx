@@ -32,7 +32,7 @@ import type { IFormCourier } from '~/types/forms/form-courier';
 import { loadCourier } from './loaders/load-courier';
 
 const ViewUpsertCourier: ComponentType = observer(() => {
-  const { store: upsertCourierStore, submitCreate: submit } = useUpsertCourierCtx();
+  const { store: upsertCourierStore, submitCreate, submitUpdate } = useUpsertCourierCtx();
   const { store: courierStore } = useCourierCtx();
   const { t } = useTranslation();
   const errorSnackbar = useErrorSnackbar();
@@ -70,9 +70,9 @@ const ViewUpsertCourier: ComponentType = observer(() => {
   const submitHandler = async (formValue: IFormCourier) => {
     try {
       if (isEdit) {
-        await submitUpdate(formValue);
+        await submitUpdateHandler(formValue);
       } else {
-        await submitCreate(formValue);
+        await submitCreateHandler(formValue);
       }
     } catch (err) {
       errorSnackbar(err);
@@ -80,14 +80,14 @@ const ViewUpsertCourier: ComponentType = observer(() => {
     }
   }
 
-  const submitCreate = async (formValue: IFormCourier) => {
-    await submit(formValue);
+  const submitCreateHandler = async (formValue: IFormCourier) => {
+    await submitCreate(formValue);
     successSnackbar(t('view_upsert_courier.create_success'));
     await navigate(routePath(ROUTES.COURIERS));
   }
 
-  const submitUpdate = async (formValue: IFormCourier) => {
-    await submit(formValue);
+  const submitUpdateHandler = async (formValue: IFormCourier) => {
+    await submitUpdate(+courierId!, formValue);
     successSnackbar(t('view_upsert_courier.edit_success'));
     await navigate(routePath(ROUTES.COURIER, { courierId: courierId ?? 1 }));
   }
@@ -102,7 +102,7 @@ const ViewUpsertCourier: ComponentType = observer(() => {
       <Box padding={3}>
         <Box maxWidth={500} margin="auto">
           {showForm && <FormCourier
-            initialValue={courier as any /* TODO */}
+            initialValue={courier}
             submitStatus={upsertCourierStore.submitStatus}
             submitError={upsertCourierStore.submitError}
             onSubmit={submitHandler}

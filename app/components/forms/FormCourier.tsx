@@ -8,6 +8,7 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
+import FormHelperText from '@mui/material/FormHelperText';
 
 import { EStatus } from '~/constants/status';
 import { PASSWORD_MIN_LENGTH, PASSWORD_VALIDATOR } from '~/validators/password.validator';
@@ -19,10 +20,9 @@ import FieldClientErrors from '~/components/forms/FieldClientErrors';
 import PasswordValidationHint from '~/components/forms/PasswordValidationHint';
 
 import type { IFormCourier } from '~/types/forms/form-courier';
-import { FormHelperText } from '@mui/material';
 
 interface IProps {
-  initialValue?: IFormCourier;
+  initialValue?: IFormCourier | null;
   submitStatus?: EStatus;
   submitError?: any;
   onSubmit?: (formValue: IFormCourier) => any;
@@ -33,7 +33,11 @@ const FormCourier: ComponentType<IProps> = ({ initialValue, submitStatus, submit
   const { formState, register, handleSubmit, watch } = useForm<IFormCourier>({
     mode: 'all',
     criteriaMode: 'all',
-    defaultValues: initialValue,
+    defaultValues: initialValue ? {
+      name: initialValue.name,
+      email: initialValue.email,
+      phone: initialValue.phone,
+    } : undefined,
   });
   const errors = formState.errors;
 
@@ -50,7 +54,7 @@ const FormCourier: ComponentType<IProps> = ({ initialValue, submitStatus, submit
       email: EMAIL_VALIDATOR
     }
   });
-  const fieldPhoneNumber = register('phoneNumber', {
+  const fieldPhone = register('phone', {
     required: true,
   });
   const fieldPassword = register('password', {
@@ -106,18 +110,18 @@ const FormCourier: ComponentType<IProps> = ({ initialValue, submitStatus, submit
         <FormLabel
           htmlFor="phone"
           required
-          error={!!errors.phoneNumber}
+          error={!!errors.phone}
         >
           {t('form_common.phone')}
         </FormLabel>
         <TextField
           id="phone"
-          {...fieldPhoneNumber}
-          error={!!errors.phoneNumber}
+          {...fieldPhone}
+          error={!!errors.phone}
           disabled={isProcessing}
         />
         <FieldClientErrors
-          error={errors.phoneNumber}
+          error={errors.phone}
         />
       </FormControl>
       <FormControl>
