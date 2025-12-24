@@ -2,21 +2,22 @@ import { useRef } from 'react';
 
 import { UpsertCourierStore } from './store';
 
+import { useHttpClientCtx } from '~/providers/http-client';
+
 import type { IFormCourier } from '~/types/forms/form-courier';
 
-import { mockRequest } from '~/utils/mock-request';
-
 export const useUpsertCourierService = () => {
+  const httpClientCtx = useHttpClientCtx();
   const upsertCourierStore = useRef<UpsertCourierStore>(null as unknown as UpsertCourierStore);
 
   if (!upsertCourierStore.current) {
     upsertCourierStore.current = new UpsertCourierStore();
   }
 
-  const submitCreate = async (_formValue: IFormCourier) => {
+  const submitCreate = async (formValue: IFormCourier) => {
     try {
       upsertCourierStore.current.doSubmitInit();
-      await mockRequest();
+      await httpClientCtx.post('/courier', formValue);
       upsertCourierStore.current.doSubmitSuccess();
     } catch (err) {
       upsertCourierStore.current.doSubmitError(err);
@@ -24,10 +25,10 @@ export const useUpsertCourierService = () => {
     }
   }
 
-  const submitUpdate = async (_formValue: IFormCourier) => {
+  const submitUpdate = async (courierId: number, formValue: IFormCourier) => {
     try {
       upsertCourierStore.current.doSubmitInit();
-      await mockRequest();
+      await httpClientCtx.patch(`/courier/${courierId}`, formValue);
       upsertCourierStore.current.doSubmitSuccess();
     } catch (err) {
       upsertCourierStore.current.doSubmitError(err);

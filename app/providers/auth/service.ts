@@ -48,6 +48,8 @@ export const useAuthService = () => {
           unauthorize();
           navigate('/login');
         }
+
+        throw error;
       }
     )
   }
