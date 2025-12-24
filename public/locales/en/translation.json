@@ -7,6 +7,7 @@
     "orders": "Orders",
     "clients": "Clients",
     "about": "About",
+    "change_password": "Change password",
     "logout": "Logout"
   },
   "common_locales": {
@@ -40,6 +41,10 @@
   "view_reset_password": {
     "title": "Reset password",
     "success_hint": "Your password was resetted successfully. Now you can <Link>log in</Link>."
+  },
+  "view_change_password": {
+    "title": "Change password",
+    "success_hint": "Your password was changed successfully"
   },
   "common_errors": {
     "page_title": "Error",

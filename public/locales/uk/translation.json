@@ -7,6 +7,7 @@
     "orders": "Замовлення",
     "clients": "Клієнти",
     "about": "Про проєкт",
+    "change_password": "Змінити пароль",
     "logout": "Вийти"
   },
   "common_locales": {
