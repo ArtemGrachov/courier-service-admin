@@ -76,8 +76,8 @@ const ViewOrder: ComponentType = observer(() => {
                     onReload={reloadPageData}
                   />
                   <OrderCard order={order} />
-                  {order.sender && <ClientCard client={order.sender} isSender={true} />}
-                  {order.receiver && <ClientCard client={order.receiver} isReceiver={true} />}
+                  {order.sender && <ClientCard client={order.sender} address={order.sender_address} isSender={true} />}
+                  {order.receiver && <ClientCard client={order.receiver} address={order.receiver_address} isReceiver={true} />}
                   {order.courier && <CourierCard courier={order.courier} />}
                 </Stack>
               </Grid>
