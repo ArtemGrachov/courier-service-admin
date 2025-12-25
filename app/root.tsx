@@ -7,6 +7,7 @@ import {
 } from 'react-router';
 import 'reflect-metadata';
 import { useTranslation } from 'react-i18next';
+import { lazy, Suspense } from 'react';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -19,10 +20,11 @@ import { HttpClientProvider } from '~/providers/http-client';
 import ViewError from '~/routes/ViewError/ViewError';
 import ModalRoot from '~/components/modals/ModalRoot';
 import PageLoader from '~/components/other/PageLoader';
-import PageLongLoading from '~/components/other/PageLongLoading';
 
 import i18n from '~/i18n/config';
 import './app.scss';
+
+const PageLongLoading = lazy(() => import('~/components/other/PageLongLoading'));
 
 const darkTheme = createTheme({
   colorSchemes: {
@@ -30,6 +32,8 @@ const darkTheme = createTheme({
     light: true,
   },
 });
+
+const isBrowser = typeof window !== 'undefined';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -54,7 +58,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <ModalsProvider>
                   <CssBaseline />
                   <PageLoader />
-                  <PageLongLoading />
+                  <Suspense fallback={null}>
+                    {isBrowser && <PageLongLoading />}
+                  </Suspense>
                   {children}
                   <ModalRoot />
                 </ModalsProvider>
