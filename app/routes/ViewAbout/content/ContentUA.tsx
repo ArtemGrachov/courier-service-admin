@@ -7,6 +7,9 @@ const ContentUA: ComponentType = () => {
     <div>
       <Typography variant="h4" component="h1" gutterBottom>📦 Адмінпанель | Сервіс кур'єрської доставки</Typography>
       <Typography variant="body1" gutterBottom>
+        Full-stack демо проєкт
+      </Typography>
+      <Typography variant="body1" gutterBottom>
         Створено з демонстративною та навчальною метою
       </Typography>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
@@ -26,7 +29,7 @@ const ContentUA: ComponentType = () => {
           📈 MUI X-Charts
         </li>
         <li>
-          📈 MUI X-Data-Grid із server-side пагінацією, фільтрами та сортуванням, а також autocomplete-фільтрами
+          📊 MUI X-Data-Grid із server-side пагінацією, фільтрами та сортуванням, а також autocomplete-фільтрами
         </li>
         <li>
           🗃️ MobX та Context API для управління станом
@@ -44,7 +47,10 @@ const ContentUA: ComponentType = () => {
           🌐 Підтримка багатомовності
         </li>
         <li>
-          💽 Mock дані для симуляції роботи з сервером
+          🧮 NestJS бекенд
+        </li>
+        <li>
+          🗄️ PostgreSQL база даних та Prisma ORM
         </li>
       </Typography>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
@@ -58,11 +64,10 @@ const ContentUA: ComponentType = () => {
           Вихідний код адмін-панелі - GitHub
         </Link>
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
-        🤖 AI
-      </Typography>
       <Typography variant="body1" gutterBottom>
-        Штучний інтелект використано для генерації mock-даних про замовлення, клієнтів та кур'єрів.
+        <Link href="https://github.com/ArtemGrachov/courier-service-backend" target="_blank">
+          Вихідний код backend - GitHub
+        </Link>
       </Typography>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         📋 Проєкт-менеджмент

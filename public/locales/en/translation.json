@@ -252,6 +252,10 @@
   },
   "orders_receivers_operator": {
     "label": "Receivers"
+  },
+  "page_long_loading": {
+    "title": "This application is hosted on free and resource-limited servers",
+    "subtitle": "Launching servers may take some time"
   }
 }
 

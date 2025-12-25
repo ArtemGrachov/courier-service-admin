@@ -16,9 +16,10 @@ import { AuthProvider } from '~/providers/auth';
 import { ModalsProvider } from '~/providers/modals';
 import { HttpClientProvider } from '~/providers/http-client';
 
+import ViewError from '~/routes/ViewError/ViewError';
 import ModalRoot from '~/components/modals/ModalRoot';
 import PageLoader from '~/components/other/PageLoader';
-import ViewError from '~/routes/ViewError/ViewError';
+import PageLongLoading from '~/components/other/PageLongLoading';
 
 import i18n from '~/i18n/config';
 import './app.scss';
@@ -53,6 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <ModalsProvider>
                   <CssBaseline />
                   <PageLoader />
+                  <PageLongLoading />
                   {children}
                   <ModalRoot />
                 </ModalsProvider>

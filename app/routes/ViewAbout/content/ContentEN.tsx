@@ -7,6 +7,9 @@ const ContentEN: ComponentType = () => {
     <div>
       <Typography variant="h4" component="h1" gutterBottom>📦 Admin panel | Courier delivery service</Typography>
       <Typography variant="body1" gutterBottom>
+        Full-stack demo project
+      </Typography>
+      <Typography variant="body1" gutterBottom>
         Created for demo and educational purposes
       </Typography>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
@@ -26,7 +29,7 @@ const ContentEN: ComponentType = () => {
           📈 MUI X-Charts
         </li>
         <li>
-          📈 MUI X-Data-Grid with server-side pagination, filtering and sorting, autocomplete filters
+          📊 MUI X-Data-Grid with server-side pagination, filtering and sorting, autocomplete filters
         </li>
         <li>
           🗃️ MobX and Context API for state management
@@ -44,7 +47,10 @@ const ContentEN: ComponentType = () => {
           🌐 Internationalization
         </li>
         <li>
-          💽 Mock data for simulating server communication
+          🧮 NestJS backend
+        </li>
+        <li>
+          🗄️ PostgreSQL database and Prisma ORM
         </li>
       </Typography>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
@@ -56,6 +62,11 @@ const ContentEN: ComponentType = () => {
       <Typography variant="body1" gutterBottom>
         <Link href="https://github.com/ArtemGrachov/courier-service-admin" target="_blank">
           Admin panel source code - GitHub
+        </Link>
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <Link href="https://github.com/ArtemGrachov/courier-service-backend" target="_blank">
+          Backend source code - GitHub
         </Link>
       </Typography>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
