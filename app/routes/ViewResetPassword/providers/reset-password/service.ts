@@ -2,21 +2,27 @@ import { useRef } from 'react';
 
 import { ResetPasswordStore } from './store';
 
+import { useHttpClientCtx } from '~/providers/http-client';
+
 import type { IFormResetPassword } from '~/types/forms/form-reset-password';
 
-import { mockRequest } from '~/utils/mock-request';
-
 export const useResetPasswordService = () => {
+  const httpClient = useHttpClientCtx();
   const resetPasswordStore = useRef<ResetPasswordStore>(null as unknown as ResetPasswordStore);
 
   if (!resetPasswordStore.current) {
     resetPasswordStore.current = new ResetPasswordStore();
   }
 
-  const submit = async (_formValue: IFormResetPassword) => {
+  const submit = async (token: string, formValue: IFormResetPassword) => {
     try {
+      const payload = {
+        token,
+        ...formValue,
+      };
+
       resetPasswordStore.current.doSubmitInit();
-      await mockRequest();
+      await httpClient.post('/admin/auth/reset-password', payload);
       resetPasswordStore.current.doSubmitSuccess();
     } catch (err) {
       resetPasswordStore.current.doSubmitError(err);

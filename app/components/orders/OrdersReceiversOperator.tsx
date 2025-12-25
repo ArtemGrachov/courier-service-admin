@@ -25,7 +25,7 @@ const OrderReceiversOperator: ComponentType<GridFilterInputValueProps> = observe
     fetchReceivers,
   } = useOrderFilterCtx();
 
-  const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
+  const receivers = useMemo(() => receiversStore.data?.items, [receiversStore.data]);
 
   const couriersMap = useMemo(() => {
     return receivers?.reduce((acc, curr) => {
@@ -62,6 +62,7 @@ const OrderReceiversOperator: ComponentType<GridFilterInputValueProps> = observe
       renderValue={renderValue}
       label={t('orders_receivers_operator.label')}
       value={item.value ?? []}
+      searchMin={3}
       onChange={changeHandler}
       onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
       onOpenLoad={() => fetchReceivers(SEARCH_QUERY)}

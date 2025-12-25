@@ -16,7 +16,7 @@ export async function loadOrders(requestUrl: string) {
     data: null,
   };
 
-  const statuses = searchParams.getAll('statuses') as EOrderStatus[];
+  const statuses = searchParams.getAll('status') as EOrderStatus[];
 
   if (!statuses.length) {
     statuses.push(EOrderStatus.ORDERED, EOrderStatus.PROCESSING);
@@ -58,6 +58,8 @@ export async function loadOrders(requestUrl: string) {
   if (courierIds.length) {
     fetchOrdersQuery.courierIds = courierIds;
   }
+
+  fetchOrdersQuery.itemsPerPage = 300;
 
   try {
     const data = await fetchOrders(fetchOrdersQuery);

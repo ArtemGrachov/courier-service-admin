@@ -113,7 +113,7 @@ export class Model {
           return;
         }
 
-        const { id, courierId } = order;
+        const { id, courier_id: courierId } = order;
 
         let senderKey;
         let receiverKey;

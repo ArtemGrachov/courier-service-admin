@@ -14,6 +14,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { StorageProvider } from '~/providers/storage';
 import { AuthProvider } from '~/providers/auth';
 import { ModalsProvider } from '~/providers/modals';
+import { HttpClientProvider } from '~/providers/http-client';
 
 import ModalRoot from '~/components/modals/ModalRoot';
 import PageLoader from '~/components/other/PageLoader';
@@ -45,18 +46,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <StorageProvider>
-          <AuthProvider>
-            <ThemeProvider theme={darkTheme}>
-              <ModalsProvider>
-                <CssBaseline />
-                <PageLoader />
-                {children}
-                <ModalRoot />
-              </ModalsProvider>
-            </ThemeProvider>
-          </AuthProvider>
-        </StorageProvider>
+        <HttpClientProvider>
+          <StorageProvider>
+            <AuthProvider>
+              <ThemeProvider theme={darkTheme}>
+                <ModalsProvider>
+                  <CssBaseline />
+                  <PageLoader />
+                  {children}
+                  <ModalRoot />
+                </ModalsProvider>
+              </ThemeProvider>
+            </AuthProvider>
+          </StorageProvider>
+        </HttpClientProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

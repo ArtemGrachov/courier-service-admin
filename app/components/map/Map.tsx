@@ -108,7 +108,7 @@ const Map: ComponentType<IProps> = ({ orders, couriers, center, showPopupOrderDa
   }, [markerPopups]);
 
   return (
-    <Box width="100%" height="100%" sx={{ '--leaflet-popup-tip-background': paperBg }}>
+    <Box width="100%" height="100%" sx={{ '--leaflet-popup-tip-background': paperBg, position: 'relative' }}>
       {markerPopupEls}
       <Box width="100%" height="100%" ref={mapRef} />
       {markerPopups.length ? <Tooltip title={t('map.close_all_windows')}>

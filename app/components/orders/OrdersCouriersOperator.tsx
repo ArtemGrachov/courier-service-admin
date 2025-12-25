@@ -25,7 +25,7 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
     fetchCouriers,
   } = useOrderFilterCtx();
 
-  const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
+  const couriers = useMemo(() => couriersStore.data?.items, [couriersStore.data]);
 
   const couriersMap = useMemo(() => {
     return couriers?.reduce((acc, curr) => {
@@ -61,6 +61,7 @@ const OrdersCouriersOperator: ComponentType<GridFilterInputValueProps> = observe
       disableCloseOnSelect={true}
       renderValue={renderValue}
       label={t('orders_couriers_operator.label')}
+      searchMin={3}
       value={item.value ?? []}
       onChange={changeHandler}
       onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}

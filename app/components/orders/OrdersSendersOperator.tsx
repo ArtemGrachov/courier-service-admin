@@ -25,14 +25,14 @@ const OrdersSendersOperator: ComponentType<GridFilterInputValueProps> = observer
     fetchSenders,
   } = useOrderFilterCtx();
 
-  const senders = useMemo(() => sendersStore.data?.data, [sendersStore.data]);
+  const senders = useMemo(() => sendersStore.data?.items, [sendersStore.data]);
 
   const sendersMap = useMemo(() => {
     return senders?.reduce((acc, curr) => {
       acc[curr.id] = curr;
       return acc;
     }, {} as Record<number, IClient>) ?? {};
-  }, []);
+  }, [senders]);
 
   const senderOptions = useMemo(() => {
     return senders?.map(s => s.id) ?? [];
@@ -62,6 +62,7 @@ const OrdersSendersOperator: ComponentType<GridFilterInputValueProps> = observer
       renderValue={renderValue}
       label={t('orders_senders_operator.label')}
       value={item.value ?? []}
+      searchMin={3}
       onChange={changeHandler}
       onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
       onOpenLoad={() => fetchSenders(SEARCH_QUERY)}

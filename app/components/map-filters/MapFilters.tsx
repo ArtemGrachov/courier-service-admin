@@ -66,9 +66,9 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
 
   const currentFormValue = watch();
 
-  const senders = useMemo(() => sendersStore.data?.data, [sendersStore.data]);
-  const couriers = useMemo(() => couriersStore.data?.data, [couriersStore.data]);
-  const receivers = useMemo(() => receiversStore.data?.data, [receiversStore.data]);
+  const senders = useMemo(() => sendersStore.data?.items, [sendersStore.data]);
+  const couriers = useMemo(() => couriersStore.data?.items, [couriersStore.data]);
+  const receivers = useMemo(() => receiversStore.data?.items, [receiversStore.data]);
 
   const hasValues = useMemo(() => {
     return currentFormValue.orderId ||
@@ -224,6 +224,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               disableCloseOnSelect={true}
               renderValue={renderValue}
               label={t('map_filters.senders')}
+              searchMin={3}
               {...field}
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchSenders({ ...SEARCH_QUERY, search })}
@@ -247,6 +248,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               disableCloseOnSelect={true}
               renderValue={renderValue}
               label={t('map_filters.receivers')}
+              searchMin={3}
               {...field}
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchReceivers({ ...SEARCH_QUERY, search })}
@@ -270,6 +272,7 @@ const MapFilters: ComponentType<IProps> = observer(({ formValue, onSubmit }) => 
               disableCloseOnSelect={true}
               renderValue={renderValue}
               label={t('map_filters.couriers')}
+              searchMin={3}
               {...field}
               onChange={(e, v, r, d) => changeHandler(field, e, v, r, d)}
               onSearchLoad={search => fetchCouriers({ ...SEARCH_QUERY, search })}

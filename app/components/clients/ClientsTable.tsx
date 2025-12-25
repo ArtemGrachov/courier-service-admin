@@ -39,7 +39,8 @@ const enum EColumns {
   NAME = 'name',
   PHONE = 'phone',
   EMAIL = 'email',
-  CURRENT_ORDERS_COUNT = 'currentOrdersCount',
+  ACTIVE_ORDERS_COUNT = 'activeOrdersCount',
+  COMPLETED_ORDERS_COUNT = 'completedOrdersCount',
   TOTAL_ORDERS_COUNT = 'totalOrdersCount',
   RATING = 'rating',
   ACTIONS = 'actions',
@@ -67,7 +68,7 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     filterOperators: STRING_OPERATORS,
   },
   [EColumns.PHONE]: {
-    field: 'phoneNumber',
+    field: 'phone',
     type: 'string',
     headerName: 'clients_table.phone',
     flex: 1,
@@ -86,16 +87,24 @@ const BASE_COLUMNS: Record<EColumns, GridColDef> = {
     filterable: true,
     filterOperators: STRING_OPERATORS,
   },
-  [EColumns.CURRENT_ORDERS_COUNT]: {
-    field: 'currentOrdersCount',
+  [EColumns.ACTIVE_ORDERS_COUNT]: {
+    field: 'active_orders_count',
     type: 'number',
     headerName: 'clients_table.current_orders_count',
     flex: 1,
     sortable: true,
     filterable: false,
   },
+  [EColumns.COMPLETED_ORDERS_COUNT]: {
+    field: 'completed_orders_count',
+    type: 'number',
+    headerName: 'clients_table.completed_orders_count',
+    flex: 1,
+    sortable: true,
+    filterable: false,
+  },
   [EColumns.TOTAL_ORDERS_COUNT]: {
-    field: 'totalOrdersCount',
+    field: 'total_orders_count',
     type: 'number',
     headerName: 'clients_table.total_orders_count',
     flex: 1,
@@ -133,7 +142,8 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
       BASE_COLUMNS[EColumns.NAME],
       BASE_COLUMNS[EColumns.EMAIL],
       BASE_COLUMNS[EColumns.PHONE],
-      BASE_COLUMNS[EColumns.CURRENT_ORDERS_COUNT],
+      BASE_COLUMNS[EColumns.ACTIVE_ORDERS_COUNT],
+      BASE_COLUMNS[EColumns.COMPLETED_ORDERS_COUNT],
       BASE_COLUMNS[EColumns.TOTAL_ORDERS_COUNT],
       BASE_COLUMNS[EColumns.RATING],
       BASE_COLUMNS[EColumns.ACTIONS],
@@ -176,7 +186,7 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
             emailSearch = item.value;
             break;
           }
-          case 'phoneNumber': {
+          case 'phone': {
             phoneSearch = item.value;
             break;
           }
@@ -189,7 +199,8 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
     }
 
     payload.nameSort = null;
-    payload.currentOrdersCountSort = null;
+    payload.activeOrdersCountSort = null;
+    payload.completedOrdersCountSort = null;
     payload.totalOrdersCountSort = null;
     payload.ratingSort = null;
 
@@ -201,11 +212,15 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
           payload.nameSort = sortBy.sort as ESortDirection;
           break;
         }
-        case 'currentOrdersCount': {
-          payload.currentOrdersCountSort = sortBy.sort as ESortDirection;
+        case 'active_orders_count': {
+          payload.activeOrdersCountSort = sortBy.sort as ESortDirection;
           break;
         }
-        case 'totalOrdersCount': {
+        case 'completed_orders_count': {
+          payload.completedOrdersCountSort = sortBy.sort as ESortDirection;
+          break;
+        }
+        case 'total_orders_count': {
           payload.totalOrdersCountSort = sortBy.sort as ESortDirection;
           break;
         }
@@ -302,10 +317,17 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
       });
     }
 
-    if (formValue?.currentOrdersCountSort) {
+    if (formValue?.activeOrdersCountSort) {
       sortModel.push({
-        field: 'currentOrdersCount',
-        sort: formValue.currentOrdersCountSort,
+        field: 'activeOrdersCount',
+        sort: formValue.activeOrdersCountSort,
+      });
+    }
+
+    if (formValue?.completedOrdersCountSort) {
+      sortModel.push({
+        field: 'completedOrdersCount',
+        sort: formValue.completedOrdersCountSort,
       });
     }
 
@@ -348,6 +370,7 @@ const ClientsTable: ComponentType<IProps> = ({ isProcessing, items, pagination, 
       slots={{
         quickFilterIcon: () => null,
       }}
+      columnFilterDebounceMs={300}
       localeText={localeText}
       pageSizeOptions={[5, 10, 25]}
       initialState={initialState}

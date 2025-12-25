@@ -13,6 +13,7 @@ export default [
     route(ROUTE_PATHS.ORDER, './routes/ViewOrder/ViewOrder.tsx', { id: ROUTE_PATHS.ORDER }),
     route(ROUTE_PATHS.CLIENTS, './routes/ViewClients/ViewClients.tsx', { id: ROUTE_PATHS.CLIENTS }),
     route(ROUTE_PATHS.CLIENT, './routes/ViewClient/ViewClient.tsx', { id: ROUTE_PATHS.CLIENT }),
+    route(ROUTE_PATHS.CHANGE_PASSWORD, './routes/ViewChangePassword/ViewChangePassword.tsx', { id: ROUTE_PATHS.CHANGE_PASSWORD }),
   ]),
   layout('./layouts/auth/LayoutAuth.tsx', [
     route(ROUTE_PATHS.LOGIN, './routes/ViewLogin/ViewLogin.tsx', { id: ROUTE_PATHS.LOGIN }),

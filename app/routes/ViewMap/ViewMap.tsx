@@ -47,7 +47,7 @@ const ViewMap: ComponentType = observer(() => {
 
   const titlePortalRef = useTitlePortalCtx();
 
-  const orders = ordersStore.data?.data;
+  const orders = ordersStore.data?.items;
 
   const submitHandler = (formValue: IFormMapFilters) => {
     handleUpdate(formValue);
@@ -84,7 +84,7 @@ const ViewMap: ComponentType = observer(() => {
           </Stack>
         </Card>
         <Map
-          couriers={couriersStore.data?.data}
+          couriers={couriersStore.data?.items}
           orders={orders}
           showPopupOrderData={true}
         />

@@ -29,11 +29,11 @@ const MapPopup: ComponentType<IProps> = ({ markerItem, showOrderData }) => {
 
   switch (type) {
     case EMarkerTypes.SENDER: {
-      el = <ClientPreview client={data as IClient} isSender={true} />
+      el = <ClientPreview client={data as IClient} address={order?.sender_address} isSender={true} />
       break;
     }
     case EMarkerTypes.RECEIVER: {
-      el = <ClientPreview client={data as IClient} isReceiver={true} />
+      el = <ClientPreview client={data as IClient} address={order?.receiver_address} isReceiver={true} />
       break;
     }
     case EMarkerTypes.COURIER: {

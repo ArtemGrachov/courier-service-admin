@@ -94,7 +94,7 @@ const ViewCourier: ComponentType = observer(() => {
           <Grid size={7} minHeight={400} display="flex">
             {courier && (
               <Map
-                orders={activeOrdersStore.data?.data}
+                orders={activeOrdersStore.data?.items}
                 couriers={[courier]}
                 showPopupOrderData={true}
               />
@@ -104,7 +104,7 @@ const ViewCourier: ComponentType = observer(() => {
         {ordersStore.data && (
           <Box>
             <OrdersTablePreview
-              items={ordersStore.data?.data}
+              items={ordersStore.data?.items}
               isProcessing={ordersStore.isProcessing}
             />
             <Button

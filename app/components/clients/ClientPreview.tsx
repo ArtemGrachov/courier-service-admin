@@ -15,14 +15,15 @@ import type { IClient } from '~/types/models/client';
 
 export interface IProps {
   client: IClient;
+  address?: string;
   isReceiver?: boolean;
   isSender?: boolean;
 }
 
-const ClientPreview: ComponentType<IProps> = ({ client, isReceiver, isSender }) => {
+const ClientPreview: ComponentType<IProps> = ({ client, address, isReceiver, isSender }) => {
   const { t, i18n } = useTranslation();
   const routePath = useRoutePath();
-  const { id, name, rating, phoneNumber, email } = client;
+  const { id, name, rating, phone, email } = client;
 
   const idLabel = useMemo(() => {
     if (isReceiver) {
@@ -54,13 +55,16 @@ const ClientPreview: ComponentType<IProps> = ({ client, isReceiver, isSender }) 
       </Stack>
       <Stack direction="row" gap={2} justifyContent="space-between" alignItems="flex-end">
         <Stack gap={2}>
-          {phoneNumber && <Box>
+          {address && <Box>
+            {address}
+          </Box>}
+          {phone && <Box>
             <Link
               component="a"
-              href={`tel:${phoneNumber}`}
+              href={`tel:${phone}`}
               target="_blank"
             >
-              {phoneNumber}
+              {phone}
             </Link>
           </Box>}
           {email && <Box>

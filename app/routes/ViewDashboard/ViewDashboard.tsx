@@ -73,12 +73,12 @@ const ViewDashboard: ComponentType = observer(() => {
           isProcessing={isLoading}
           onReload={reloadPageData}
         />
-        <OrdersChart stats={statsStore.data?.stats} />
+        <OrdersChart stats={statsStore.data?.statistic} />
         <Grid container spacing={2}>
           <Grid size={6} gap={2}>
             <CouriersTablePreview
               isProcessing={couriersStore.isProcessing}
-              items={couriersStore.data?.data}
+              items={couriersStore.data?.items}
             />
             <Button
               sx={{ mt: 2 }}
@@ -93,7 +93,7 @@ const ViewDashboard: ComponentType = observer(() => {
           <Grid size={6} gap={2}>
             <OrdersTablePreview
               isProcessing={ordersStore.isProcessing}
-              items={ordersStore.data?.data}
+              items={ordersStore.data?.items}
             />
             <Button
               sx={{ mt: 2 }}

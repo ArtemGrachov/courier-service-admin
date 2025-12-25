@@ -9,7 +9,6 @@ export async function loadCouriers(requestUrl: string) {
   const url = new URL(requestUrl);
   const searchParams = url.searchParams;
 
-
   const couriersState: ICouriersStoreData = {
     getStatus: EStatus.INIT,
     getError: null,

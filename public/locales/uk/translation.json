@@ -7,6 +7,7 @@
     "orders": "Замовлення",
     "clients": "Клієнти",
     "about": "Про проєкт",
+    "change_password": "Змінити пароль",
     "logout": "Вийти"
   },
   "common_locales": {
@@ -14,7 +15,7 @@
     "uk": "Українська"
   },
   "form_login": {
-    "login": "Email / Номер телефону",
+    "email": "Email",
     "submit": "Увійти"
   },
   "view_login": {
@@ -88,6 +89,7 @@
     "email": "Email",
     "status": "Статус",
     "current_orders_count": "Активних замовлень",
+    "completed_orders_count": "Виконаних замовлень",
     "total_orders_count": "Замовлень загалом",
     "rating": "Рейтинг",
     "details": "Деталі"
@@ -159,6 +161,7 @@
     "id": "ID",
     "name": "Ім'я",
     "current_orders_count": "Активних замовлень",
+    "completed_orders_count": "Завершених замовлень",
     "total_orders_count": "Замовлень загалом",
     "phone": "Номер телефону",
     "email": "Email",
@@ -176,6 +179,7 @@
     "rating": "Рейтинг",
     "status": "Статус",
     "current_orders_count": "Активних замовлень",
+    "completed_orders_count": "Виконаних замовлень",
     "total_orders_count": "Замовлень загалом",
     "phone": "Номер телефону",
     "email": "Email"
@@ -206,7 +210,7 @@
     "title": "Клієнти"
   },
   "view_courier": {
-    "title": "Кур'єр' ID {{id}} {{name}}",
+    "title": "Кур'єр ID {{id}} {{name}}",
     "orders": "Усі замовлення"
   },
   "view_map": {

@@ -12,6 +12,7 @@ export const ROUTE_PATHS = {
   LOGIN: 'login',
   FORGOT_PASSWORD: 'forgot-password',
   RESET_PASSWORD: 'reset-password/:token',
+  CHANGE_PASSWORD: 'change-password',
   ABOUT: 'about'
 };
 

@@ -7,6 +7,7 @@ import Alert from '@mui/material/Alert';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router';
 import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router';
 
 import i18n from '~/i18n/config';
 
@@ -27,10 +28,11 @@ const ViewResetPassword: ComponentType = observer(() => {
   const { store, submit } = useResetPasswordCtx();
   const errorSnackbar = useErrorSnackbar();
   const routePath = useRoutePath();
+  const { token } = useParams();
 
   const submitHandler = async (formValue: IFormResetPassword) => {
     try {
-      await submit(formValue);
+      await submit(token! ,formValue);
     } catch (err) {
       errorSnackbar(err);
       throw err;

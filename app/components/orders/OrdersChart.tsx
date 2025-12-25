@@ -18,15 +18,21 @@ const X_AXIS = [{
 
 const SERIES = [
   {
-    id: 'cancelled',
-    label: 'order_status.cancelled',
-    dataKey: 'cancelled',
+    id: 'ordered',
+    label: 'order_status.ordered',
+    dataKey: 'ordered',
     connectNulls: true,
   },
   {
     id: 'completed',
     label: 'order_status.completed',
     dataKey: 'completed',
+    connectNulls: true,
+  },
+  {
+    id: 'cancelled',
+    label: 'order_status.cancelled',
+    dataKey: 'cancelled',
     connectNulls: true,
   },
 ];
@@ -52,6 +58,7 @@ const OrdersChart: ComponentType<IProps> = ({ stats }) => {
           date: dayjs(dateKey).toDate(),
           cancelled: record.cancelled ?? null,
           completed: record.completed ?? null,
+          ordered: record.ordered ?? null,
         };
       });
   }, [stats]);
