@@ -7,6 +7,7 @@ import { STORAGE_AUTH_TOKEN_KEY } from '~/constants/auth';
 import { AuthStore } from '~/providers/auth/store';
 import { useStorageCtx } from '~/providers/storage/hooks/use-storage-ctx'
 import { useHttpClientCtx } from '~/providers/http-client';
+import { Cache } from '~/cache/Cache';
 
 export const useAuthService = () => {
   const authStore = useRef<AuthStore>(null as unknown as AuthStore);
@@ -29,6 +30,7 @@ export const useAuthService = () => {
   }
 
   const authorize = (authToken: string) => {
+    Cache.instance.clear();
     authStore.current.authorize(true);
     storage.setItem(STORAGE_AUTH_TOKEN_KEY, authToken);
     httpClientCtx.defaults.headers.Authorization = `Bearer ${authToken}`;
@@ -45,6 +47,7 @@ export const useAuthService = () => {
       res => res,
       error => {
         if (error?.status === 401) {
+          Cache.instance.clear();
           unauthorize();
           navigate('/login');
         }
